@@ -1,4 +1,4 @@
-# Site de Vinhos — Adega Campelo
+# Site de Vinhos — Garrafeira Campelo
 
 Site estático de catálogo de vinhos portugueses. HTML, CSS e JavaScript puros —
 sem passo de build, sem dependências, sem Node.

@@ -1,5 +1,5 @@
 /* =========================================================
-   Adega Campelo — comportamento da página
+   Garrafeira Campelo — comportamento da página
    Depende de VINHOS, definido em js/vinhos.js
    ========================================================= */
 
