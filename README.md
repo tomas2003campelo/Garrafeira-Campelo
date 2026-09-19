@@ -88,6 +88,7 @@ Para trocar entre WhatsApp e email, muda `metodoEncomenda` no `config.js`.
 - [ ] Preencher os contactos reais no `js/config.js`
 - [ ] Substituir os produtos de exemplo no `js/produtos.js`
 - [ ] Trocar as garrafas desenhadas por fotografias dos produtos
+- [ ] Trocar as fotos de banco de imagens por fotos da loja
 - [ ] Ligar o formulário de contacto a um serviço a sério (Formspree, Netlify
       Forms ou um backend próprio) — hoje só valida no browser
 - [ ] Escrever a política de privacidade e os termos, se passar a vender online
@@ -97,6 +98,11 @@ Para trocar entre WhatsApp e email, muda `metodoEncomenda` no `config.js`.
 **Verificação de idade.** Aparece um aviso de +18 na primeira visita, como a lei
 exige para venda de bebidas alcoólicas. A resposta fica guardada só durante a
 sessão do browser.
+
+**As fotografias são de banco de imagens.** Mostram adegas genéricas, não a
+tua loja. A proveniência e as licenças estão no [CREDITOS.md](CREDITOS.md), que
+também explica o que ter em conta se as trocares. Substitui-as por fotos tuas
+quando as tiveres — é o que mais diferença faz no site.
 
 **As garrafas são desenhos, não fotografias.** São SVG gerado em
 `js/ilustracoes.js`, pintado com a cor que puseres em cada produto. Mantém o

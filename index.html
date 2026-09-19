@@ -62,14 +62,13 @@
 
 <main id="conteudo">
 
-  <section class="hero">
-    <!-- Camadas de colinas, no espírito da capa da marca -->
-    <div class="hero-colinas" aria-hidden="true">
-      <svg viewBox="0 0 1440 420" preserveAspectRatio="none">
-        <path class="colina colina-1" d="M0 300c220-60 400-30 620 10s420 60 820-40v150H0z"/>
-        <path class="colina colina-2" d="M0 350c260-45 470 5 700 35s480 15 740-55v90H0z"/>
-      </svg>
-    </div>
+  <section class="hero hero-foto">
+    <!-- Fotografia de fundo. A versão pequena poupa dados no telemóvel. -->
+    <picture class="hero-fundo">
+      <source media="(max-width: 760px)" srcset="img/corredor-pequeno.webp">
+      <img src="img/corredor.webp" alt="" fetchpriority="high" decoding="async">
+    </picture>
+    <div class="hero-veu" aria-hidden="true"></div>
 
     <div class="hero-inner">
       <div class="entrada">
@@ -81,8 +80,8 @@
           explica o que estás a levar.
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="vinhos.html">Ver os vinhos</a>
-          <a class="btn btn-ghost" href="contacto.html">Falar connosco</a>
+          <a class="btn btn-dourado" href="vinhos.html">Ver os vinhos</a>
+          <a class="btn btn-ghost-claro" href="contacto.html">Falar connosco</a>
         </div>
         <div class="hero-tags">
           <span>Direto das quintas</span>
@@ -96,12 +95,19 @@
       </div>
     </div>
 
+    <a class="indicador-scroll" href="#o-que-temos">
+      <span>Ver mais</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M12 5v14M19 12l-7 7-7-7"/>
+      </svg>
+    </a>
+
     <svg class="onda" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true">
       <path fill="#FCF6EE" d="M0 46c180-34 360-46 540-28s360 66 540 58 240-42 360-58v72H0z"/>
     </svg>
   </section>
 
-  <section class="section">
+  <section class="section" id="o-que-temos">
     <div class="container">
       <div class="section-head revelar">
         <h2>O que temos</h2>
@@ -153,6 +159,23 @@
         <a class="btn btn-ghost" href="vinhos.html">Ver tudo</a>
       </div>
       <div class="grid" id="lista-destaques" data-quantos="4"></div>
+    </div>
+  </section>
+
+  <section class="faixa">
+    <picture class="faixa-fundo cortina">
+      <source media="(max-width: 760px)" srcset="img/adega-pequena.webp">
+      <img src="img/adega.webp" alt="" loading="lazy" decoding="async">
+    </picture>
+    <div class="faixa-veu" aria-hidden="true"></div>
+    <div class="container faixa-conteudo">
+      <p class="eyebrow">A nossa forma de trabalhar</p>
+      <h2>Provamos tudo o que vendemos.</h2>
+      <p class="lead">
+        Recusamos mais do que aceitamos. Se não bebêssemos em nossa casa,
+        não está na prateleira.
+      </p>
+      <a class="btn btn-dourado" href="sobre.html">Conhecer a casa</a>
     </div>
   </section>
 

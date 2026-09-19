@@ -104,7 +104,7 @@
      ======================================================= */
 
   function ligarAnimacoes() {
-    const alvos = document.querySelectorAll(".revelar");
+    const alvos = document.querySelectorAll(".revelar, .cortina");
     if (!alvos.length) return;
 
     // Se o browser não souber observar, mostra tudo já.
@@ -221,6 +221,86 @@
       card.style.setProperty("--rato-x", `${e.clientX - r.left}px`);
       card.style.setProperty("--rato-y", `${e.clientY - r.top}px`);
     }, { passive: true });
+  }
+
+  /* --- Parallax da faixa fotográfica ---
+     A imagem desliza mais devagar do que a página, o que dá
+     sensação de profundidade sem pesar nada.                 */
+  function ligarParallaxFaixa() {
+    if (menosMovimento) return;
+
+    const faixas = [...document.querySelectorAll(".faixa")];
+    if (!faixas.length) return;
+
+    let aEsperar = false;
+    function mover() {
+      faixas.forEach(faixa => {
+        const r = faixa.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        const img = faixa.querySelector(".faixa-fundo img");
+        if (!img) return;
+        // -1 quando a faixa entra por baixo, +1 quando sai por cima
+        const progresso = (window.innerHeight / 2 - (r.top + r.height / 2)) / window.innerHeight;
+        img.style.transform = `translateY(${progresso * 42}px)`;
+      });
+      aEsperar = false;
+    }
+    window.addEventListener("scroll", () => {
+      if (!aEsperar) { aEsperar = true; requestAnimationFrame(mover); }
+    }, { passive: true });
+    mover();
+  }
+
+  /* --- Inclinação dos cartões conforme a posição do rato --- */
+  function ligarInclinacao() {
+    if (menosMovimento || window.matchMedia("(hover: none)").matches) return;
+
+    const LIMITE = 4.5;   // graus — mais do que isto enjoa
+
+    document.addEventListener("pointermove", e => {
+      const card = e.target.closest(".card");
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width  - 0.5;
+      const py = (e.clientY - r.top)  / r.height - 0.5;
+      card.style.setProperty("--inclina-y", `${px * LIMITE * 2}deg`);
+      card.style.setProperty("--inclina-x", `${-py * LIMITE * 2}deg`);
+    }, { passive: true });
+
+    document.addEventListener("pointerout", e => {
+      const card = e.target.closest(".card");
+      if (!card || card.contains(e.relatedTarget)) return;
+      card.style.setProperty("--inclina-x", "0deg");
+      card.style.setProperty("--inclina-y", "0deg");
+    }, { passive: true });
+  }
+
+  /* --- Transição entre páginas ---
+     Esbate a página a sair antes de navegar, para não haver
+     o salto branco entre páginas. Se o JavaScript falhar, os
+     links continuam a funcionar como links normais.          */
+  function ligarTransicaoPaginas() {
+    if (menosMovimento) return;
+
+    document.addEventListener("click", e => {
+      const link = e.target.closest("a");
+      if (!link) return;
+
+      const destino = link.getAttribute("href") || "";
+      const interno = /^[\w-]+\.html(#.*)?$/.test(destino);
+      const modificador = e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0;
+
+      if (!interno || modificador || link.target === "_blank") return;
+
+      e.preventDefault();
+      document.body.classList.add("a-sair");
+      setTimeout(() => { location.href = destino; }, 240);
+    });
+
+    // Se o utilizador voltar atrás, a página vem da cache já esbatida
+    window.addEventListener("pageshow", ev => {
+      if (ev.persisted) document.body.classList.remove("a-sair");
+    });
   }
 
   /* --- Garrafa grande do hero --- */
@@ -655,5 +735,8 @@
     ligarContadores();
     ligarBrilhoCartoes();
     ligarParallax();
+    ligarParallaxFaixa();
+    ligarInclinacao();
+    ligarTransicaoPaginas();
   });
 })();

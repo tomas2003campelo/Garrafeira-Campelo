@@ -337,6 +337,62 @@ img { max-width: 100%; display: block; }
   background: var(--dourado);
 }
 
+/* =========================================================
+   HERO COM FOTOGRAFIA
+   As fotos são de banco de imagens (Unsplash, licença livre
+   para uso comercial) e mostram adegas genéricas — não são
+   da loja. Substitui por fotos tuas quando as tiveres.
+   ========================================================= */
+
+.hero-foto { background: var(--borgonha-escuro); }
+
+.hero-fundo {
+  position: absolute;
+  display: block;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero-fundo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  /* Zoom muito lento, para a imagem não ficar parada */
+  animation: aproximar 26s ease-in-out infinite alternate;
+}
+
+@keyframes aproximar {
+  from { transform: scale(1) translateY(0); }
+  to   { transform: scale(1.09) translateY(-1.2%); }
+}
+
+/* Véu que garante que o texto se lê sobre a fotografia */
+.hero-veu {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(100deg, rgba(58, 0, 10, .94) 0%, rgba(58, 0, 10, .82) 38%, rgba(58, 0, 10, .42) 72%, rgba(58, 0, 10, .58) 100%),
+    linear-gradient(to top, rgba(58, 0, 10, .75) 0%, transparent 34%);
+}
+
+/* O conteúdo do hero passa a ser claro */
+.hero-foto .hero-inner { color: var(--areia); }
+.hero-foto h1 { color: var(--creme); }
+.hero-foto h1 em { color: var(--dourado); font-style: italic; }
+.hero-foto .lead { color: rgba(252, 246, 238, .87); }
+.hero-foto .eyebrow { color: var(--dourado); }
+.hero-foto .eyebrow::before { background: var(--dourado); }
+.hero-foto .hero-tags {
+  color: rgba(252, 246, 238, .78);
+  border-top-color: rgba(252, 246, 238, .22);
+}
+.hero-foto .hero-palco .ilustracao { filter: drop-shadow(0 30px 50px rgba(0, 0, 0, .55)); }
+
+/* O gradiente e as colinas do hero claro não se usam sobre fotografia */
+.hero-foto::before, .hero-foto .hero-colinas { display: none; }
+
 /* Colinas em camadas, no espírito da capa da marca */
 .hero-colinas {
   position: absolute;
@@ -369,7 +425,7 @@ img { max-width: 100%; display: block; }
 }
 
 /* Onda que separa o hero do resto, como na capa */
-.onda { display: block; width: 100%; height: auto; margin-bottom: -1px; }
+.onda { position: relative; z-index: 2; display: block; width: 100%; height: auto; margin-bottom: -1px; }
 
 /* --- Secções genéricas --- */
 
@@ -393,6 +449,79 @@ img { max-width: 100%; display: block; }
 }
 .section-head-linha h2 { margin: 0; }
 .section-head-linha p { margin: .3rem 0 0; color: var(--tinta-suave); }
+
+/* =========================================================
+   FAIXA FOTOGRÁFICA
+   ========================================================= */
+
+.faixa {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(4.5rem, 11vw, 8rem) 0;
+  background: var(--borgonha-escuro);
+  isolation: isolate;
+}
+
+.faixa .faixa-fundo { position: absolute; display: block; inset: -12% 0; z-index: 0; }
+.faixa-fundo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.faixa-veu {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(95deg, rgba(58, 0, 10, .93) 0%, rgba(58, 0, 10, .8) 45%, rgba(58, 0, 10, .5) 100%);
+}
+
+.faixa-conteudo {
+  position: relative;
+  z-index: 2;
+  max-width: 620px;
+  margin-inline: 0;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+  color: var(--areia);
+}
+.faixa-conteudo h2 { color: var(--creme); margin-bottom: .7rem; }
+.faixa-conteudo .lead { color: rgba(252, 246, 238, .85); margin-bottom: 1.8rem; }
+.faixa-conteudo .eyebrow { color: var(--dourado); }
+.faixa-conteudo .eyebrow::before { background: var(--dourado); }
+
+/* Centrar a faixa dentro da largura máxima do site */
+@media (min-width: 1240px) {
+  .faixa-conteudo { margin-inline: auto; padding-left: calc((100vw - var(--largura)) / 2); max-width: none; }
+  .faixa-conteudo > * { max-width: 620px; }
+}
+
+/* --- Fotografia emoldurada (página Sobre) --- */
+
+.sobre-lateral { display: grid; gap: 1.2rem; }
+
+.foto-emoldurada {
+  margin: 0;
+  border-radius: var(--raio);
+  overflow: hidden;
+  border: 1px solid var(--linha);
+  background: var(--branco);
+}
+.foto-emoldurada img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  transition: transform .8s cubic-bezier(.22, .68, .3, 1);
+}
+.foto-emoldurada:hover img { transform: scale(1.05); }
+.foto-emoldurada figcaption {
+  padding: .7rem .9rem;
+  font-size: .76rem;
+  color: var(--tinta-suave);
+  text-align: center;
+  border-top: 1px solid var(--linha);
+}
 
 /* =========================================================
    CARTÕES DE PRODUTO
@@ -972,6 +1101,63 @@ img { max-width: 100%; display: block; }
 }
 .contador.salta { animation: pulsar-anel .7s ease-out; }
 
+/* --- Cortina que revela as fotografias --- */
+.cortina { overflow: hidden; }
+/* Só damos posicionamento a quem ainda não tem um próprio: o fundo da
+   faixa já é absoluto, e impor-lhe "relative" partia o layout. */
+.cortina:not(.faixa-fundo) { position: relative; }
+.cortina::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: var(--creme-fundo);
+  transform-origin: right center;
+  transform: scaleX(1);
+  transition: transform .85s cubic-bezier(.76, 0, .24, 1);
+}
+.cortina.visivel::after { transform: scaleX(0); }
+.cortina img { transform: scale(1.12); transition: transform 1.1s cubic-bezier(.22, .68, .3, 1); }
+.cortina.visivel img { transform: scale(1); }
+
+/* --- Inclinação suave dos cartões ao passar o rato --- */
+.card {
+  transform: perspective(900px) rotateX(var(--inclina-x, 0deg)) rotateY(var(--inclina-y, 0deg)) translateY(var(--sobe, 0));
+  transform-style: preserve-3d;
+}
+.card:hover { --sobe: -4px; }
+
+/* --- Indicador de scroll no hero --- */
+.indicador-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 5.5rem;
+  z-index: 3;
+  transform: translateX(-50%);
+  display: grid;
+  justify-items: center;
+  gap: .5rem;
+  color: rgba(252, 246, 238, .72);
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  text-decoration: none;
+  animation: acenar 2.4s ease-in-out infinite;
+}
+.indicador-scroll:hover { color: var(--dourado); text-decoration: none; }
+.indicador-scroll svg { width: 17px; height: 17px; }
+
+@keyframes acenar {
+  0%, 100% { transform: translate(-50%, 0); opacity: .72; }
+  50%      { transform: translate(-50%, 8px); opacity: 1; }
+}
+
+/* --- Transição entre páginas --- */
+body { animation: pagina-entra .42s ease both; }
+@keyframes pagina-entra { from { opacity: 0; } to { opacity: 1; } }
+
+body.a-sair { opacity: 0; transition: opacity .26s ease; }
+
 /* =========================================================
    ANIMAÇÕES DE ENTRADA
    ========================================================= */
@@ -1014,6 +1200,7 @@ img { max-width: 100%; display: block; }
   .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 1.5rem; }
   .hero-inner .eyebrow, .hero-inner .lead { margin-inline: auto; }
   .hero-actions, .hero-tags { justify-content: center; }
+  .indicador-scroll { display: none; }
   .hero-arte { order: -1; margin-bottom: 0; }
   .hero-inner { gap: 1rem; padding-top: 0; }
   .hero-palco .ilustracao { height: clamp(190px, 26vh, 240px); }
@@ -1067,6 +1254,13 @@ img { max-width: 100%; display: block; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  .hero-fundo img { animation: none; }
+  .faixa-fundo img { transform: none !important; }
+  .cortina::after { display: none; }
+  .cortina img { transform: none; }
+  .card { transform: none !important; }
+  .indicador-scroll { animation: none; }
+  body, body.a-sair { animation: none; opacity: 1; }
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   .revelar { opacity: 1; transform: none; }
   .entrada > * { opacity: 1; }
