@@ -1,74 +1,110 @@
-# Site de Vinhos — Garrafeira Campelo
+# Garrafeira Campelo — site
 
-Site estático de catálogo de vinhos portugueses. HTML, CSS e JavaScript puros —
-sem passo de build, sem dependências, sem Node.
+Site de catálogo com carrinho de encomendas, em HTML, CSS e JavaScript puros.
+Sem passo de build, sem dependências, sem Node.
 
 ## Como ver o site
 
-Basta abrir o `index.html` no browser:
+Abre o `index.html` no browser:
 
 ```bash
 open index.html
 ```
 
-Se preferires servir por HTTP (mais parecido com produção):
-
-```bash
-python3 -m http.server 8000
-```
-
-E depois abrir http://localhost:8000
+Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 
 ## Estrutura
 
 ```
 .
-├── index.html        Página única com todas as secções
+├── index.html        Início
+├── vinhos.html       Catálogo de vinhos (Douro, Verde, Maduro, Espumantes)
+├── cervejas.html     Catálogo de cervejas
+├── sobre.html        Sobre a casa
+├── contacto.html     Morada, horário, formulário e entregas
 ├── css/
-│   └── style.css     Estilos, paleta e responsivo
+│   └── style.css     Estilos, paleta da marca e animações
 ├── js/
-│   ├── vinhos.js     Dados do catálogo (editar aqui)
-│   └── main.js       Filtros, menu e formulário
-└── README.md
+│   ├── config.js     ←  OS TEUS DADOS (contactos, horário, entregas)
+│   ├── produtos.js   ←  O CATÁLOGO (vinhos e cervejas)
+│   ├── carrinho.js   Lógica do carrinho
+│   └── main.js       Navegação, filtros, animações, formulário
+└── img/              Logótipo, favicon, capa social e fotos de produtos
 ```
 
-## Editar o catálogo
+Só precisas de mexer em dois ficheiros: **`js/config.js`** e **`js/produtos.js`**.
 
-Os vinhos vivem em `js/vinhos.js`, num array de objetos. Para adicionar um vinho,
-copia um bloco existente e muda os campos:
+## Os teus dados — `js/config.js`
+
+Tudo o que escreveres aqui aparece automaticamente em todas as páginas:
+cabeçalho, rodapé, página de contacto e mensagens de encomenda.
+
+Os campos marcados `// POR PREENCHER` ainda têm dados de exemplo:
+telefone, email, morada, horário, redes sociais e condições de entrega.
+
+Se deixares uma rede social vazia (`""`), o ícone desaparece do site sozinho.
+
+## O catálogo — `js/produtos.js`
+
+Cada produto é um bloco. Para acrescentar um, copia um bloco inteiro, cola a
+seguir e muda os valores:
 
 ```js
 {
-  nome: "Nome do vinho",
-  regiao: "Douro",
-  tipo: "tinto",          // tinto | branco | rosé | espumante | fortificado
-  ano: 2021,
-  preco: 12.50,
-  nota: "Descrição curta para o cartão.",
-  cor: "#6b1f2e",         // cor da garrafa no cartão
-  destaque: "Reserva"     // opcional — etiqueta no canto
+  id: "identificador-unico",      // sem espaços — é o que o carrinho usa
+  nome: "Nome do produto",
+  categoria: "douro",             // douro | verde | maduro | espumantes | cervejas
+  tipo: "tinto",                  // tinto | branco | rosé | espumante | cerveja
+  produtor: "Quinta X",
+  regiao: "Douro DOC",
+  ano: 2021,                      // null nas cervejas
+  volume: "75 cl",
+  preco: 12.50,                   // ponto decimal, não vírgula
+  descricao: "Uma ou duas frases.",
+  cor: "#53000F",                 // cor da garrafa desenhada
+  imagem: "img/foto.webp",        // opcional — substitui a garrafa desenhada
+  destaque: "Reserva",            // opcional — etiqueta no canto
+  esgotado: true                  // opcional — esconde o botão de comprar
 }
 ```
 
-> **Os dados atuais são de exemplo.** Nomes, preços e notas de prova são
-> fictícios, só para dar forma ao layout. Substitui-os pelos reais antes de
-> publicar.
+Os produtos com `destaque` aparecem na secção "Em destaque" da página inicial.
 
-Se acrescentares um tipo novo, adiciona-o também à lista `TIPOS` no topo de
-`js/main.js` para aparecer nos filtros.
+> **Todos os produtos atuais são de exemplo.** Nomes, produtores, preços e notas
+> de prova são inventados. Substitui-os antes de pôr o site online.
+
+## Como funciona o carrinho
+
+Não há pagamentos nem servidor. O carrinho guarda as escolhas no browser do
+cliente e, no fim, escreve a encomenda numa mensagem de **WhatsApp** ou de
+**email**, pronta a enviar-te. Confirmas disponibilidade, entrega e pagamento
+pela conversa.
+
+Para trocar entre WhatsApp e email, muda `metodoEncomenda` no `config.js`.
 
 ## Por fazer
 
-- [ ] Substituir os dados de exemplo por vinhos reais
-- [ ] Trocar as garrafas em CSS por fotografias dos produtos
+- [ ] Preencher os contactos reais no `js/config.js`
+- [ ] Substituir os produtos de exemplo no `js/produtos.js`
+- [ ] Trocar as garrafas desenhadas por fotografias dos produtos
 - [ ] Ligar o formulário de contacto a um serviço a sério (Formspree, Netlify
       Forms ou um backend próprio) — hoje só valida no browser
-- [ ] Definir os textos legais e a política de privacidade
-- [ ] Verificação de idade (+18), se for para vender online
+- [ ] Escrever a política de privacidade e os termos, se passar a vender online
 
-## Publicar com GitHub Pages
+## Notas
 
-Como é um site estático, dá para publicar de graça: no repositório do GitHub vai a
-**Settings → Pages**, em *Source* escolhe `Deploy from a branch`, e seleciona a
-branch `main` com a pasta `/ (root)`. Em um ou dois minutos o site fica em
-`https://<utilizador>.github.io/<repositorio>/`.
+**Verificação de idade.** Aparece um aviso de +18 na primeira visita, como a lei
+exige para venda de bebidas alcoólicas. A resposta fica guardada só durante a
+sessão do browser.
+
+**Acessibilidade e animações.** O site respeita a definição do sistema de
+*reduzir movimento*: quem a tiver ligada não vê animações.
+
+## Publicar
+
+Como é um site estático, dá para publicar de graça:
+
+- **GitHub Pages** — só funciona em repositórios **públicos** em contas Free.
+  Em *Settings → Pages*, escolhe `Deploy from a branch`, branch `main`, pasta `/ (root)`.
+- **Netlify** ou **Cloudflare Pages** — publicam repositórios privados no plano
+  gratuito e atualizam sozinhos a cada `git push`.
