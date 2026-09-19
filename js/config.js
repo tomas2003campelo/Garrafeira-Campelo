@@ -59,6 +59,28 @@ const CONFIG = {
   /* Texto que acompanha a encomenda enviada */
   notaEncomenda: "Encomenda feita através do site. Confirmo disponibilidade e combino entrega e pagamento por esta via.",
 
+  /* --- Dados legais da empresa ---
+     Obrigatórios num site comercial português. Quem compra tem
+     direito a saber com quem está a negociar antes de encomendar.  */
+
+  empresa: {
+    denominacao: "",          // POR PREENCHER — nome da empresa tal como está registado.
+                              // Se ainda és em nome individual, põe o teu nome completo.
+    nif: "",                  // POR PREENCHER — NIF ou NIPC
+    sede: "",                 // POR PREENCHER — deixa vazio para usar a morada da loja
+    capitalSocial: "",        // Opcional — só se for sociedade
+    registoComercial: ""      // Opcional — conservatória e número de matrícula
+  },
+
+  /* Entidade de resolução alternativa de litígios de consumo.
+     Um site que vende a consumidores tem de indicar a entidade a
+     que está vinculado ou a que o cliente pode recorrer.
+     Procura a da tua região em www.consumidor.gov.pt              */
+  litigios: {
+    nome: "",                 // POR PREENCHER — ex: "CNIACC — Centro Nacional de Informação e Arbitragem de Conflitos de Consumo"
+    site: ""                  // POR PREENCHER — endereço dessa entidade
+  },
+
   /* --- Entregas --- */
   entrega: {
     texto: "Entregamos em todo o Portugal continental.",  // POR PREENCHER

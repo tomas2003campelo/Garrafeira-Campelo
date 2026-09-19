@@ -33,6 +33,19 @@
     document.querySelectorAll("[data-email]").forEach(el => { el.href = "mailto:" + CONFIG.email; });
     document.querySelectorAll("[data-whatsapp]").forEach(el => { el.href = "https://wa.me/" + CONFIG.telefoneLimpo; });
 
+    // Morada numa linha só, para correr dentro de um parágrafo
+    document.querySelectorAll("[data-morada-linha]").forEach(el => {
+      const mo = CONFIG.morada;
+      el.textContent = (CONFIG.empresa && CONFIG.empresa.sede)
+        ? CONFIG.empresa.sede
+        : `${mo.rua}, ${mo.codigoPostal} ${mo.localidade}`;
+    });
+
+    // Data de atualização dos textos legais
+    document.querySelectorAll("[data-atualizado]").forEach(el => {
+      el.textContent = new Date().toLocaleDateString("pt-PT", { month: "long", year: "numeric" });
+    });
+
     // Morada completa
     const m = CONFIG.morada;
     document.querySelectorAll("[data-morada]").forEach(el => {
@@ -54,6 +67,48 @@
 
     // Ano corrente no rodapé
     document.querySelectorAll("[data-ano]").forEach(el => { el.textContent = new Date().getFullYear(); });
+  }
+
+  /* Linha de identificação da empresa no rodapé.
+     Obrigatória num site comercial: quem compra tem direito a saber
+     com quem está a negociar. Enquanto os campos não estiverem
+     preenchidos, mostra um aviso visível — para não passar
+     despercebido que falta.                                        */
+  function preencherIdentificacao() {
+    const alvo = document.querySelector("[data-identificacao]");
+    if (!alvo) return;
+
+    const e = CONFIG.empresa || {};
+    const m = CONFIG.morada;
+    const sede = e.sede || `${m.rua}, ${m.codigoPostal} ${m.localidade}`;
+
+    if (!e.denominacao || !e.nif) {
+      alvo.innerHTML = '<strong>Por preencher:</strong> denominação e NIF da empresa ' +
+                       '(js/config.js). São obrigatórios num site comercial.';
+      alvo.classList.add("identificacao-em-falta");
+      return;
+    }
+
+    const partes = [e.denominacao, `NIF ${e.nif}`, sede];
+    if (e.capitalSocial)    partes.push(`Capital social ${e.capitalSocial}`);
+    if (e.registoComercial) partes.push(e.registoComercial);
+    alvo.textContent = partes.join(" · ");
+  }
+
+  /* O link da entidade de resolução de litígios só aparece depois
+     de estar preenchido — um link vazio é pior do que nenhum.      */
+  function preencherLitigios() {
+    const link = document.querySelector("[data-litigios]");
+    if (!link) return;
+
+    const l = CONFIG.litigios || {};
+    if (!l.site || !l.nome) return;      // fica escondido
+
+    link.href = l.site;
+    link.textContent = l.nome;
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.hidden = false;
   }
 
   function preencherHorario() {
@@ -648,9 +703,19 @@
      Obrigatório em Portugal para venda de bebidas alcoólicas.
      ======================================================= */
 
+  /* Páginas que ninguém deve ter de desbloquear: informação legal
+     tem de estar acessível sem declarar idade nenhuma.            */
+  const PAGINAS_SEM_IDADE = ["privacidade.html", "termos.html"];
+
   function ligarVerificacaoIdade() {
     const modal = document.getElementById("modal-idade");
     if (!modal) return;
+
+    const pagina = location.pathname.split("/").pop() || "index.html";
+    if (PAGINAS_SEM_IDADE.includes(pagina)) {
+      modal.remove();
+      return;
+    }
 
     let jaConfirmou = false;
     try { jaConfirmou = sessionStorage.getItem("idade-confirmada") === "sim"; } catch (e) {}
@@ -717,6 +782,8 @@
     }
 
     preencherConfig();
+    preencherIdentificacao();
+    preencherLitigios();
     preencherHorario();
     marcarPaginaAtual();
     ligarMenu();

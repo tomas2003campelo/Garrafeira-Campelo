@@ -22,6 +22,7 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 ├── cervejas.html     Catálogo de cervejas
 ├── sobre.html        Sobre a casa
 ├── contacto.html     Morada, horário, formulário e entregas
+├── privacidade.html  Política de privacidade (RGPD)
 ├── css/
 │   └── style.css     Estilos, paleta da marca e animações
 ├── js/
@@ -83,8 +84,26 @@ pela conversa.
 
 Para trocar entre WhatsApp e email, muda `metodoEncomenda` no `config.js`.
 
+## Obrigações legais
+
+O site já tem as três peças que a lei portuguesa exige:
+
+- **Livro de Reclamações Eletrónico** — link no rodapé de todas as páginas,
+  para `livroreclamacoes.pt`. Reclamações têm de ser respondidas em 15 dias úteis.
+- **Identificação da empresa** — denominação, NIF e sede no rodapé, a partir do
+  `config.js`. Enquanto estiverem por preencher, o rodapé mostra um aviso visível
+  em vez de ficar em branco.
+- **Política de privacidade** — em `privacidade.html`, escrita sobre o que o site
+  realmente faz. **Por rever** antes de publicar.
+
+As páginas legais estão isentas da verificação de idade: ninguém deve ter de
+declarar idade para ler a política de privacidade.
+
 ## Por fazer
 
+- [ ] Preencher os dados da empresa no `js/config.js` (denominação, NIF, sede)
+- [ ] Rever a política de privacidade com quem trata da contabilidade
+- [ ] Indicar a entidade de resolução de litígios (o link só aparece depois de preenchida)
 - [ ] Preencher os contactos reais no `js/config.js`
 - [ ] Substituir os produtos de exemplo no `js/produtos.js`
 - [ ] Trocar as garrafas desenhadas por fotografias dos produtos
