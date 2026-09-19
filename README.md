@@ -25,10 +25,11 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 ├── css/
 │   └── style.css     Estilos, paleta da marca e animações
 ├── js/
-│   ├── config.js     ←  OS TEUS DADOS (contactos, horário, entregas)
-│   ├── produtos.js   ←  O CATÁLOGO (vinhos e cervejas)
-│   ├── carrinho.js   Lógica do carrinho
-│   └── main.js       Navegação, filtros, animações, formulário
+│   ├── config.js      ←  OS TEUS DADOS (contactos, horário, entregas)
+│   ├── produtos.js    ←  O CATÁLOGO (vinhos e cervejas)
+│   ├── ilustracoes.js Garrafas e latas desenhadas em SVG
+│   ├── carrinho.js    Lógica do carrinho
+│   └── main.js        Navegação, filtros, animações, formulário
 └── img/              Logótipo, favicon, capa social e fotos de produtos
 ```
 
@@ -97,8 +98,14 @@ Para trocar entre WhatsApp e email, muda `metodoEncomenda` no `config.js`.
 exige para venda de bebidas alcoólicas. A resposta fica guardada só durante a
 sessão do browser.
 
+**As garrafas são desenhos, não fotografias.** São SVG gerado em
+`js/ilustracoes.js`, pintado com a cor que puseres em cada produto. Mantém o
+site leve, mas é um desenho: assim que tiveres fotos dos produtos, preenche o
+campo `imagem` e a fotografia passa à frente do desenho.
+
 **Acessibilidade e animações.** O site respeita a definição do sistema de
-*reduzir movimento*: quem a tiver ligada não vê animações.
+*reduzir movimento*: quem a tiver ligada não vê animação nenhuma — nem as
+de scroll, nem os contadores, nem o parallax.
 
 ## Publicar
 

@@ -63,8 +63,16 @@
 <main id="conteudo">
 
   <section class="hero">
+    <!-- Camadas de colinas, no espírito da capa da marca -->
+    <div class="hero-colinas" aria-hidden="true">
+      <svg viewBox="0 0 1440 420" preserveAspectRatio="none">
+        <path class="colina colina-1" d="M0 300c220-60 400-30 620 10s420 60 820-40v150H0z"/>
+        <path class="colina colina-2" d="M0 350c260-45 470 5 700 35s480 15 740-55v90H0z"/>
+      </svg>
+    </div>
+
     <div class="hero-inner">
-      <div>
+      <div class="entrada">
         <p class="eyebrow" data-config="tagline">Retalhista de vinhos · Direto das quintas</p>
         <h1>O vinho português<br>direto de <em>quem o faz</em>.</h1>
         <p class="lead">
@@ -84,12 +92,7 @@
       </div>
 
       <div class="hero-arte">
-        <div class="garrafa-hero">
-          <div class="rotulo-hero">
-            <strong data-config="nome">Garrafeira Campelo</strong>
-            <span>Douro · Portugal</span>
-          </div>
-        </div>
+        <div class="hero-palco" id="hero-garrafa"></div>
       </div>
     </div>
 
@@ -106,31 +109,31 @@
       </div>
 
       <div class="categorias-grid">
-        <a class="categoria-card revelar" href="vinhos.html#douro">
+        <a class="categoria-card revelar revelar-zoom" href="vinhos.html#douro">
           <h3>Douro</h3>
           <p>Encostas de xisto e verões quentes. Tintos estruturados e brancos de altitude.</p>
           <span class="categoria-conta" data-conta-categoria="douro"></span><br>
           <span class="seta">Ver vinhos →</span>
         </a>
-        <a class="categoria-card revelar" href="vinhos.html#verde">
+        <a class="categoria-card revelar revelar-zoom" href="vinhos.html#verde">
           <h3>Verde</h3>
           <p>Noroeste atlântico. Leves, cítricos e de acidez marcada.</p>
           <span class="categoria-conta" data-conta-categoria="verde"></span><br>
           <span class="seta">Ver vinhos →</span>
         </a>
-        <a class="categoria-card revelar" href="vinhos.html#maduro">
+        <a class="categoria-card revelar revelar-zoom" href="vinhos.html#maduro">
           <h3>Maduro</h3>
           <p>Alentejo, Dão, Bairrada e Setúbal. O resto de Portugal, garrafa a garrafa.</p>
           <span class="categoria-conta" data-conta-categoria="maduro"></span><br>
           <span class="seta">Ver vinhos →</span>
         </a>
-        <a class="categoria-card revelar" href="vinhos.html#espumantes">
+        <a class="categoria-card revelar revelar-zoom" href="vinhos.html#espumantes">
           <h3>Espumantes</h3>
           <p>Método clássico e bolha fina, para celebrar ou acompanhar a refeição.</p>
           <span class="categoria-conta" data-conta-categoria="espumantes"></span><br>
           <span class="seta">Ver vinhos →</span>
         </a>
-        <a class="categoria-card revelar" href="cervejas.html">
+        <a class="categoria-card revelar revelar-zoom" href="cervejas.html">
           <h3>Cervejas</h3>
           <p>Artesanais portuguesas, de IPA a stout.</p>
           <span class="categoria-conta" data-conta-categoria="cervejas"></span><br>
@@ -299,6 +302,7 @@
 
 <script src="js/config.js"></script>
 <script src="js/produtos.js"></script>
+<script src="js/ilustracoes.js"></script>
 <script src="js/carrinho.js"></script>
 <script src="js/main.js"></script>
 </body>

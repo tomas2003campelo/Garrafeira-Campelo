@@ -273,7 +273,7 @@ img { max-width: 100%; display: block; }
 .hero::before {
   content: "";
   position: absolute;
-  top: -18%; right: -12%;
+  top: calc(-18% + var(--deslocamento, 0px)); right: -12%;
   width: min(760px, 78vw);
   aspect-ratio: 1;
   border-radius: 50%;
@@ -283,7 +283,7 @@ img { max-width: 100%; display: block; }
 
 .hero-inner {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   max-width: var(--largura);
   margin-inline: auto;
   padding-inline: clamp(1rem, 4vw, 3rem);
@@ -337,62 +337,35 @@ img { max-width: 100%; display: block; }
   background: var(--dourado);
 }
 
-/* Garrafa ilustrada do hero */
-.hero-arte { display: grid; place-items: center; }
+/* Colinas em camadas, no espírito da capa da marca */
+.hero-colinas {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 62%;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-colinas svg { width: 100%; height: 100%; display: block; }
+.colina-1 { fill: rgba(219, 186, 167, .62); }
+.colina-2 { fill: rgba(189, 145, 133, .5); }
 
-.garrafa-hero {
-  width: 118px;
-  height: 330px;
-  position: relative;
-  background: var(--borgonha);
-  border-radius: 12px 12px 18px 18px;
-  box-shadow: var(--sombra-lg);
-  animation: flutuar 6s ease-in-out infinite;
-}
-.garrafa-hero::before {
-  content: "";
-  position: absolute;
-  top: -92px; left: 50%;
-  transform: translateX(-50%);
-  width: 40px; height: 96px;
-  background: var(--borgonha);
-  border-radius: 8px 8px 0 0;
-}
-.garrafa-hero::after {
-  content: "";
-  position: absolute;
-  top: 40%; left: 0; right: 0;
-  height: 108px;
-  background: var(--creme);
-  border-block: 1px solid rgba(42, 26, 22, .1);
-}
+/* Ilustração do hero */
+.hero-arte { display: grid; place-items: center; will-change: transform; }
 
-.rotulo-hero {
-  position: absolute;
-  top: 40%; left: 0; right: 0;
-  height: 108px;
-  z-index: 2;
+.hero-palco {
   display: grid;
-  place-content: center;
-  text-align: center;
-  gap: .2rem;
+  place-items: center;
+  animation: flutuar 7s ease-in-out infinite;
 }
-.rotulo-hero strong {
-  font-family: var(--fonte-titulo);
-  font-size: .82rem;
-  color: var(--borgonha);
-  letter-spacing: .02em;
-}
-.rotulo-hero span {
-  font-size: .54rem;
-  text-transform: uppercase;
-  letter-spacing: .14em;
-  color: var(--dourado-escuro);
+.hero-palco .ilustracao {
+  height: clamp(280px, 42vh, 430px);
+  width: auto;
+  filter: drop-shadow(0 26px 40px rgba(83, 0, 15, .26));
 }
 
 @keyframes flutuar {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50%      { transform: translateY(-16px) rotate(1deg); }
+  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
+  50%      { transform: translateY(-18px) rotate(1.5deg); }
 }
 
 /* Onda que separa o hero do resto, como na capa */
@@ -472,71 +445,34 @@ img { max-width: 100%; display: block; }
 
 .card-top {
   position: relative;
-  aspect-ratio: 4 / 3.2;
+  height: 215px;
   display: grid;
   place-items: center;
   background: linear-gradient(158deg, var(--creme) 0%, var(--areia) 100%);
   border-bottom: 1px solid var(--linha);
   overflow: hidden;
 }
-.card-top img { height: 82%; width: auto; object-fit: contain; transition: transform .3s ease; }
+.card-top img { height: 172px; width: auto; max-width: 76%; object-fit: contain; transition: transform .3s ease; }
 .card:hover .card-top img { transform: scale(1.06); }
 
-/* Garrafa desenhada em CSS — usada quando não há fotografia */
-.garrafa {
-  width: 32px;
-  height: 108px;
-  background: var(--cor-produto, var(--borgonha));
-  border-radius: 4px 4px 7px 7px;
-  position: relative;
-  transition: transform .3s ease;
+/* Ilustrações SVG das garrafas e latas (ver js/ilustracoes.js) */
+.ilustracao {
+  width: auto;
+  max-width: 62%;
+  overflow: visible;
+  transition: transform .42s cubic-bezier(.22, .68, .3, 1), filter .42s ease;
+  filter: drop-shadow(0 8px 16px rgba(42, 26, 22, .13));
 }
-.card:hover .garrafa { transform: translateY(-4px) scale(1.04); }
-.garrafa::before {
-  content: "";
-  position: absolute;
-  top: -31px; left: 50%;
-  transform: translateX(-50%);
-  width: 12px; height: 33px;
-  background: inherit;
-  border-radius: 3px 3px 0 0;
+.card-top .ilustracao { height: 176px; }
+.card:hover .ilustracao {
+  transform: translateY(-9px) rotate(-2.5deg) scale(1.05);
+  filter: drop-shadow(0 18px 26px rgba(42, 26, 22, .2));
 }
-.garrafa::after {
-  content: "";
-  position: absolute;
-  top: -35px; left: 50%;
-  transform: translateX(-50%);
-  width: 16px; height: 9px;
-  background: var(--dourado);
-  border-radius: 2px;
-}
-.garrafa .rotulo {
-  position: absolute;
-  top: 34%; left: -3px; right: -3px;
-  height: 38px;
-  background: var(--creme);
-  border-block: 1px solid rgba(42, 26, 22, .09);
-}
+.card.esgotado .ilustracao { filter: grayscale(.72) drop-shadow(0 6px 12px rgba(42, 26, 22, .1)); }
 
-/* Lata, para as cervejas */
-.lata {
-  width: 46px;
-  height: 92px;
-  background: var(--cor-produto, var(--dourado));
-  border-radius: 7px;
-  position: relative;
-  transition: transform .3s ease;
-}
-.card:hover .lata { transform: translateY(-4px) scale(1.04); }
-.lata::before, .lata::after {
-  content: "";
-  position: absolute;
-  left: 3px; right: 3px;
-  height: 5px;
-  background: rgba(255, 255, 255, .42);
-}
-.lata::before { top: 4px; border-radius: 3px 3px 0 0; }
-.lata::after  { bottom: 4px; border-radius: 0 0 3px 3px; }
+/* Miniatura na linha do carrinho */
+.linha-arte .ilustracao { height: 52px; max-width: 80%; filter: none; }
+.linha-arte .ilustracao:hover { transform: none; }
 
 .badge {
   position: absolute;
@@ -683,7 +619,6 @@ img { max-width: 100%; display: block; }
   overflow: hidden;
 }
 .linha-arte img { height: 88%; width: auto; object-fit: contain; }
-.linha-pilula { width: 13px; height: 38px; border-radius: 2px 2px 4px 4px; background: var(--cor-produto, var(--borgonha)); }
 
 .linha-info { min-width: 0; }
 .linha-nome { font-size: .93rem; font-weight: 600; margin: 0 0 .1rem; }
@@ -925,31 +860,163 @@ img { max-width: 100%; display: block; }
 .aviso-legal { width: 100%; padding: .9rem 1.1rem; margin-top: 1.2rem; border: 1px solid rgba(252, 246, 238, .2); border-radius: var(--raio-sm); text-align: center; font-size: .8rem; color: rgba(252, 246, 238, .7); }
 
 /* =========================================================
+   MOVIMENTO E MICRO-INTERAÇÕES
+   ========================================================= */
+
+/* --- Barra de progresso de leitura, no topo --- */
+.progresso {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 70;
+  height: 3px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--borgonha), var(--dourado));
+  will-change: transform;
+}
+
+/* --- Cabeçalho encolhe ao descer --- */
+.topbar { transition: box-shadow .3s ease, background .3s ease; }
+.topbar.encolhido { box-shadow: 0 2px 20px rgba(42, 26, 22, .09); }
+.topbar.encolhido .topbar-inner { min-height: 58px; padding-block: .45rem; }
+.topbar-inner { transition: min-height .3s ease, padding .3s ease; }
+.topbar.encolhido .logo img { width: 34px; height: 34px; }
+.logo img { transition: width .3s ease, height .3s ease; }
+.topbar.encolhido .logo-tag { opacity: 0; max-height: 0; }
+.logo-tag { transition: opacity .25s ease, max-height .3s ease; max-height: 20px; }
+
+/* --- Brilho que atravessa os botões principais --- */
+.btn-primary, .btn-dourado { position: relative; overflow: hidden; isolation: isolate; }
+.btn-primary::after, .btn-dourado::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, .28) 50%, transparent 62%);
+  transform: translateX(-120%);
+  transition: transform .7s cubic-bezier(.3, .7, .3, 1);
+}
+.btn-primary:hover::after, .btn-dourado:hover::after { transform: translateX(120%); }
+
+/* --- Cartões: brilho que segue o rato --- */
+.card { position: relative; }
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .3s ease;
+  background: radial-gradient(420px circle at var(--rato-x, 50%) var(--rato-y, 50%),
+              rgba(194, 158, 97, .13), transparent 62%);
+}
+.card:hover::before { opacity: 1; }
+
+/* --- Fundo do cartão reage ao hover --- */
+.card-top { transition: background .4s ease; }
+.card:hover .card-top { background: linear-gradient(158deg, var(--areia) 0%, var(--terracota) 100%); }
+
+/* --- Etiqueta entra a saltar --- */
+.badge { animation: badge-entra .45s cubic-bezier(.34, 1.56, .64, 1) both; animation-delay: .25s; }
+@keyframes badge-entra {
+  from { opacity: 0; transform: translateY(-7px) scale(.85); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* --- Números que contam para cima --- */
+.stats dd { font-variant-numeric: tabular-nums; }
+
+/* --- Sublinhado dos links de texto --- */
+.ligacao-animada {
+  position: relative;
+  text-decoration: none;
+  background-image: linear-gradient(var(--borgonha), var(--borgonha));
+  background-size: 0% 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size .3s ease;
+}
+.ligacao-animada:hover { text-decoration: none; background-size: 100% 1.5px; }
+
+/* --- Cartões de categoria: brilho a varrer --- */
+.categoria-card::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: -45%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(194, 158, 97, .16), transparent);
+  transform: skewX(-18deg);
+  transition: left .65s cubic-bezier(.3, .7, .3, 1);
+  pointer-events: none;
+}
+.categoria-card:hover::after { left: 115%; }
+
+/* --- Painel do carrinho: linhas entram escalonadas --- */
+.linha-item:nth-child(1) { animation-delay: .02s; }
+.linha-item:nth-child(2) { animation-delay: .06s; }
+.linha-item:nth-child(3) { animation-delay: .1s; }
+.linha-item:nth-child(4) { animation-delay: .14s; }
+.linha-item:nth-child(n+5) { animation-delay: .18s; }
+
+/* --- Ícones dos blocos de informação --- */
+.info-icone { transition: transform .35s cubic-bezier(.34, 1.4, .64, 1), background .3s ease; }
+.info:hover .info-icone { transform: rotate(-8deg) scale(1.1); background: var(--dourado); color: var(--creme); }
+
+/* --- Pulsar do botão do carrinho quando há artigos --- */
+@keyframes pulsar-anel {
+  0%   { box-shadow: 0 0 0 0 rgba(83, 0, 15, .35); }
+  70%  { box-shadow: 0 0 0 9px rgba(83, 0, 15, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(83, 0, 15, 0); }
+}
+.contador.salta { animation: pulsar-anel .7s ease-out; }
+
+/* =========================================================
    ANIMAÇÕES DE ENTRADA
    ========================================================= */
 
 @keyframes entrar { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
-.revelar { opacity: 0; transform: translateY(26px); transition: opacity .65s ease, transform .65s cubic-bezier(.22, .68, .3, 1); }
+.revelar {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.22, .68, .3, 1);
+  transition-delay: var(--atraso, 0s);
+}
 .revelar.visivel { opacity: 1; transform: none; }
-.revelar:nth-child(2) { transition-delay: .07s; }
-.revelar:nth-child(3) { transition-delay: .14s; }
-.revelar:nth-child(4) { transition-delay: .21s; }
-.revelar:nth-child(5) { transition-delay: .28s; }
-.revelar:nth-child(6) { transition-delay: .35s; }
+
+/* Variantes de direção */
+.revelar-esq { transform: translateX(-34px); }
+.revelar-dir { transform: translateX(34px); }
+.revelar-zoom { transform: scale(.94); }
+.revelar-esq.visivel, .revelar-dir.visivel, .revelar-zoom.visivel { transform: none; }
+
+/* O hero entra sozinho ao carregar, sem esperar pelo scroll */
+.entrada > * { animation: subir .85s cubic-bezier(.22, .68, .3, 1) both; }
+.entrada > *:nth-child(1) { animation-delay: .05s; }
+.entrada > *:nth-child(2) { animation-delay: .15s; }
+.entrada > *:nth-child(3) { animation-delay: .25s; }
+.entrada > *:nth-child(4) { animation-delay: .35s; }
+.entrada > *:nth-child(5) { animation-delay: .45s; }
+
+@keyframes subir {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
 
 /* =========================================================
    RESPONSIVO
    ========================================================= */
 
 @media (max-width: 1000px) {
-  .hero-inner { grid-template-columns: 1fr; text-align: center; }
+  .hero { padding-top: clamp(2rem, 6vw, 4rem); }
+  .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 1.5rem; }
   .hero-inner .eyebrow, .hero-inner .lead { margin-inline: auto; }
   .hero-actions, .hero-tags { justify-content: center; }
-  .hero-arte { order: -1; margin-bottom: 1rem; }
-  .garrafa-hero { width: 96px; height: 250px; }
-  .garrafa-hero::before { top: -74px; height: 78px; width: 33px; }
-  .garrafa-hero::after, .rotulo-hero { height: 86px; }
+  .hero-arte { order: -1; margin-bottom: 0; }
+  .hero-inner { gap: 1rem; padding-top: 0; }
+  .hero-palco .ilustracao { height: clamp(190px, 26vh, 240px); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .contacto-grid, .about { grid-template-columns: 1fr; }
 }
@@ -993,13 +1060,18 @@ img { max-width: 100%; display: block; }
 @media (max-width: 420px) {
   .stats { grid-template-columns: 1fr; }
   .grid { grid-template-columns: 1fr; }
+  .card-top { height: 235px; }
+  .card-top .ilustracao { height: 195px; }
+  .card-top img { height: 190px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   .revelar { opacity: 1; transform: none; }
-  .garrafa-hero { animation: none; }
+  .entrada > * { opacity: 1; }
+  .hero-palco { animation: none; }
+  .progresso { display: none; }
 }
 
 @media print {

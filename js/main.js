@@ -122,7 +122,134 @@
       });
     }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
 
+    // O atraso escalonado é calculado por grupo de irmãos, para
+    // os cartões entrarem em cascata mesmo quando são gerados por JS.
+    const contagemPorPai = new Map();
+    alvos.forEach(el => {
+      if (el.style.getPropertyValue("--atraso")) return;
+      const pai = el.parentElement;
+      const n = contagemPorPai.get(pai) || 0;
+      contagemPorPai.set(pai, n + 1);
+      if (n > 0) el.style.setProperty("--atraso", `${Math.min(n * 0.07, 0.42)}s`);
+    });
+
     alvos.forEach(el => observador.observe(el));
+  }
+
+  /* Quem pediu menos movimento no sistema não leva animações
+     nenhumas — nem as que são feitas por JavaScript.          */
+  const menosMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* --- Barra de progresso de leitura --- */
+  function ligarProgresso() {
+    if (menosMovimento) return;
+
+    const barra = document.createElement("div");
+    barra.className = "progresso";
+    document.body.appendChild(barra);
+
+    let aEsperar = false;
+    function atualizar() {
+      const altura = document.documentElement.scrollHeight - window.innerHeight;
+      const fracao = altura > 0 ? window.scrollY / altura : 0;
+      barra.style.transform = `scaleX(${fracao})`;
+      aEsperar = false;
+    }
+    window.addEventListener("scroll", () => {
+      if (!aEsperar) { aEsperar = true; requestAnimationFrame(atualizar); }
+    }, { passive: true });
+    atualizar();
+  }
+
+  /* --- Cabeçalho encolhe depois dos primeiros pixels --- */
+  function ligarCabecalhoEncolhido() {
+    const topbar = document.querySelector(".topbar");
+    if (!topbar) return;
+
+    let aEsperar = false;
+    function verificar() {
+      topbar.classList.toggle("encolhido", window.scrollY > 60);
+      aEsperar = false;
+    }
+    window.addEventListener("scroll", () => {
+      if (!aEsperar) { aEsperar = true; requestAnimationFrame(verificar); }
+    }, { passive: true });
+    verificar();
+  }
+
+  /* --- Números que contam para cima quando aparecem --- */
+  function ligarContadores() {
+    const numeros = document.querySelectorAll(".stats dd");
+    if (!numeros.length) return;
+
+    if (menosMovimento || !("IntersectionObserver" in window)) return;
+
+    const observador = new IntersectionObserver(entradas => {
+      entradas.forEach(entrada => {
+        if (!entrada.isIntersecting) return;
+        observador.unobserve(entrada.target);
+
+        const alvo = parseInt(entrada.target.textContent.replace(/\D/g, ""), 10);
+        if (!alvo) return;
+
+        const duracao = 1100;
+        const inicio = performance.now();
+
+        function passo(agora) {
+          const t = Math.min((agora - inicio) / duracao, 1);
+          // desacelera no fim, para o número assentar
+          const suave = 1 - Math.pow(1 - t, 3);
+          entrada.target.textContent = Math.round(alvo * suave);
+          if (t < 1) requestAnimationFrame(passo);
+        }
+        entrada.target.textContent = "0";
+        requestAnimationFrame(passo);
+      });
+    }, { threshold: 0.5 });
+
+    numeros.forEach(n => observador.observe(n));
+  }
+
+  /* --- Brilho dos cartões a seguir o rato --- */
+  function ligarBrilhoCartoes() {
+    if (menosMovimento || window.matchMedia("(hover: none)").matches) return;
+
+    document.addEventListener("pointermove", e => {
+      const card = e.target.closest(".card, .categoria-card");
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--rato-x", `${e.clientX - r.left}px`);
+      card.style.setProperty("--rato-y", `${e.clientY - r.top}px`);
+    }, { passive: true });
+  }
+
+  /* --- Garrafa grande do hero --- */
+  function desenharGarrafaHero() {
+    const palco = document.getElementById("hero-garrafa");
+    if (!palco) return;
+    palco.innerHTML = Ilustracoes.garrafa("#53000F", "bordeaux", "Garrafa da Garrafeira Campelo");
+  }
+
+  /* --- Parallax suave na ilustração do hero --- */
+  function ligarParallax() {
+    if (menosMovimento) return;
+
+    const arte = document.querySelector(".hero-arte");
+    const hero = document.querySelector(".hero");
+    if (!arte || !hero) return;
+
+    let aEsperar = false;
+    function mover() {
+      const y = window.scrollY;
+      if (y < window.innerHeight * 1.2) {
+        arte.style.transform = `translateY(${y * 0.13}px)`;
+        hero.style.setProperty("--deslocamento", `${y * 0.05}px`);
+      }
+      aEsperar = false;
+    }
+    window.addEventListener("scroll", () => {
+      if (!aEsperar) { aEsperar = true; requestAnimationFrame(mover); }
+    }, { passive: true });
   }
 
   /* =======================================================
@@ -133,12 +260,7 @@
     if (p.imagem) {
       return `<img src="${p.imagem}" alt="${p.nome}" loading="lazy">`;
     }
-    if (p.categoria === "cervejas") {
-      return `<div class="lata" style="--cor-produto: ${p.cor}" role="img" aria-label="Lata de ${p.nome}"></div>`;
-    }
-    return `<div class="garrafa" style="--cor-produto: ${p.cor}" role="img" aria-label="Garrafa de ${p.nome}">
-              <span class="rotulo"></span>
-            </div>`;
+    return Ilustracoes.paraProduto(p);
   }
 
   function criarCartao(p) {
@@ -293,7 +415,7 @@
       const p = l.produto;
       const arte = p.imagem
         ? `<img src="${p.imagem}" alt="">`
-        : `<span class="linha-pilula" style="--cor-produto: ${p.cor}"></span>`;
+        : Ilustracoes.paraProduto(p);
 
       return `
         <div class="linha-item">
@@ -527,5 +649,11 @@
     ligarVerificacaoIdade();
     ligarFormulario();
     ligarAnimacoes();
+    desenharGarrafaHero();
+    ligarProgresso();
+    ligarCabecalhoEncolhido();
+    ligarContadores();
+    ligarBrilhoCartoes();
+    ligarParallax();
   });
 })();
