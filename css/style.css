@@ -1,0 +1,465 @@
+/* =========================================================
+   Adega Campelo — folha de estilos principal
+   Paleta, tipografia e componentes. Sem dependências.
+   ========================================================= */
+
+:root {
+  --borgonha: #6b1f2e;
+  --borgonha-claro: #8f2f41;
+  --creme: #faf7f2;
+  --creme-fundo: #f3ede4;
+  --tinta: #24191b;
+  --tinta-suave: #5d5052;
+  --linha: #e2d8cb;
+  --dourado: #b08d4f;
+  --branco: #ffffff;
+
+  --fonte-titulo: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --fonte-texto: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --raio: 10px;
+  --sombra: 0 1px 2px rgba(36, 25, 27, .06), 0 8px 24px rgba(36, 25, 27, .06);
+  --largura: 1140px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--fonte-texto);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--tinta);
+  background: var(--creme);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0 0 .5em;
+  letter-spacing: -.01em;
+}
+
+h1 { font-size: clamp(2.2rem, 5.5vw, 3.9rem); }
+h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); }
+h3 { font-size: 1.2rem; }
+
+p { margin: 0 0 1rem; }
+a { color: var(--borgonha); text-decoration: none; }
+a:hover { text-decoration: underline; }
+img { max-width: 100%; display: block; }
+
+/* ---------- Barra de topo ---------- */
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem clamp(1rem, 4vw, 3rem);
+  background: rgba(250, 247, 242, .88);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--linha);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  font-family: var(--fonte-titulo);
+  font-size: 1.28rem;
+  color: var(--tinta);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.logo:hover { text-decoration: none; }
+
+.logo-mark {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--borgonha);
+  box-shadow: 0 0 0 4px rgba(107, 31, 46, .14);
+}
+
+.nav { display: flex; gap: 1.8rem; }
+
+.nav a {
+  color: var(--tinta-suave);
+  font-size: .95rem;
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1.5px solid transparent;
+  transition: color .15s, border-color .15s;
+}
+.nav a:hover {
+  color: var(--borgonha);
+  border-bottom-color: var(--borgonha);
+  text-decoration: none;
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--tinta);
+  border-radius: 2px;
+}
+
+/* ---------- Hero ---------- */
+
+.hero {
+  padding: clamp(4rem, 11vw, 8.5rem) clamp(1rem, 4vw, 3rem);
+  background:
+    radial-gradient(1000px 420px at 82% -8%, rgba(107, 31, 46, .1), transparent 62%),
+    linear-gradient(180deg, var(--creme) 0%, var(--creme-fundo) 100%);
+  border-bottom: 1px solid var(--linha);
+}
+
+.hero-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: .74rem;
+  font-weight: 600;
+  color: var(--dourado);
+  margin-bottom: 1.4rem;
+}
+
+.lead {
+  font-size: 1.1rem;
+  color: var(--tinta-suave);
+  max-width: 56ch;
+  margin: 0 auto 2.2rem;
+}
+
+.hero-actions {
+  display: flex;
+  gap: .8rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------- Botões ---------- */
+
+.btn {
+  display: inline-block;
+  padding: .8rem 1.7rem;
+  border: 1.5px solid transparent;
+  border-radius: 100px;
+  font-size: .95rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .16s, color .16s, border-color .16s, transform .16s;
+}
+.btn:hover { text-decoration: none; transform: translateY(-1px); }
+
+.btn-primary { background: var(--borgonha); color: var(--branco); }
+.btn-primary:hover { background: var(--borgonha-claro); }
+
+.btn-ghost { background: transparent; color: var(--borgonha); border-color: var(--linha); }
+.btn-ghost:hover { border-color: var(--borgonha); }
+
+/* ---------- Secções ---------- */
+
+.section {
+  max-width: var(--largura);
+  margin: 0 auto;
+  padding: clamp(3.5rem, 8vw, 6rem) clamp(1rem, 4vw, 3rem);
+}
+
+.section-alt {
+  max-width: none;
+  background: var(--creme-fundo);
+  border-block: 1px solid var(--linha);
+}
+.section-alt > * { max-width: var(--largura); margin-inline: auto; }
+
+.section-head { text-align: center; margin-bottom: 2.6rem; }
+.section-head p { color: var(--tinta-suave); margin: 0; }
+
+/* ---------- Filtros ---------- */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  justify-content: center;
+  margin-bottom: 2.4rem;
+}
+
+.chip {
+  padding: .45rem 1.1rem;
+  border: 1.5px solid var(--linha);
+  border-radius: 100px;
+  background: var(--branco);
+  color: var(--tinta-suave);
+  font: inherit;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: all .15s;
+}
+.chip:hover { border-color: var(--borgonha); color: var(--borgonha); }
+.chip[aria-pressed="true"] {
+  background: var(--borgonha);
+  border-color: var(--borgonha);
+  color: var(--branco);
+}
+
+/* ---------- Grelha de vinhos ---------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+  gap: 1.4rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--branco);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  overflow: hidden;
+  transition: transform .18s, box-shadow .18s;
+}
+.card:hover { transform: translateY(-3px); box-shadow: var(--sombra); }
+
+.card-top {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #f6f1ea, #e9ded0);
+  border-bottom: 1px solid var(--linha);
+}
+
+/* Silhueta de garrafa desenhada em CSS — evita depender de imagens */
+.bottle {
+  width: 30px;
+  height: 104px;
+  background: var(--cor-vinho, var(--borgonha));
+  border-radius: 4px 4px 7px 7px;
+  position: relative;
+  opacity: .9;
+}
+.bottle::before {
+  content: "";
+  position: absolute;
+  top: -30px; left: 50%;
+  transform: translateX(-50%);
+  width: 11px; height: 32px;
+  background: inherit;
+  border-radius: 3px 3px 0 0;
+}
+.bottle::after {
+  content: "";
+  position: absolute;
+  top: -34px; left: 50%;
+  transform: translateX(-50%);
+  width: 15px; height: 9px;
+  background: var(--dourado);
+  border-radius: 2px;
+}
+
+.badge {
+  position: absolute;
+  top: .7rem; left: .7rem;
+  padding: .2rem .6rem;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, .92);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+
+.card-body { padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
+
+.card-region {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--dourado);
+  font-weight: 600;
+  margin-bottom: .35rem;
+}
+
+.card-name { font-size: 1.08rem; margin-bottom: .3rem; }
+.card-note { font-size: .9rem; color: var(--tinta-suave); flex: 1; margin-bottom: 1rem; }
+
+.card-foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .5rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--linha);
+}
+
+.price { font-family: var(--fonte-titulo); font-size: 1.32rem; }
+.vintage { font-size: .85rem; color: var(--tinta-suave); }
+
+.empty { text-align: center; color: var(--tinta-suave); padding: 2.5rem 0; }
+
+/* ---------- Regiões ---------- */
+
+.regions { display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr)); gap: 1.3rem; }
+
+.region {
+  padding: 1.5rem;
+  background: var(--branco);
+  border: 1px solid var(--linha);
+  border-left: 3px solid var(--borgonha);
+  border-radius: var(--raio);
+}
+.region p { margin: 0; font-size: .93rem; color: var(--tinta-suave); }
+
+/* ---------- Sobre ---------- */
+
+.about {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+.about-text p { color: var(--tinta-suave); }
+
+.stats { display: grid; gap: 1rem; margin: 0; }
+.stats > div {
+  padding: 1.1rem 1.3rem;
+  background: var(--branco);
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+}
+.stats dt {
+  font-size: .74rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--tinta-suave);
+  margin-bottom: .2rem;
+}
+.stats dd { margin: 0; font-family: var(--fonte-titulo); font-size: 1.9rem; color: var(--borgonha); }
+
+/* ---------- Formulário ---------- */
+
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+.field { display: flex; flex-direction: column; gap: .35rem; }
+.field-full { grid-column: 1 / -1; }
+
+.form label { font-size: .85rem; font-weight: 600; color: var(--tinta-suave); }
+
+.form input, .form textarea {
+  padding: .7rem .9rem;
+  border: 1.5px solid var(--linha);
+  border-radius: 8px;
+  background: var(--branco);
+  font: inherit;
+  font-size: .95rem;
+  color: var(--tinta);
+  resize: vertical;
+}
+.form input:focus, .form textarea:focus {
+  outline: none;
+  border-color: var(--borgonha);
+  box-shadow: 0 0 0 3px rgba(107, 31, 46, .12);
+}
+.form input[aria-invalid="true"], .form textarea[aria-invalid="true"] { border-color: #b3261e; }
+
+.form-note { margin: .8rem 0 0; font-size: .9rem; color: var(--borgonha); min-height: 1.4em; }
+
+/* ---------- Rodapé ---------- */
+
+.footer {
+  padding: 3rem clamp(1rem, 4vw, 3rem) 2rem;
+  background: var(--tinta);
+  color: rgba(250, 247, 242, .76);
+  font-size: .9rem;
+}
+.footer a { color: var(--creme); }
+
+.footer-inner {
+  max-width: var(--largura);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.footer p { margin: 0 0 .3rem; }
+
+.footer-brand {
+  font-family: var(--fonte-titulo);
+  font-size: 1.15rem;
+  color: var(--creme);
+  margin-bottom: .5rem;
+}
+
+.legal {
+  grid-column: 1 / -1;
+  padding-top: 1.6rem;
+  margin-top: .6rem;
+  border-top: 1px solid rgba(250, 247, 242, .16);
+  font-size: .8rem;
+  color: rgba(250, 247, 242, .55);
+}
+
+/* ---------- Responsivo ---------- */
+
+@media (max-width: 860px) {
+  .about { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 680px) {
+  body { font-size: 16px; }
+
+  .nav {
+    display: none;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    flex-direction: column;
+    gap: 0;
+    padding: .5rem 0;
+    background: var(--creme);
+    border-bottom: 1px solid var(--linha);
+  }
+  .nav.aberto { display: flex; }
+  .nav a { padding: .8rem clamp(1rem, 4vw, 3rem); border-bottom: 0; }
+
+  .nav-toggle { display: flex; }
+
+  .form, .footer-inner { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: 1fr; }
+  .hero-actions .btn { flex: 1 1 auto; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+  .card:hover, .btn:hover { transform: none; }
+}

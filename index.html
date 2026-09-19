@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adega Campelo — Vinhos Portugueses</title>
+  <meta name="description" content="Seleção de vinhos portugueses das principais regiões: Douro, Alentejo, Dão, Bairrada e Vinhos Verdes.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="logo" href="#inicio">
+      <span class="logo-mark" aria-hidden="true"></span>
+      Adega Campelo
+    </a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="#catalogo">Vinhos</a>
+      <a href="#regioes">Regiões</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="hero-inner">
+        <p class="eyebrow">Desde 1987 · Vale do Douro</p>
+        <h1>O vinho português<br>como deve ser provado.</h1>
+        <p class="lead">
+          Uma seleção cuidada de produtores de pequena escala — do xisto do Douro
+          às planícies do Alentejo. Enviamos para todo o país em 48 horas.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#catalogo">Ver a seleção</a>
+          <a class="btn btn-ghost" href="#regioes">Conhecer as regiões</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="catalogo">
+      <div class="section-head">
+        <h2>A nossa seleção</h2>
+        <p>Filtra por tipo de vinho para encontrares o que procuras.</p>
+      </div>
+
+      <div class="filters" role="group" aria-label="Filtrar vinhos por tipo">
+        <!-- Os botões de filtro são gerados em js/main.js -->
+      </div>
+
+      <div class="grid" id="lista-vinhos">
+        <!-- Os cartões de vinho são gerados em js/main.js -->
+      </div>
+
+      <p class="empty" id="sem-resultados" hidden>Nenhum vinho corresponde a este filtro.</p>
+    </section>
+
+    <section class="section section-alt" id="regioes">
+      <div class="section-head">
+        <h2>Regiões</h2>
+        <p>Cada região imprime no vinho o seu solo e o seu clima.</p>
+      </div>
+      <div class="regions">
+        <article class="region">
+          <h3>Douro</h3>
+          <p>Encostas de xisto e verões quentes. Tintos estruturados, de fruta escura e taninos firmes.</p>
+        </article>
+        <article class="region">
+          <h3>Alentejo</h3>
+          <p>Planície e muito sol. Vinhos generosos, maduros e macios, de acesso fácil.</p>
+        </article>
+        <article class="region">
+          <h3>Vinhos Verdes</h3>
+          <p>Noroeste húmido e atlântico. Brancos leves, cítricos e de acidez marcada.</p>
+        </article>
+        <article class="region">
+          <h3>Dão</h3>
+          <p>Granito e altitude. Elegância, frescura e um perfil mais contido que o Douro.</p>
+        </article>
+        <article class="region">
+          <h3>Bairrada</h3>
+          <p>Solos argilo-calcários. Casa da Baga e dos espumantes de método clássico.</p>
+        </article>
+        <article class="region">
+          <h3>Setúbal</h3>
+          <p>Areia e calcário junto ao mar. Moscatel e tintos de Castelão.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="sobre">
+      <div class="about">
+        <div class="about-text">
+          <h2>Sobre nós</h2>
+          <p>
+            Começámos como uma pequena garrafeira de bairro e mantivemos o mesmo
+            critério: trabalhar diretamente com quem faz o vinho. Provamos tudo
+            o que vendemos e recusamos mais do que aceitamos.
+          </p>
+          <p>
+            Hoje representamos 40 produtores, a maioria com menos de dez hectares
+            de vinha. Se procuras uma recomendação para um jantar concreto,
+            escreve-nos — respondemos no mesmo dia.
+          </p>
+        </div>
+        <dl class="stats">
+          <div><dt>Produtores</dt><dd>40</dd></div>
+          <div><dt>Referências</dt><dd>260</dd></div>
+          <div><dt>Anos de casa</dt><dd>38</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="contacto">
+      <div class="section-head">
+        <h2>Contacto</h2>
+        <p>Dúvidas, encomendas ou sugestões de harmonização.</p>
+      </div>
+      <form class="form" id="form-contacto" novalidate>
+        <div class="field">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome" name="nome" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+        <div class="field field-full">
+          <label for="mensagem">Mensagem</label>
+          <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+        </div>
+        <div class="field-full">
+          <button class="btn btn-primary" type="submit">Enviar mensagem</button>
+          <p class="form-note" id="form-nota" role="status"></p>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <p class="footer-brand">Adega Campelo</p>
+        <p>Rua das Vinhas 12, 4400 Vila Nova de Gaia</p>
+      </div>
+      <div>
+        <p><a href="mailto:ola@exemplo.pt">ola@exemplo.pt</a></p>
+        <p>Seg a Sáb, 10h–19h</p>
+      </div>
+      <p class="legal">
+        Consumo de bebidas alcoólicas proibido a menores de 18 anos.<br>
+        Seja responsável. Beba com moderação.
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/vinhos.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Dependências / builds
+node_modules/
+dist/
+build/
+.next/
+.cache/
+
+# Variáveis de ambiente (nunca enviar para o GitHub)
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
