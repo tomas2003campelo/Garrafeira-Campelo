@@ -79,7 +79,7 @@ const CONFIG = {
   litigios: {
     // O CIAB é a entidade competente para o concelho de Barcelos,
     // sem limite de valor. Verificado em setembro de 2026.
-    nome: "CIAB — Tribunal Arbitral de Consumo",
+    nome: "CIAB (Tribunal Arbitral de Consumo)",
     site: "https://www.ciab.pt"
   },
 
