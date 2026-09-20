@@ -35,8 +35,8 @@ const CONFIG = {
      em que estejas fechado — o site mostra "Encerrado".        */
   horario: [
     { dia: "Segunda a Sexta", horas: "09:00 – 19:00" },
-    { dia: "Sábado",          horas: "09:00 – 19:00" },  // CONFIRMAR — assumi o mesmo horário
-    { dia: "Domingo",         horas: "" }                // CONFIRMAR — assumi encerrado
+    { dia: "Sábado",          horas: "09:00 – 13:00" },
+    { dia: "Domingo",         horas: "" }
   ],
 
   /* --- Redes sociais ---
