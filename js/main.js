@@ -743,15 +743,36 @@
     modal.classList.add("aberto");
     document.body.classList.add("sem-scroll");
 
-    modal.querySelector("[data-idade-sim]")?.addEventListener("click", () => {
+    modal.querySelector("[data-idade-sim]")?.addEventListener("click", confirmar);
+
+    /* Antes, o "Não" atirava a pessoa para o Google. Quem carregasse
+       por engano perdia o site e não tinha caminho de volta óbvio.
+       Agora fica no sítio, com a despedida e a hipótese de corrigir. */
+    modal.querySelector("[data-idade-nao]")?.addEventListener("click", () => {
+      const caixa = modal.querySelector(".modal-caixa");
+      caixa.innerHTML = `
+        <img src="img/logo.png" alt="">
+        <h2>Volta noutra altura</h2>
+        <p>
+          Este site vende bebidas alcoólicas e, por lei, só pode ser visitado
+          por maiores de 18 anos.
+        </p>
+        <div class="modal-acoes">
+          <button class="btn btn-ghost" data-idade-voltar>Enganei-me, tenho 18 ou mais</button>
+        </div>
+        <p class="modal-legal">
+          Se precisares de falar connosco por outro motivo, escreve para
+          <a href="mailto:${CONFIG.email}">${CONFIG.email}</a>.
+        </p>`;
+
+      caixa.querySelector("[data-idade-voltar]").addEventListener("click", confirmar);
+    });
+
+    function confirmar() {
       try { sessionStorage.setItem("idade-confirmada", "sim"); } catch (e) {}
       modal.classList.remove("aberto");
       document.body.classList.remove("sem-scroll");
-    });
-
-    modal.querySelector("[data-idade-nao]")?.addEventListener("click", () => {
-      location.href = "https://www.google.com";
-    });
+    }
   }
 
   /* =======================================================
