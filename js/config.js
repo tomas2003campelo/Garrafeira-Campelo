@@ -43,9 +43,9 @@ const CONFIG = {
      Deixa vazio ("") qualquer rede que não tenhas — o ícone
      desaparece do site sozinho.                                */
   redes: {
-    instagram: "",   // POR PREENCHER — ex: "https://instagram.com/garrafeiracampelo"
-    facebook: "",    // POR PREENCHER
-    tripadvisor: ""  // POR PREENCHER
+    instagram: "https://www.instagram.com/garrafeira_campelo/",
+    facebook: "https://www.facebook.com/profile.php?id=61594402711283",
+    tripadvisor: ""  // deixa vazio enquanto não tiveres — o ícone não aparece
   },
 
   /* --- Encomendas ---
