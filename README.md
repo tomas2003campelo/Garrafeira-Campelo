@@ -133,6 +133,20 @@ campo `imagem` e a fotografia passa à frente do desenho.
 *reduzir movimento*: quem a tiver ligada não vê animação nenhuma — nem as
 de scroll, nem os contadores, nem o parallax.
 
+## Modo de pré-visualização
+
+O site está publicado como **rascunho**, com duas coisas temporárias:
+
+- Uma **faixa dourada** no topo de todas as páginas a dizer que os produtos
+  são exemplos
+- Uma marca `<meta name="robots" content="noindex, nofollow">` que impede o
+  Google de indexar o site
+
+**Quando o catálogo for real, apaga as duas em todas as páginas.** Ambas estão
+assinaladas com um comentário `PRÉ-VISUALIZAÇÃO` no HTML, e o estilo da faixa
+está em `css/style.css`, na secção com o mesmo nome. Enquanto a marca `noindex`
+lá estiver, o site não aparece nas pesquisas — por muito bom que seja.
+
 ## Publicar
 
 Como é um site estático, dá para publicar de graça:
