@@ -9,7 +9,9 @@
   --borgonha-claro:  #6E0A1A;
   --borgonha-escuro: #3A000A;
   --dourado:         #C29E61;
-  --dourado-escuro:  #A5823F;
+  /* Escurecido de #A5823F para passar o mínimo de contraste (4.5:1)
+     sobre o creme: é usado em texto pequeno, onde mais importa. */
+  --dourado-escuro:  #896C34;
   --creme:           #FCF6EE;
   --creme-fundo:     #F7EDE3;
   --areia:           #F2DDCF;
@@ -63,6 +65,10 @@ h1, h2, h3, h4 {
 }
 
 h1 { font-size: clamp(2.3rem, 5.5vw, 4.1rem); }
+
+/* Título principal das páginas interiores: é h1 por ser o assunto da
+   página, mas com o peso visual de um título de secção. */
+h1.titulo-pagina { font-size: clamp(1.8rem, 3.6vw, 2.7rem); }
 h2 { font-size: clamp(1.8rem, 3.6vw, 2.7rem); }
 h3 { font-size: 1.22rem; }
 h4 { font-size: 1rem; }
