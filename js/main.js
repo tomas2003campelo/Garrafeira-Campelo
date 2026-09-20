@@ -30,6 +30,14 @@
 
     // Links de telefone e email
     document.querySelectorAll("[data-tel]").forEach(el => { el.href = "tel:" + CONFIG.telefone.replace(/\s/g, ""); });
+
+    // Segundo número: só aparece se existir no config
+    document.querySelectorAll("[data-tel2]").forEach(el => {
+      if (!CONFIG.telefone2) return;
+      el.href = "tel:" + CONFIG.telefone2.replace(/\s/g, "");
+      el.textContent = CONFIG.telefone2;
+      el.hidden = false;
+    });
     document.querySelectorAll("[data-email]").forEach(el => { el.href = "mailto:" + CONFIG.email; });
     document.querySelectorAll("[data-whatsapp]").forEach(el => { el.href = "https://wa.me/" + CONFIG.telefoneLimpo; });
 

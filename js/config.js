@@ -19,14 +19,15 @@ const CONFIG = {
   /* --- Contactos ---------------------------------------
      POR PREENCHER: troca pelos teus dados reais.          */
 
-  telefone: "+351 000 000 000",        // POR PREENCHER
-  telefoneLimpo: "351000000000",       // POR PREENCHER — só dígitos, com indicativo do país, para o WhatsApp
+  telefone: "+351 936 506 371",
+  telefoneLimpo: "351936506371",       // só dígitos, com indicativo do país, para o WhatsApp
+  telefone2: "+351 936 506 373",       // segundo número, mostrado a seguir ao primeiro
   email: "geral@garrafeiracampelo.pt", // POR PREENCHER
 
   morada: {
-    rua: "Rua Exemplo, 000",           // POR PREENCHER
-    codigoPostal: "0000-000",          // POR PREENCHER
-    localidade: "Localidade",          // POR PREENCHER
+    rua: "Rua Principal, 1201",
+    codigoPostal: "4775-237",
+    localidade: "Silveiros, Barcelos",
     pais: "Portugal"
   },
 
@@ -64,10 +65,9 @@ const CONFIG = {
      direito a saber com quem está a negociar antes de encomendar.  */
 
   empresa: {
-    denominacao: "",          // POR PREENCHER — nome da empresa tal como está registado.
-                              // Se ainda és em nome individual, põe o teu nome completo.
-    nif: "",                  // POR PREENCHER — NIF ou NIPC
-    sede: "",                 // POR PREENCHER — deixa vazio para usar a morada da loja
+    denominacao: "J. Faria Campelo, Unipessoal Lda",
+    nif: "506401561",
+    sede: "",                 // vazio = usa a morada da loja
     capitalSocial: "",        // Opcional — só se for sociedade
     registoComercial: ""      // Opcional — conservatória e número de matrícula
   },
@@ -77,8 +77,10 @@ const CONFIG = {
      que está vinculado ou a que o cliente pode recorrer.
      Procura a da tua região em www.consumidor.gov.pt              */
   litigios: {
-    nome: "",                 // POR PREENCHER — ex: "CNIACC — Centro Nacional de Informação e Arbitragem de Conflitos de Consumo"
-    site: ""                  // POR PREENCHER — endereço dessa entidade
+    // O CIAB é a entidade competente para o concelho de Barcelos,
+    // sem limite de valor. Verificado em setembro de 2026.
+    nome: "CIAB — Tribunal Arbitral de Consumo",
+    site: "https://www.ciab.pt"
   },
 
   /* --- Entregas --- */
