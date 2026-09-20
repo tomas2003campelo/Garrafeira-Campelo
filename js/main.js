@@ -49,6 +49,16 @@
         : `${mo.rua}, ${mo.codigoPostal} ${mo.localidade}`;
     });
 
+    // Lista de concelhos de entrega, em português corrente:
+    // "A, B, C e D" em vez de "A, B, C, D"
+    document.querySelectorAll("[data-concelhos]").forEach(el => {
+      const c = (CONFIG.entrega && CONFIG.entrega.concelhos) || [];
+      if (!c.length) return;
+      el.textContent = c.length === 1
+        ? c[0]
+        : c.slice(0, -1).join(", ") + " e " + c[c.length - 1];
+    });
+
     // Data de atualização dos textos legais
     document.querySelectorAll("[data-atualizado]").forEach(el => {
       el.textContent = new Date().toLocaleDateString("pt-PT", { month: "long", year: "numeric" });

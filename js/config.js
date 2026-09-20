@@ -22,7 +22,7 @@ const CONFIG = {
   telefone: "+351 936 506 371",
   telefoneLimpo: "351936506371",       // só dígitos, com indicativo do país, para o WhatsApp
   telefone2: "+351 936 506 373",       // segundo número, mostrado a seguir ao primeiro
-  email: "geral@garrafeiracampelo.pt", // POR PREENCHER
+  email: "j.campelo.unipessoal@gmail.com",
 
   morada: {
     rua: "Rua Principal, 1201",
@@ -34,9 +34,9 @@ const CONFIG = {
   /* Horário de funcionamento. Deixa a string vazia ("") num dia
      em que estejas fechado — o site mostra "Encerrado".        */
   horario: [
-    { dia: "Segunda a Sexta", horas: "10:00 – 19:00" },  // POR PREENCHER
-    { dia: "Sábado",          horas: "10:00 – 13:00" },  // POR PREENCHER
-    { dia: "Domingo",         horas: "" }                // POR PREENCHER
+    { dia: "Segunda a Sexta", horas: "09:00 – 19:00" },
+    { dia: "Sábado",          horas: "09:00 – 19:00" },  // CONFIRMAR — assumi o mesmo horário
+    { dia: "Domingo",         horas: "" }                // CONFIRMAR — assumi encerrado
   ],
 
   /* --- Redes sociais ---
@@ -83,10 +83,19 @@ const CONFIG = {
     site: "https://www.ciab.pt"
   },
 
-  /* --- Entregas --- */
+  /* --- Entregas ---
+     Dois modos: entrega em mão nos concelhos da zona, e o resto
+     do país mediante orçamento. A lista de concelhos aparece
+     sozinha no site — acrescenta ou tira e o site acompanha.    */
   entrega: {
-    texto: "Entregamos em todo o Portugal continental.",  // POR PREENCHER
-    prazo: "2 a 3 dias úteis",                            // POR PREENCHER
-    portes: "Portes grátis acima de 50 €"                 // POR PREENCHER
+    /* Concelhos onde entregas pessoalmente */
+    concelhos: ["Barcelos", "Famalicão", "Braga", "Póvoa de Varzim", "Vila do Conde"],
+
+    emMao:  "Entrega em mão, sem custo de portes.",
+    prazo:  "Dia e hora combinados consigo.",
+    resto:  "Pedimos orçamento de transporte antes de fechar a encomenda.",
+
+    /* Resumo curto, para o topo da página inicial */
+    resumo: "Entrega em mão no Minho"
   }
 };
