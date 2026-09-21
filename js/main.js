@@ -403,35 +403,6 @@
     });
   }
 
-  /* --- Garrafa grande do hero --- */
-  function desenharGarrafaHero() {
-    const palco = document.getElementById("hero-garrafa");
-    if (!palco) return;
-    palco.innerHTML = Ilustracoes.garrafa("#53000F", "bordeaux", "Garrafa da Garrafeira Campelo");
-  }
-
-  /* --- Parallax suave na ilustração do hero --- */
-  function ligarParallax() {
-    if (menosMovimento) return;
-
-    const arte = document.querySelector(".hero-arte");
-    const hero = document.querySelector(".hero");
-    if (!arte || !hero) return;
-
-    let aEsperar = false;
-    function mover() {
-      const y = window.scrollY;
-      if (y < window.innerHeight * 1.2) {
-        arte.style.transform = `translateY(${y * 0.13}px)`;
-        hero.style.setProperty("--deslocamento", `${y * 0.05}px`);
-      }
-      aEsperar = false;
-    }
-    window.addEventListener("scroll", () => {
-      if (!aEsperar) { aEsperar = true; requestAnimationFrame(mover); }
-    }, { passive: true });
-  }
-
   /* =======================================================
      4. CARTÕES DE PRODUTO
      ======================================================= */
@@ -1116,13 +1087,11 @@
     ligarVerificacaoIdade();
     ligarFormulario();
     ligarAnimacoes();
-    desenharGarrafaHero();
     ajustarFaixaRascunho();
     ligarProgresso();
     ligarCabecalhoEncolhido();
     ligarContadores();
     ligarBrilhoCartoes();
-    ligarParallax();
     ligarParallaxFaixa();
     ligarInclinacao();
     ligarTransicaoPaginas();

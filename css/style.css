@@ -487,7 +487,6 @@ main { overflow-x: clip; }
   color: rgba(252, 246, 238, .78);
   border-top-color: rgba(252, 246, 238, .22);
 }
-.hero-foto .hero-palco .ilustracao { filter: drop-shadow(0 30px 50px rgba(0, 0, 0, .55)); }
 
 /* O gradiente e as colinas do hero claro não se usam sobre fotografia */
 .hero-foto::before, .hero-foto .hero-colinas { display: none; }
@@ -503,25 +502,6 @@ main { overflow-x: clip; }
 .hero-colinas svg { width: 100%; height: 100%; display: block; }
 .colina-1 { fill: rgba(219, 186, 167, .62); }
 .colina-2 { fill: rgba(189, 145, 133, .5); }
-
-/* Ilustração do hero */
-.hero-arte { display: grid; place-items: center; will-change: transform; }
-
-.hero-palco {
-  display: grid;
-  place-items: center;
-  animation: flutuar 7s ease-in-out infinite;
-}
-.hero-palco .ilustracao {
-  height: clamp(280px, 42vh, 430px);
-  width: auto;
-  filter: drop-shadow(0 26px 40px rgba(83, 0, 15, .26));
-}
-
-@keyframes flutuar {
-  0%, 100% { transform: translateY(0) rotate(-2.5deg); }
-  50%      { transform: translateY(-18px) rotate(1.5deg); }
-}
 
 /* Onda que separa o hero do resto, como na capa */
 .onda path { fill: var(--fundo); }
@@ -1519,6 +1499,24 @@ main { overflow-x: clip; }
 
 /* --- Fundo do cartão reage ao hover --- */
 .card-top { transition: background .4s ease; }
+
+/* Página inicial: os cartões do "Em destaque" são dourados, com o
+   texto em bordô, as duas cores do logótipo. As garrafas claras
+   continuam a ver-se porque têm as margens sombreadas. */
+.destaques .card {
+  --texto:       #2A0A10;
+  --texto-suave: #4A2820;
+  --acento:      #6E0A1A;
+  --linha:       rgba(58, 0, 10, .16);
+  --terracota:   #F2DBA8;   /* borda ao passar o rato */
+  background: linear-gradient(165deg, #DCC08A 0%, #CBAA6E 55%, #C29E61 100%);
+  border-color: #D9BC85;
+  color: var(--texto);
+}
+.destaques .card-top {
+  background: radial-gradient(ellipse 58% 70% at 50% 46%, #F6E9CC 0%, #E3C997 50%, #CFAF74 100%);
+  border-bottom-color: rgba(58, 0, 10, .14);
+}
 /* Ao passar o rato, a luz acende um pouco mais */
 .card-top::after {
   content: "";
@@ -1727,9 +1725,7 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .hero-inner .eyebrow, .hero-inner .lead { margin-inline: auto; }
   .hero-actions, .hero-tags { justify-content: center; }
   .indicador-scroll { display: none; }
-  .hero-arte { order: -1; margin-bottom: 0; }
   .hero-inner { gap: 1rem; padding-top: 0; }
-  .hero-palco .ilustracao { height: clamp(190px, 26vh, 240px); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .contacto-grid, .about { grid-template-columns: 1fr; }
 }
@@ -1774,7 +1770,6 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
   .revelar { opacity: 1; transform: none; }
   .entrada > * { opacity: 1; }
-  .hero-palco { animation: none; }
   .progresso { display: none; }
 }
 
