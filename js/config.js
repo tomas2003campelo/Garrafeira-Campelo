@@ -54,11 +54,10 @@ const CONFIG = {
        "email"    → abre o programa de email com a encomenda escrita   */
   metodoEncomenda: "whatsapp",
 
-  /* Valor mínimo de encomenda em euros (0 = sem mínimo) */
-  encomendaMinima: 0,
-
   /* Texto que acompanha a encomenda enviada */
-  notaEncomenda: "Encomenda feita através do site. Confirmo disponibilidade e combino entrega e pagamento por esta via.",
+  /* Frase final da mensagem. É o CLIENTE que a envia, por isso está
+     escrita na voz dele, não na tua. */
+  notaEncomenda: "Encomenda feita através do site. Fico a aguardar a vossa confirmação.",
 
   /* --- Dados legais da empresa ---
      Obrigatórios num site comercial português. Quem compra tem
@@ -83,19 +82,33 @@ const CONFIG = {
     site: "https://www.ciab.pt"
   },
 
-  /* --- Entregas ---
-     Dois modos: entrega em mão nos concelhos da zona, e o resto
-     do país mediante orçamento. A lista de concelhos aparece
-     sozinha no site — acrescenta ou tira e o site acompanha.    */
+  /* --- Como o cliente recebe a encomenda ---
+     Três modos, que o cliente escolhe no carrinho:
+
+       1. Recolha na loja    sem mínimo de compra
+       2. Entrega em mão     só a partir do valor mínimo, e só nos concelhos da lista
+       3. Resto do país      mediante orçamento de transporte
+
+     Para mudar o valor mínimo da entrega, muda o número em "minimo".
+     Para deixar de fazer entregas em mão, põe "concelhos: []".       */
+
+  recolha: {
+    texto: "Recolha na loja, sem mínimo de compra.",
+    prazo: "Pronta a levantar no próprio dia ou no seguinte. Avisamos quando estiver."
+  },
+
   entrega: {
+    /* Valor mínimo, em euros, para entrega em mão. Abaixo disto, o
+       cliente só pode escolher a recolha na loja. */
+    minimo: 40,
+
     /* Concelhos onde entregas pessoalmente */
     concelhos: ["Barcelos", "Famalicão", "Braga", "Póvoa de Varzim", "Vila do Conde"],
 
-    emMao:  "Entrega em mão, sem custo de portes.",
     prazo:  "Dia e hora combinados consigo.",
     resto:  "Pedimos orçamento de transporte antes de fechar a encomenda.",
 
     /* Resumo curto, para o topo da página inicial */
-    resumo: "Entrega em mão no Minho"
+    resumo: "Recolha na loja ou entrega em mão"
   }
 };

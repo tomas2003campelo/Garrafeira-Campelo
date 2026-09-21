@@ -49,6 +49,12 @@
         : `${mo.rua}, ${mo.codigoPostal} ${mo.localidade}`;
     });
 
+    // Valor mínimo da entrega em mão, formatado em euros
+    document.querySelectorAll("[data-minimo-entrega]").forEach(el => {
+      const m = CONFIG.entrega && CONFIG.entrega.minimo;
+      if (m) el.textContent = m.toLocaleString("pt-PT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+    });
+
     // Lista de concelhos de entrega, em português corrente:
     // "A, B, C e D" em vez de "A, B, C, D"
     document.querySelectorAll("[data-concelhos]").forEach(el => {
@@ -626,24 +632,87 @@
       lista.innerHTML = linhas.map(linhaHTML).join("");
       fundo.hidden = false;
 
-      const faltam = CONFIG.encomendaMinima - total;
-      const abaixoDoMinimo = CONFIG.encomendaMinima > 0 && faltam > 0;
+      const modo = Carrinho.modoAtual();
+      const falta = Carrinho.faltaParaEntrega();
+      const minimo = CONFIG.entrega.minimo || 0;
+      const minimoTexto = minimo.toLocaleString("pt-PT", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
+      const pode = Carrinho.podeEncomendar();
+      const concelhos = (CONFIG.entrega.concelhos || []);
+      const listaConcelhos = concelhos.length > 1
+        ? concelhos.slice(0, -1).join(", ") + " e " + concelhos[concelhos.length - 1]
+        : (concelhos[0] || "");
+
+      /* Opções de receção. A entrega em mão mostra quanto falta para o
+         mínimo em vez de desaparecer: assim o cliente percebe porquê,
+         e percebe que chega lá com mais uma garrafa. */
+      const opcoes = [
+        {
+          valor: "recolha",
+          titulo: "Recolha na loja",
+          detalhe: "Sem mínimo de compra. Rua Principal, Silveiros."
+        },
+        Carrinho.entregaDisponivel() && {
+          valor: "entrega",
+          titulo: "Entrega em mão",
+          detalhe: falta > 0
+            ? `A partir de ${minimoTexto}. Faltam ${euros(falta)}.`
+            : `Grátis em ${listaConcelhos}.`,
+          bloqueada: falta > 0
+        },
+        {
+          valor: "pais",
+          titulo: "Resto do país",
+          detalhe: "Pedimos orçamento de envio antes de fechar."
+        }
+      ].filter(Boolean);
+
+      const opcoesHTML = opcoes.map(o => `
+        <label class="modo${o.valor === modo ? " escolhido" : ""}${o.bloqueada ? " bloqueado" : ""}">
+          <input type="radio" name="modo-rececao" value="${o.valor}"
+                 ${o.valor === modo ? "checked" : ""}>
+          <span class="modo-texto">
+            <strong>${o.titulo}</strong>
+            <span>${o.detalhe}</span>
+          </span>
+        </label>`).join("");
+
+      let aviso = "";
+      if (modo === "entrega" && falta > 0) {
+        aviso = `<p class="aviso-minimo">
+          A entrega em mão é a partir de ${minimoTexto}. Faltam ${euros(falta)},
+          ou escolhe a recolha na loja.
+        </p>`;
+      }
+
+      const textoBotao = CONFIG.metodoEncomenda === "email" ? "Encomendar por email" : "Encomendar por WhatsApp";
 
       fundo.innerHTML = `
+        <fieldset class="modos">
+          <legend>Como queres receber?</legend>
+          ${opcoesHTML}
+        </fieldset>
+
         <div class="total-linha"><span>${Carrinho.totalItens()} artigo(s)</span><span>${euros(total)}</span></div>
         <div class="total-linha grande"><span>Total</span><strong>${euros(total)}</strong></div>
-        ${abaixoDoMinimo ? `<p class="aviso-minimo">Faltam ${euros(faltam)} para a encomenda mínima.</p>` : ""}
-        <a class="btn btn-primary btn-bloco" id="btn-encomendar" href="${Carrinho.linkEncomenda()}"
-           target="_blank" rel="noopener"${abaixoDoMinimo ? ' aria-disabled="true"' : ""}>
-          ${CONFIG.metodoEncomenda === "email" ? "Encomendar por email" : "Encomendar por WhatsApp"}
-        </a>
-        <button type="button" class="btn-remover" id="btn-esvaziar" style="display:block;margin:.9rem auto 0">Esvaziar carrinho</button>
+        ${aviso}
         <p class="nota-carrinho">
-          A encomenda é enviada como mensagem. Confirmamos disponibilidade,
-          entrega e pagamento antes de seguir.
-        </p>`;
+          A encomenda é enviada como mensagem. Confirmamos disponibilidade
+          e combinamos o pagamento antes de seguir.
+        </p>
+        <button type="button" class="btn-remover" id="btn-esvaziar">Esvaziar carrinho</button>
 
-      if (abaixoDoMinimo) {
+        <div class="carrinho-acao">
+          <a class="btn btn-primary btn-bloco" id="btn-encomendar" href="${Carrinho.linkEncomenda()}"
+             target="_blank" rel="noopener"${pode ? "" : ' aria-disabled="true"'}>
+            ${textoBotao} · ${euros(total)}
+          </a>
+        </div>`;
+
+      fundo.querySelectorAll('input[name="modo-rececao"]').forEach(r => {
+        r.addEventListener("change", () => Carrinho.definirModo(r.value));
+      });
+
+      if (!pode) {
         document.getElementById("btn-encomendar").addEventListener("click", e => e.preventDefault());
       }
       document.getElementById("btn-esvaziar").addEventListener("click", () => {
@@ -821,7 +890,7 @@
       }
 
       nota.className = "form-nota ok";
-      nota.textContent = "Obrigado! (Demonstração — o formulário ainda não envia nada. Liga-o a um serviço de formulários.)";
+      nota.textContent = "Obrigado! Isto é uma demonstração: o formulário ainda não envia nada.";
       form.reset();
       campos.forEach(c => c.removeAttribute("aria-invalid"));
     });

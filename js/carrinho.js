@@ -14,9 +14,21 @@ const Carrinho = (function () {
   "use strict";
 
   const CHAVE = "garrafeira-campelo-carrinho";
+  const CHAVE_MODO = "garrafeira-campelo-modo";
 
   /* itens = { idDoProduto: quantidade } */
   let itens = carregar();
+
+  /* Como o cliente quer receber: "recolha", "entrega" ou "pais".
+     Começa em recolha, que é o único modo sem mínimo de compra. */
+  let modo = carregarModo();
+
+  function carregarModo() {
+    try {
+      const m = localStorage.getItem(CHAVE_MODO);
+      return ["recolha", "entrega", "pais"].includes(m) ? m : "recolha";
+    } catch (e) { return "recolha"; }
+  }
 
   /* ---------- Guardar e ler do browser ---------- */
 
@@ -87,6 +99,35 @@ const Carrinho = (function () {
     avisar();
   }
 
+  /* ---------- Modo de receção ---------- */
+
+  function modoAtual() { return modo; }
+
+  function definirModo(novo) {
+    if (!["recolha", "entrega", "pais"].includes(novo)) return;
+    modo = novo;
+    try { localStorage.setItem(CHAVE_MODO, modo); } catch (e) {}
+    avisar();
+  }
+
+  /* A entrega em mão só existe se houver concelhos configurados */
+  function entregaDisponivel() {
+    return (CONFIG.entrega.concelhos || []).length > 0;
+  }
+
+  /* Quanto falta para chegar ao mínimo da entrega em mão (0 se já chega) */
+  function faltaParaEntrega() {
+    const minimo = CONFIG.entrega.minimo || 0;
+    return Math.max(0, minimo - totalEuros());
+  }
+
+  /* A encomenda pode seguir no modo escolhido? */
+  function podeEncomendar() {
+    if (!linhas().length) return false;
+    if (modo === "entrega") return faltaParaEntrega() === 0;
+    return true;
+  }
+
   /* ---------- Avisar quem está a ouvir ---------- */
 
   const ouvintes = [];
@@ -104,11 +145,22 @@ const Carrinho = (function () {
 
     linhas().forEach(l => {
       const total = euros(l.produto.preco * l.qtd);
-      partes.push(`• ${l.qtd}x ${l.produto.nome} (${l.produto.volume}) — ${total}`);
+      partes.push(`• ${l.qtd}x ${l.produto.nome} (${l.produto.volume}) · ${total}`);
     });
 
     partes.push("");
     partes.push(`Total: ${euros(totalEuros())}`);
+    partes.push("");
+
+    if (modo === "recolha") {
+      partes.push("Vou levantar na loja.");
+    } else if (modo === "entrega") {
+      partes.push("Gostaria de entrega em mão. A minha morada é:");
+      partes.push("(escrever aqui a morada)");
+    } else {
+      partes.push("Sou de fora da zona de entrega. Peço orçamento de envio para:");
+      partes.push("(escrever aqui a morada)");
+    }
 
     if (CONFIG.notaEncomenda) {
       partes.push("");
@@ -122,7 +174,7 @@ const Carrinho = (function () {
     const texto = textoEncomenda();
 
     if (CONFIG.metodoEncomenda === "email") {
-      const assunto = encodeURIComponent(`Encomenda — ${CONFIG.nome}`);
+      const assunto = encodeURIComponent(`Encomenda para ${CONFIG.nome}`);
       return `mailto:${CONFIG.email}?subject=${assunto}&body=${encodeURIComponent(texto)}`;
     }
     return `https://wa.me/${CONFIG.telefoneLimpo}?text=${encodeURIComponent(texto)}`;
@@ -133,6 +185,7 @@ const Carrinho = (function () {
   return {
     linhas, totalItens, totalEuros,
     adicionar, definirQuantidade, remover, esvaziar,
+    modoAtual, definirModo, entregaDisponivel, faltaParaEntrega, podeEncomendar,
     aoMudar, textoEncomenda, linkEncomenda, euros
   };
 })();
