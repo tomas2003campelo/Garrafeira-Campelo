@@ -917,6 +917,132 @@ img { max-width: 100%; display: block; }
 
 .aviso-minimo { font-size: .84rem; color: var(--erro); margin: 0 0 .8rem; }
 
+/* --- Passo 2 do carrinho: dados do cliente --- */
+
+.checkout { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.btn-voltar {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .3rem .1rem;
+  border: 0;
+  background: none;
+  color: var(--tinta-suave);
+  font: inherit;
+  font-size: .86rem;
+  cursor: pointer;
+  transition: color .18s;
+}
+.btn-voltar:hover { color: var(--borgonha); }
+.btn-voltar svg { width: 16px; height: 16px; }
+
+.resumo-encomenda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .3rem .9rem;
+  margin: 0;
+  padding: .75rem .9rem;
+  border-radius: var(--raio-sm);
+  background: var(--creme-fundo);
+  font-size: .85rem;
+  color: var(--tinta-suave);
+}
+.resumo-encomenda strong {
+  margin-left: auto;
+  font-family: var(--fonte-titulo);
+  font-size: 1.1rem;
+  color: var(--tinta);
+}
+
+#form-dados { display: flex; flex-direction: column; gap: 1.1rem; }
+
+.bloco-dados {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.bloco-dados legend {
+  padding: 0;
+  margin-bottom: .55rem;
+  font-size: .78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--tinta-suave);
+}
+
+.campo { display: flex; flex-direction: column; gap: .3rem; }
+.campo label { font-size: .86rem; font-weight: 600; color: var(--tinta); }
+.campo .opcional { font-weight: 400; font-size: .78rem; color: var(--tinta-suave); }
+
+.campo input, .campo select, .campo textarea {
+  width: 100%;
+  padding: .65rem .8rem;
+  border: 1.5px solid var(--linha);
+  border-radius: var(--raio-sm);
+  background: var(--branco);
+  font: inherit;
+  font-size: 1rem;           /* 16px: abaixo disto o iPhone faz zoom ao tocar */
+  color: var(--tinta);
+  transition: border-color .18s, box-shadow .18s;
+}
+.campo textarea { resize: vertical; min-height: 60px; }
+.campo input:focus, .campo select:focus, .campo textarea:focus {
+  outline: none;
+  border-color: var(--borgonha);
+  box-shadow: 0 0 0 3px rgba(83, 0, 15, .1);
+}
+.campo input::placeholder, .campo textarea::placeholder { color: #A89A94; }
+
+.campo [aria-invalid="true"] { border-color: var(--erro); background: #FFF8F7; }
+.campo-erro { margin: 0; font-size: .8rem; color: var(--erro); min-height: 0; }
+.campo-erro:empty { display: none; }
+
+.ajuda { margin: -.4rem 0 0; font-size: .78rem; color: var(--tinta-suave); }
+
+.campos-lado { display: grid; grid-template-columns: 8.5rem 1fr; gap: .7rem; }
+
+.opcao-caixa {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .6rem;
+  align-items: start;
+  font-size: .9rem;
+  color: var(--tinta);
+  cursor: pointer;
+}
+.opcao-caixa input {
+  width: 18px;
+  height: 18px;
+  margin: .1rem 0 0;
+  accent-color: var(--borgonha);
+  cursor: pointer;
+}
+.opcao-caixa.lembrar { font-size: .84rem; color: var(--tinta-suave); }
+
+#bloco-nif { display: flex; flex-direction: column; gap: .75rem; margin-top: .2rem; }
+
+.aviso-dados {
+  margin: 0;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--tinta-suave);
+}
+.aviso-dados a { color: var(--borgonha); }
+
+/* O botão Continuar desativado, abaixo do mínimo da entrega */
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+@media (max-width: 380px) {
+  .campos-lado { grid-template-columns: 1fr; }
+}
+
 /* Um link com aria-disabled continuava a parecer clicável */
 .btn[aria-disabled="true"] {
   opacity: .45;

@@ -568,7 +568,19 @@
     const veu = document.getElementById("veu");
     const lista = document.getElementById("carrinho-lista");
     const fundo = document.getElementById("carrinho-fundo");
+    const tituloPainel = painel?.querySelector(".carrinho-topo h2");
     if (!painel || !lista) return;
+
+    /* O painel tem dois passos: 1 é o carrinho, 2 são os dados do
+       cliente. Fechar o painel volta sempre ao carrinho. */
+    let passo = 1;
+    function irPara(n) {
+      passo = n;
+      desenhar();
+      painel.scrollTop = 0;
+      const foco = n === 2 ? painel.querySelector("#d-nome") : painel.querySelector(".btn-fechar");
+      foco?.focus({ preventScroll: true });
+    }
 
     function abrir() {
       painel.classList.add("aberto");
@@ -578,6 +590,7 @@
     }
 
     function fechar() {
+      if (passo !== 1) { passo = 1; desenhar(); }
       painel.classList.remove("aberto");
       veu.classList.remove("aberto");
       document.body.classList.remove("sem-scroll");
@@ -618,6 +631,11 @@
     function desenhar() {
       const linhas = Carrinho.linhas();
       const total = Carrinho.totalEuros();
+
+      if (passo === 2 && linhas.length) return desenharDados();
+      passo = 1;
+      lista.hidden = false;
+      if (tituloPainel) tituloPainel.textContent = "O teu carrinho";
 
       if (!linhas.length) {
         lista.innerHTML = `
@@ -687,8 +705,6 @@
         </p>`;
       }
 
-      const textoBotao = CONFIG.metodoEncomenda === "email" ? "Encomendar por email" : "Encomendar por WhatsApp";
-
       fundo.innerHTML = `
         <fieldset class="modos">
           <legend>Como queres receber?</legend>
@@ -705,22 +721,180 @@
         <button type="button" class="btn-remover" id="btn-esvaziar">Esvaziar carrinho</button>
 
         <div class="carrinho-acao">
-          <a class="btn btn-primary btn-bloco" id="btn-encomendar" href="${Carrinho.linkEncomenda()}"
-             target="_blank" rel="noopener"${pode ? "" : ' aria-disabled="true"'}>
-            ${textoBotao} · ${euros(total)}
-          </a>
+          <button type="button" class="btn btn-primary btn-bloco" id="btn-continuar"${pode ? "" : " disabled"}>
+            Continuar · ${euros(total)}
+          </button>
         </div>`;
 
       fundo.querySelectorAll('input[name="modo-rececao"]').forEach(r => {
         r.addEventListener("change", () => Carrinho.definirModo(r.value));
       });
 
-      if (!pode) {
-        document.getElementById("btn-encomendar").addEventListener("click", e => e.preventDefault());
-      }
+      document.getElementById("btn-continuar").addEventListener("click", () => {
+        if (Carrinho.podeEncomendar()) irPara(2);
+      });
       document.getElementById("btn-esvaziar").addEventListener("click", () => {
         if (confirm("Esvaziar o carrinho?")) Carrinho.esvaziar();
       });
+    }
+
+    /* ---------- Passo 2: dados do cliente ---------- */
+
+    function desenharDados() {
+      const d = Carrinho.dadosCliente();
+      const modo = Carrinho.modoAtual();
+      const total = Carrinho.totalEuros();
+      const precisaMorada = modo === "entrega" || modo === "pais";
+      const esc = v => String(v ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+      const nomeModo = { recolha: "Recolha na loja", entrega: "Entrega em mão", pais: "Envio com orçamento" }[modo];
+      const textoBotao = CONFIG.metodoEncomenda === "email" ? "Encomendar por email" : "Encomendar por WhatsApp";
+
+      lista.hidden = true;
+      if (tituloPainel) tituloPainel.textContent = "Os teus dados";
+
+      // Campo de texto com etiqueta, espaço para o erro e ligação acessível entre os dois
+      const campo = (id, nome, etiqueta, extra = "", opcional = false) => `
+        <div class="campo">
+          <label for="d-${id}">${etiqueta}${opcional ? ' <span class="opcional">opcional</span>' : ""}</label>
+          <input id="d-${id}" name="${nome}" value="${esc(d[nome])}" aria-describedby="e-${id}" ${extra}>
+          <p class="campo-erro" id="e-${id}"></p>
+        </div>`;
+
+      const concelhos = (CONFIG.entrega.concelhos || [])
+        .map(c => `<option${d.concelho === c ? " selected" : ""}>${c}</option>`).join("");
+
+      fundo.innerHTML = `
+        <div class="checkout">
+          <button type="button" class="btn-voltar" id="btn-voltar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            Voltar ao carrinho
+          </button>
+
+          <p class="resumo-encomenda">
+            <span>${Carrinho.totalItens()} ${Carrinho.totalItens() === 1 ? "artigo" : "artigos"}</span>
+            <span>${nomeModo}</span>
+            <strong>${euros(total)}</strong>
+          </p>
+
+          <form id="form-dados" novalidate>
+            <fieldset class="bloco-dados">
+              <legend>Contacto</legend>
+              ${campo("nome", "nome", "Nome completo", 'autocomplete="name" required')}
+              ${campo("telefone", "telefone", "Telemóvel", 'type="tel" autocomplete="tel" inputmode="tel" required')}
+              ${campo("email", "email", "Email", 'type="email" autocomplete="email" inputmode="email"', true)}
+              <p class="ajuda">Para te enviarmos a fatura.</p>
+            </fieldset>
+
+            ${precisaMorada ? `
+            <fieldset class="bloco-dados">
+              <legend>${modo === "entrega" ? "Morada da entrega" : "Morada de envio"}</legend>
+              ${modo === "entrega" ? `
+              <div class="campo">
+                <label for="d-concelho">Concelho</label>
+                <select id="d-concelho" name="concelho" aria-describedby="e-concelho" required>
+                  <option value="">Escolhe</option>
+                  ${concelhos}
+                </select>
+                <p class="campo-erro" id="e-concelho"></p>
+              </div>` : ""}
+              ${campo("morada", "morada", "Rua, número e andar", 'autocomplete="street-address" required')}
+              <div class="campos-lado">
+                ${campo("codigoPostal", "codigoPostal", "Código postal", 'autocomplete="postal-code" inputmode="numeric" placeholder="0000-000" required')}
+                ${campo("localidade", "localidade", "Localidade", 'autocomplete="address-level2" required')}
+              </div>
+              ${modo === "pais" ? campo("pais", "pais", "País", 'autocomplete="country-name"') : ""}
+            </fieldset>` : ""}
+
+            <fieldset class="bloco-dados">
+              <legend>Faturação</legend>
+              <label class="opcao-caixa">
+                <input type="checkbox" id="d-fatura" name="fatura"${d.fatura ? " checked" : ""}>
+                <span>Quero fatura com NIF</span>
+              </label>
+              <div id="bloco-nif"${d.fatura ? "" : " hidden"}>
+                ${campo("nif", "nif", "NIF", 'inputmode="numeric" autocomplete="off" maxlength="11"')}
+                ${campo("nomeFatura", "nomeFatura", "Em nome de", 'autocomplete="organization" placeholder="Só se for diferente do teu nome"', true)}
+              </div>
+            </fieldset>
+
+            <div class="campo">
+              <label for="d-observacoes">Observações <span class="opcional">opcional</span></label>
+              <textarea id="d-observacoes" name="observacoes" rows="2"
+                placeholder="${modo === "recolha" ? "Quando pensas passar pela loja" : "Horário que dá jeito, indicações para chegar"}">${esc(d.observacoes)}</textarea>
+            </div>
+
+            <label class="opcao-caixa lembrar">
+              <input type="checkbox" id="d-lembrar" name="lembrar"${d.lembrar ? " checked" : ""}>
+              <span>Lembrar os meus dados neste dispositivo, para a próxima encomenda</span>
+            </label>
+
+            <p class="aviso-dados">
+              Os teus dados seguem na mensagem para a ${CONFIG.nome}, só para tratar desta encomenda.
+              <a href="privacidade.html" target="_blank" rel="noopener">Como tratamos os dados</a>
+            </p>
+          </form>
+
+          <div class="carrinho-acao">
+            <a class="btn btn-primary btn-bloco" id="btn-encomendar" href="${Carrinho.linkEncomenda()}"
+               target="_blank" rel="noopener">${textoBotao} · ${euros(total)}</a>
+          </div>
+        </div>`;
+
+      const form = fundo.querySelector("#form-dados");
+      const botao = fundo.querySelector("#btn-encomendar");
+
+      // Guarda o que se escreve a cada tecla, e mantém o link do botão atualizado
+      function lerFormulario() {
+        const v = {};
+        form.querySelectorAll("input, select, textarea").forEach(el => {
+          v[el.name] = el.type === "checkbox" ? el.checked : el.value;
+        });
+        Carrinho.definirDados(v);
+        botao.href = Carrinho.linkEncomenda();
+      }
+
+      form.addEventListener("input", e => {
+        // Quem corrige um campo deixa de ver o erro dele
+        const alvo = e.target;
+        if (alvo.getAttribute("aria-invalid") === "true") {
+          alvo.removeAttribute("aria-invalid");
+          const erro = fundo.querySelector(`#e-${alvo.id.slice(2)}`);
+          if (erro) erro.textContent = "";
+        }
+        if (alvo.id === "d-fatura") fundo.querySelector("#bloco-nif").hidden = !alvo.checked;
+        lerFormulario();
+      });
+
+      // O código postal ganha o hífen sozinho: 4750123 → 4750-123
+      const cp = form.querySelector("#d-codigoPostal");
+      cp?.addEventListener("blur", () => {
+        const so = cp.value.replace(/\D/g, "");
+        if (so.length === 7) { cp.value = `${so.slice(0, 4)}-${so.slice(4)}`; lerFormulario(); }
+      });
+
+      botao.addEventListener("click", e => {
+        lerFormulario();
+        const erros = Carrinho.validarDados();
+        const campos = Object.keys(erros);
+
+        form.querySelectorAll("[aria-invalid]").forEach(el => el.removeAttribute("aria-invalid"));
+        form.querySelectorAll(".campo-erro").forEach(el => (el.textContent = ""));
+
+        if (!campos.length) return;          // tudo certo: segue para o WhatsApp
+
+        e.preventDefault();
+        campos.forEach(nome => {
+          const el = form.querySelector(`[name="${nome}"]`);
+          const msg = fundo.querySelector(`#e-${el?.id.slice(2)}`);
+          if (el) el.setAttribute("aria-invalid", "true");
+          if (msg) msg.textContent = erros[nome];
+        });
+        const primeiro = form.querySelector('[aria-invalid="true"]');
+        primeiro?.focus();
+        primeiro?.scrollIntoView({ block: "center", behavior: "smooth" });
+      });
+
+      fundo.querySelector("#btn-voltar").addEventListener("click", () => irPara(1));
     }
 
     // Cliques dentro do painel

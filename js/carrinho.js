@@ -23,6 +23,27 @@ const Carrinho = (function () {
      Começa em recolha, que é o único modo sem mínimo de compra. */
   let modo = carregarModo();
 
+  /* Dados do cliente para a encomenda. Vivem em memória; só ficam
+     guardados no browser se o próprio cliente o pedir (caixa
+     "Lembrar os meus dados"). As observações nunca se guardam: são
+     de cada encomenda. */
+  const CHAVE_DADOS = "garrafeira-campelo-cliente";
+  const DADOS_VAZIOS = {
+    nome: "", telefone: "", email: "",
+    fatura: false, nif: "", nomeFatura: "",
+    morada: "", codigoPostal: "", localidade: "", concelho: "", pais: "Portugal",
+    observacoes: "", lembrar: false
+  };
+  let dados = carregarDados();
+
+  function carregarDados() {
+    try {
+      const guardado = JSON.parse(localStorage.getItem(CHAVE_DADOS) || "null");
+      if (guardado) return Object.assign({}, DADOS_VAZIOS, guardado, { lembrar: true, observacoes: "" });
+    } catch (e) {}
+    return Object.assign({}, DADOS_VAZIOS);
+  }
+
   function carregarModo() {
     try {
       const m = localStorage.getItem(CHAVE_MODO);
@@ -121,6 +142,66 @@ const Carrinho = (function () {
     return Math.max(0, minimo - totalEuros());
   }
 
+  /* ---------- Dados do cliente ---------- */
+
+  function dadosCliente() { return Object.assign({}, dados); }
+
+  function definirDados(parcial) {
+    dados = Object.assign({}, dados, parcial);
+    try {
+      if (dados.lembrar) {
+        const { observacoes, lembrar, ...guardar } = dados;
+        localStorage.setItem(CHAVE_DADOS, JSON.stringify(guardar));
+      } else {
+        localStorage.removeItem(CHAVE_DADOS);
+      }
+    } catch (e) {}
+  }
+
+  /* NIF português: 9 dígitos, o último é de controlo */
+  function nifValido(nif) {
+    const n = String(nif).replace(/\s/g, "");
+    if (!/^\d{9}$/.test(n)) return false;
+    const soma = [...n.slice(0, 8)].reduce((t, d, i) => t + Number(d) * (9 - i), 0);
+    const resto = soma % 11;
+    const controlo = resto < 2 ? 0 : 11 - resto;
+    return controlo === Number(n[8]);
+  }
+
+  /* Devolve { campo: "mensagem de erro" } — vazio se estiver tudo bem */
+  function validarDados() {
+    const e = {};
+    const d = dados;
+    const emPortugal = !d.pais || /^portugal$/i.test(d.pais.trim());
+
+    if (d.nome.trim().length < 3) e.nome = "Escreve o teu nome completo.";
+
+    const digitos = d.telefone.replace(/\D/g, "");
+    if (!digitos) e.telefone = "Precisamos de um número para confirmar a encomenda.";
+    else if (digitos.length < 9) e.telefone = "O número parece curto. Confirma se falta algum algarismo.";
+
+    if (d.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim()))
+      e.email = "Este email não parece completo.";
+
+    if (d.fatura) {
+      if (!d.nif.trim()) e.nif = "Escreve o NIF para a fatura.";
+      else if (emPortugal && !nifValido(d.nif)) e.nif = "Este NIF não é válido. Confirma os algarismos.";
+    }
+
+    if (modo === "entrega" || modo === "pais") {
+      if (!d.morada.trim()) e.morada = "Precisamos da morada para a entrega.";
+      if (!d.codigoPostal.trim()) e.codigoPostal = "Falta o código postal.";
+      else if (emPortugal && !/^\d{4}-\d{3}$/.test(d.codigoPostal.trim()))
+        e.codigoPostal = "Em Portugal, o código postal é assim: 4750-123.";
+      if (!d.localidade.trim()) e.localidade = "Falta a localidade.";
+    }
+
+    if (modo === "entrega" && !(CONFIG.entrega.concelhos || []).includes(d.concelho))
+      e.concelho = "Escolhe o concelho da entrega.";
+
+    return e;
+  }
+
   /* A encomenda pode seguir no modo escolhido? */
   function podeEncomendar() {
     if (!linhas().length) return false;
@@ -141,32 +222,51 @@ const Carrinho = (function () {
   }
 
   function textoEncomenda() {
-    const partes = [`Olá! Gostaria de encomendar na ${CONFIG.nome}:`, ""];
+    // No WhatsApp, *texto* sai a negrito. No email ficaria com os
+    // asteriscos à vista, por isso só se usa no WhatsApp.
+    const zap = CONFIG.metodoEncomenda !== "email";
+    const titulo = t => zap ? `*${t}*` : t.toUpperCase();
+    const d = dados;
+    const p = [`Olá! Gostaria de encomendar na ${CONFIG.nome}:`, ""];
 
     linhas().forEach(l => {
-      const total = euros(l.produto.preco * l.qtd);
-      partes.push(`• ${l.qtd}x ${l.produto.nome} (${l.produto.volume}) · ${total}`);
+      p.push(`• ${l.qtd}x ${l.produto.nome} (${l.produto.volume}) · ${euros(l.produto.preco * l.qtd)}`);
     });
+    p.push("", titulo(`Total: ${euros(totalEuros())}`), "");
 
-    partes.push("");
-    partes.push(`Total: ${euros(totalEuros())}`);
-    partes.push("");
+    p.push(titulo("Cliente"));
+    p.push(`Nome: ${d.nome.trim()}`);
+    p.push(`Telefone: ${d.telefone.trim()}`);
+    if (d.email.trim()) p.push(`Email: ${d.email.trim()}`);
+    p.push("");
 
+    p.push(titulo("Receção"));
     if (modo === "recolha") {
-      partes.push("Vou levantar na loja.");
-    } else if (modo === "entrega") {
-      partes.push("Gostaria de entrega em mão. A minha morada é:");
-      partes.push("(escrever aqui a morada)");
+      p.push("Recolha na loja");
     } else {
-      partes.push("Sou de fora da zona de entrega. Peço orçamento de envio para:");
-      partes.push("(escrever aqui a morada)");
+      p.push(modo === "entrega"
+        ? `Entrega em mão em ${d.concelho}`
+        : "Envio, com pedido de orçamento de transporte");
+      p.push(d.morada.trim());
+      p.push(`${d.codigoPostal.trim()} ${d.localidade.trim()}`);
+      if (d.pais.trim() && !/^portugal$/i.test(d.pais.trim())) p.push(d.pais.trim());
+    }
+    p.push("");
+
+    p.push(titulo("Faturação"));
+    if (d.fatura) {
+      p.push(`Fatura com NIF: ${d.nif.replace(/\s/g, "")}`);
+      if (d.nomeFatura.trim()) p.push(`Em nome de: ${d.nomeFatura.trim()}`);
+    } else {
+      p.push("Sem NIF (consumidor final)");
     }
 
-    if (CONFIG.notaEncomenda) {
-      partes.push("");
-      partes.push(CONFIG.notaEncomenda);
+    if (d.observacoes.trim()) {
+      p.push("", titulo("Observações"), d.observacoes.trim());
     }
-    return partes.join("\n");
+
+    if (CONFIG.notaEncomenda) p.push("", CONFIG.notaEncomenda);
+    return p.join("\n");
   }
 
   /* Devolve o endereço que abre o WhatsApp ou o email já preenchido */
@@ -186,6 +286,7 @@ const Carrinho = (function () {
     linhas, totalItens, totalEuros,
     adicionar, definirQuantidade, remover, esvaziar,
     modoAtual, definirModo, entregaDisponivel, faltaParaEntrega, podeEncomendar,
+    dadosCliente, definirDados, validarDados, nifValido,
     aoMudar, textoEncomenda, linkEncomenda, euros
   };
 })();
