@@ -76,17 +76,21 @@
       el.innerHTML = `${m.rua}<br>${m.codigoPostal} ${m.localidade}<br>${m.pais}`;
     });
 
-    // Link do Google Maps
-    const consulta = encodeURIComponent(`${CONFIG.nome}, ${m.rua}, ${m.codigoPostal} ${m.localidade}`);
-    document.querySelectorAll("[data-mapa]").forEach(el => {
-      el.href = `https://www.google.com/maps/search/?api=1&query=${consulta}`;
-    });
+    // Link do Google Maps. Sem o nome da loja na pesquisa: com ele, o
+    // Google mostrava outra empresa com "Campelo" no nome.
+    const mapa = CONFIG.mapa || "https://www.google.com/maps/search/?api=1&query=" +
+      encodeURIComponent(`${m.rua.replace(",", "")}, ${m.codigoPostal} ${m.localidade}`);
+    document.querySelectorAll("[data-mapa]").forEach(el => { el.href = mapa; });
 
-    // Redes sociais: esconde as que não estão preenchidas
+    // Redes sociais: esconde as que não estão preenchidas, e os blocos
+    // que fiquem sem nenhuma
     document.querySelectorAll("[data-rede]").forEach(el => {
       const url = CONFIG.redes[el.dataset.rede];
       if (url) el.href = url;
       else el.remove();
+    });
+    document.querySelectorAll("[data-redes]").forEach(bloco => {
+      if (!bloco.querySelector("[data-rede]")) bloco.remove();
     });
 
     // Ano corrente no rodapé
@@ -169,7 +173,7 @@
     });
 
     nav.addEventListener("click", e => {
-      if (e.target.tagName === "A") {
+      if (e.target.closest("a")) {
         nav.classList.remove("aberto");
         toggle.setAttribute("aria-expanded", "false");
       }

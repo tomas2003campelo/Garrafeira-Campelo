@@ -233,6 +233,9 @@ main { overflow-x: clip; }
   font-weight: 600;
   white-space: nowrap;
 }
+/* O lema já aparece na página inicial e no rodapé. No cabeçalho, o
+   espaço vai para os ícones das redes sociais. */
+.topbar .logo-tag { display: none; }
 
 .nav { display: flex; gap: 1.7rem; align-items: center; }
 
@@ -1230,6 +1233,70 @@ main { overflow-x: clip; }
 .stats dt { font-size: .73rem; text-transform: uppercase; letter-spacing: .1em; color: var(--texto-suave); margin-bottom: .15rem; }
 .stats dd { margin: 0; font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 2rem; font-weight: 700; color: var(--acento); }
 
+/* =========================================================
+   REDES SOCIAIS
+   Ícones no cabeçalho; botões com o nome no menu do telemóvel,
+   na página inicial, no contacto e no rodapé.
+   ========================================================= */
+
+.redes-topo { display: flex; align-items: center; gap: .1rem; }
+.redes-topo a {
+  width: 38px; height: 38px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: var(--texto);
+  transition: color .18s, background .18s;
+}
+.redes-topo a:hover { color: var(--acento); background: var(--superficie); }
+.redes-topo svg { width: 20px; height: 20px; }
+
+.nav-redes { display: none; }
+
+.redes { display: flex; flex-wrap: wrap; gap: .6rem; }
+.redes .btn-rede, .nav-redes .btn-rede {
+  display: inline-flex;
+  align-items: center;
+  gap: .55rem;
+  margin: 0;
+  padding: .6rem 1.15rem .6rem .95rem;
+  border: 1.5px solid var(--linha-forte);
+  border-radius: 100px;
+  color: var(--texto);
+  font-size: .9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: background .18s, border-color .18s, color .18s, transform .18s;
+}
+.btn-rede svg { width: 19px; height: 19px; flex-shrink: 0; color: var(--acento); }
+.redes .btn-rede:hover, .nav-redes .btn-rede:hover {
+  background: var(--dourado);
+  border-color: var(--dourado);
+  color: var(--borgonha-escuro);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+.redes .btn-rede:hover svg, .nav-redes .btn-rede:hover svg { color: currentColor; }
+
+/* Página inicial: faixa por baixo dos três cartões */
+.redes-faixa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem 2rem;
+  margin-top: 1.4rem;
+  padding: 1.5rem 1.7rem;
+  background: var(--superficie);
+  border: 1px solid var(--linha);
+  border-left: 3px solid var(--dourado);
+  border-radius: var(--raio);
+}
+.redes-faixa h3 { font-size: 1.2rem; margin-bottom: .25rem; }
+.redes-faixa p { margin: 0; font-size: .92rem; color: var(--texto-suave); }
+
+.contacto-bloco .redes { margin-top: .8rem; }
+
 /* Contacto */
 .contacto-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2rem, 5vw, 3.5rem); align-items: start; }
 
@@ -1335,16 +1402,16 @@ main { overflow-x: clip; }
 .footer-marca strong { font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 1.2rem; color: var(--creme); display: block; line-height: 1.2; }
 .footer-marca span { font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; color: var(--dourado); }
 
-.redes { display: flex; gap: .6rem; margin-top: 1rem; }
-.redes a {
-  width: 38px; height: 38px;
-  display: grid; place-items: center;
-  border: 1px solid rgba(252, 246, 238, .22);
-  border-radius: 50%;
-  transition: background .18s, border-color .18s, transform .18s;
+.footer .redes-titulo {
+  margin: 1.4rem 0 .7rem;
+  font-size: .8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--creme);
 }
-.redes a:hover { background: var(--dourado); border-color: var(--dourado); color: var(--borgonha-escuro); transform: translateY(-2px); }
-.redes svg { width: 17px; height: 17px; }
+.footer .redes .btn-rede { color: var(--creme); border-color: rgba(252, 246, 238, .32); }
+.footer .redes .btn-rede svg { color: var(--dourado); }
 
 /* --- Bloco legal do rodapé --- */
 
@@ -1490,7 +1557,7 @@ main { overflow-x: clip; }
 .categoria-card::after {
   content: "";
   position: absolute;
-  top: 0; bottom: 0; left: -45%;
+  top: 0; bottom: 0; left: -65%;   /* bem fora do cartão: inclinado, a ponta de cima espreitava */
   width: 40%;
   background: linear-gradient(100deg, transparent, rgba(194, 158, 97, .16), transparent);
   transform: skewX(-18deg);
@@ -1612,6 +1679,14 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
    RESPONSIVO
    ========================================================= */
 
+/* Portáteis pequenos: o menu ainda cabe inteiro se o carrinho ficar
+   só com o ícone e os links mais juntos. */
+@media (min-width: 1021px) and (max-width: 1180px) {
+  .nav { gap: 1.2rem; }
+  .btn-carrinho { padding: .55rem .8rem; }
+  .btn-carrinho .etiqueta-carrinho { display: none; }
+}
+
 /* A navegação passa a hambúrguer mais cedo do que o resto do
    layout: seis itens no menu precisam de mais largura do que cinco. */
 @media (max-width: 1020px) {
@@ -1633,6 +1708,17 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .nav a[aria-current="page"] { background: var(--areia); }
 
   .nav-toggle { display: flex; order: 3; }
+
+  /* No telemóvel, as redes passam do cabeçalho para dentro do menu */
+  .redes-topo { display: none; }
+  .nav-redes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-top: .4rem;
+    padding: 1rem clamp(1rem, 4vw, 3rem) .3rem;
+    border-top: 1px solid var(--linha);
+  }
 }
 
 @media (max-width: 1000px) {
