@@ -31,6 +31,7 @@ const Carrinho = (function () {
   const DADOS_VAZIOS = {
     nome: "", telefone: "", email: "",
     fatura: false, nif: "", nomeFatura: "",
+    mesmaMorada: true, moradaFatura: "", codigoPostalFatura: "", localidadeFatura: "",
     morada: "", codigoPostal: "", localidade: "", concelho: "", pais: "Portugal",
     observacoes: "", lembrar: false
   };
@@ -158,6 +159,11 @@ const Carrinho = (function () {
     } catch (e) {}
   }
 
+  /* A morada fiscal tem de ser escrita à parte? */
+  function precisaMoradaFatura() {
+    return dados.fatura && (modo === "recolha" || !dados.mesmaMorada);
+  }
+
   /* NIF português: 9 dígitos, o último é de controlo */
   function nifValido(nif) {
     const n = String(nif).replace(/\s/g, "");
@@ -186,6 +192,16 @@ const Carrinho = (function () {
     if (d.fatura) {
       if (!d.nif.trim()) e.nif = "Escreve o NIF para a fatura.";
       else if (emPortugal && !nifValido(d.nif)) e.nif = "Este NIF não é válido. Confirma os algarismos.";
+
+      // A fatura com NIF leva morada fiscal. Na entrega pode ser a mesma;
+      // na recolha não há outra, por isso tem de ser escrita.
+      if (precisaMoradaFatura()) {
+        if (!d.moradaFatura.trim()) e.moradaFatura = "A fatura com NIF precisa da morada fiscal.";
+        if (!d.codigoPostalFatura.trim()) e.codigoPostalFatura = "Falta o código postal.";
+        else if (emPortugal && !/^\d{4}-\d{3}$/.test(d.codigoPostalFatura.trim()))
+          e.codigoPostalFatura = "Em Portugal, o código postal é assim: 4750-123.";
+        if (!d.localidadeFatura.trim()) e.localidadeFatura = "Falta a localidade.";
+      }
     }
 
     if (modo === "entrega" || modo === "pais") {
@@ -257,6 +273,13 @@ const Carrinho = (function () {
     if (d.fatura) {
       p.push(`Fatura com NIF: ${d.nif.replace(/\s/g, "")}`);
       if (d.nomeFatura.trim()) p.push(`Em nome de: ${d.nomeFatura.trim()}`);
+      // Repete a morada mesmo quando é a da entrega: nome, NIF e morada
+      // juntos são o que se copia para passar a fatura.
+      const outra = precisaMoradaFatura();
+      const rua = (outra ? d.moradaFatura : d.morada).trim();
+      const cp  = (outra ? d.codigoPostalFatura : d.codigoPostal).trim();
+      const loc = (outra ? d.localidadeFatura : d.localidade).trim();
+      p.push(`Morada fiscal: ${rua}, ${cp} ${loc}`);
     } else {
       p.push("Sem NIF (consumidor final)");
     }

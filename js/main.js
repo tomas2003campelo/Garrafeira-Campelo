@@ -814,6 +814,18 @@
               <div id="bloco-nif"${d.fatura ? "" : " hidden"}>
                 ${campo("nif", "nif", "NIF", 'inputmode="numeric" autocomplete="off" maxlength="11"')}
                 ${campo("nomeFatura", "nomeFatura", "Em nome de", 'autocomplete="organization" placeholder="Só se for diferente do teu nome"', true)}
+                ${precisaMorada ? `
+                <label class="opcao-caixa">
+                  <input type="checkbox" id="d-mesmaMorada" name="mesmaMorada"${d.mesmaMorada ? " checked" : ""}>
+                  <span>A morada da fatura é a mesma da entrega</span>
+                </label>` : ""}
+                <div id="bloco-morada-fatura"${precisaMorada && d.mesmaMorada ? " hidden" : ""}>
+                  ${campo("moradaFatura", "moradaFatura", "Morada fiscal", 'autocomplete="billing street-address" placeholder="Rua, número e andar"')}
+                  <div class="campos-lado">
+                    ${campo("codigoPostalFatura", "codigoPostalFatura", "Código postal", 'autocomplete="billing postal-code" inputmode="numeric" placeholder="0000-000"')}
+                    ${campo("localidadeFatura", "localidadeFatura", "Localidade", 'autocomplete="billing address-level2"')}
+                  </div>
+                </div>
               </div>
             </fieldset>
 
@@ -862,14 +874,16 @@
           if (erro) erro.textContent = "";
         }
         if (alvo.id === "d-fatura") fundo.querySelector("#bloco-nif").hidden = !alvo.checked;
+        if (alvo.id === "d-mesmaMorada") fundo.querySelector("#bloco-morada-fatura").hidden = alvo.checked;
         lerFormulario();
       });
 
       // O código postal ganha o hífen sozinho: 4750123 → 4750-123
-      const cp = form.querySelector("#d-codigoPostal");
-      cp?.addEventListener("blur", () => {
-        const so = cp.value.replace(/\D/g, "");
-        if (so.length === 7) { cp.value = `${so.slice(0, 4)}-${so.slice(4)}`; lerFormulario(); }
+      form.querySelectorAll('[name^="codigoPostal"]').forEach(cp => {
+        cp.addEventListener("blur", () => {
+          const so = cp.value.replace(/\D/g, "");
+          if (so.length === 7) { cp.value = `${so.slice(0, 4)}-${so.slice(4)}`; lerFormulario(); }
+        });
       });
 
       botao.addEventListener("click", e => {

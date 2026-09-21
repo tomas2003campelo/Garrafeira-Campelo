@@ -1027,6 +1027,7 @@ img { max-width: 100%; display: block; }
 .opcao-caixa.lembrar { font-size: .84rem; color: var(--tinta-suave); }
 
 #bloco-nif { display: flex; flex-direction: column; gap: .75rem; margin-top: .2rem; }
+#bloco-morada-fatura { display: flex; flex-direction: column; gap: .75rem; }
 
 .aviso-dados {
   margin: 0;
