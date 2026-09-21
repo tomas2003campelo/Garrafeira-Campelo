@@ -56,8 +56,20 @@ const Carrinho = (function () {
 
   function carregar() {
     try {
-      const guardado = localStorage.getItem(CHAVE);
-      return guardado ? JSON.parse(guardado) : {};
+      const guardado = JSON.parse(localStorage.getItem(CHAVE) || "{}") || {};
+      // Fica só o que ainda se pode comprar. Um carrinho de uma visita
+      // antiga pode ter produtos que entretanto saíram do catálogo ou
+      // esgotaram: o contador contava-os, mas o carrinho aparecia vazio.
+      const limpo = {};
+      for (const [id, qtd] of Object.entries(guardado)) {
+        const p = PRODUTOS.find(x => x.id === id);
+        const n = Math.floor(Number(qtd));
+        if (p && !p.esgotado && n > 0) limpo[id] = n;
+      }
+      if (JSON.stringify(limpo) !== JSON.stringify(guardado)) {
+        localStorage.setItem(CHAVE, JSON.stringify(limpo));
+      }
+      return limpo;
     } catch (e) {
       // Browser em modo privado ou storage bloqueado: o carrinho
       // funciona na mesma, só não sobrevive a recarregar a página.
@@ -84,7 +96,7 @@ const Carrinho = (function () {
   }
 
   function totalItens() {
-    return Object.values(itens).reduce((soma, q) => soma + q, 0);
+    return linhas().reduce((soma, l) => soma + l.qtd, 0);
   }
 
   function totalEuros() {
