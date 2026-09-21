@@ -27,3 +27,10 @@ npm-debug.log*
 
 # Config local do Claude Code
 .claude/
+
+# Folha de cálculo do catálogo — privada.
+# O repositório é público: uma coluna com preços de custo ou margens
+# ficaria visível para toda a gente. Só o js/produtos.js gerado a
+# partir dela vai para o GitHub. Guarda uma cópia no iCloud ou Drive.
+catalogo/*.xlsx
+catalogo/~$*

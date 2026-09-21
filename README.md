@@ -24,18 +24,22 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 ├── sobre.html        Sobre a casa
 ├── contacto.html     Morada, horário, formulário e entregas
 ├── privacidade.html  Política de privacidade (RGPD)
+├── catalogo/
+│   ├── produtos.xlsx      ←  O CATÁLOGO (fica só no teu Mac)
+│   ├── atualizar-site.py  Passa a folha para o site
+│   └── criar-modelo.py    Cria uma folha nova e vazia
 ├── css/
 │   └── style.css     Estilos, paleta da marca e animações
 ├── js/
 │   ├── config.js      ←  OS TEUS DADOS (contactos, horário, entregas)
-│   ├── produtos.js    ←  O CATÁLOGO (vinhos e cervejas)
+│   ├── produtos.js    Gerado a partir do Excel — não editar à mão
 │   ├── ilustracoes.js Garrafas e latas desenhadas em SVG
 │   ├── carrinho.js    Lógica do carrinho
 │   └── main.js        Navegação, filtros, animações, formulário
 └── img/              Logótipo, favicon, capa social e fotos de produtos
 ```
 
-Só precisas de mexer em dois ficheiros: **`js/config.js`** e **`js/produtos.js`**.
+Só precisas de mexer em dois sítios: **`js/config.js`** e **`catalogo/produtos.xlsx`**.
 
 ## Os teus dados — `js/config.js`
 
@@ -47,34 +51,52 @@ telefone, email, morada, horário, redes sociais e condições de entrega.
 
 Se deixares uma rede social vazia (`""`), o ícone desaparece do site sozinho.
 
-## O catálogo — `js/produtos.js`
+## O catálogo — `catalogo/produtos.xlsx`
 
-Cada produto é um bloco. Para acrescentar um, copia um bloco inteiro, cola a
-seguir e muda os valores:
+Os produtos geres-los numa folha de Excel, uma linha por produto. Depois:
 
-```js
-{
-  id: "identificador-unico",      // sem espaços — é o que o carrinho usa
-  nome: "Nome do produto",
-  categoria: "douro",             // douro | verde | maduro | espumantes | cervejas
-  tipo: "tinto",                  // tinto | branco | rosé | espumante | cerveja
-  produtor: "Quinta X",
-  regiao: "Douro DOC",
-  ano: 2021,                      // null nas cervejas
-  volume: "75 cl",
-  preco: 12.50,                   // ponto decimal, não vírgula
-  descricao: "Uma ou duas frases.",
-  cor: "#53000F",                 // cor da garrafa desenhada
-  imagem: "img/foto.webp",        // opcional — substitui a garrafa desenhada
-  destaque: "Reserva",            // opcional — etiqueta no canto
-  esgotado: true                  // opcional — esconde o botão de comprar
-}
+```bash
+python3 catalogo/atualizar-site.py
 ```
 
-Os produtos com `destaque` aparecem na secção "Em destaque" da página inicial.
+O comando lê a folha, confere se está tudo bem preenchido, e atualiza
+`js/produtos.js`. Se houver algum erro — categoria que não existe, preço em
+falta, nome vazio —, **não mexe em nada** e diz-te em que linha está o
+problema.
 
-> **Todos os produtos atuais são de exemplo.** Nomes, produtores, preços e notas
-> de prova são inventados. Substitui-os antes de pôr o site online.
+Para só conferir sem mudar nada:
+
+```bash
+python3 catalogo/atualizar-site.py --verificar
+```
+
+A folha tem uma aba **Como preencher** com a explicação de cada coluna. O
+essencial:
+
+- **Publicar** — Sim para aparecer no site, Não para esconder. Útil para
+  produtos fora de época.
+- **Categoria** e **Tipo** — escolhe da lista, para não haver erros de escrita.
+- **Preço PVP** — com IVA incluído, só o número.
+- **Etiqueta** — opcional; os produtos com etiqueta aparecem em destaque na
+  página inicial.
+- **Fotografia** — opcional; o nome de um ficheiro na pasta `img`. Sem foto, o
+  site desenha uma garrafa na cor do tipo.
+
+### A folha fica só no teu computador
+
+`catalogo/produtos.xlsx` **não vai para o GitHub**, de propósito. O repositório
+é público: se acrescentares uma coluna com preços de custo ou margens, ficava
+visível para toda a gente. O `js/produtos.js` gerado vai, porque tem só o que o
+site mostra de qualquer forma.
+
+O lado mau: não há cópia da folha em lado nenhum. **Guarda uma no iCloud ou
+no Google Drive.**
+
+Se a perderes, cria uma nova e vazia com `python3 catalogo/criar-modelo.py`.
+
+### Não edites o `js/produtos.js` à mão
+
+É gerado. O que lá escreveres é substituído da próxima vez que o comando correr.
 
 ## Como funciona o carrinho
 
@@ -106,7 +128,7 @@ declarar idade para ler a política de privacidade.
 - [ ] Rever a política de privacidade com quem trata da contabilidade
 - [ ] Indicar a entidade de resolução de litígios (o link só aparece depois de preenchida)
 - [ ] Preencher os contactos reais no `js/config.js`
-- [ ] Substituir os produtos de exemplo no `js/produtos.js`
+- [ ] Preencher `catalogo/produtos.xlsx` com os produtos reais e correr `atualizar-site.py`
 - [ ] Trocar as garrafas desenhadas por fotografias dos produtos
 - [ ] Trocar as fotos de banco de imagens por fotos da loja
 - [ ] Ligar o formulário de contacto a um serviço a sério (Formspree, Netlify
