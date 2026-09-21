@@ -52,8 +52,19 @@
   --terracota:       var(--linha-forte);
   --terracota-forte: var(--linha-forte);
 
-  --fonte-titulo: "Playfair Display", "Iowan Old Style", Palatino, Georgia, serif;
-  --fonte-texto:  "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* Ibarra Real Nova recria os tipos de Joaquín Ibarra, impressor
+     madrileno do séc. XVIII: tipografia da Península. Karla no texto,
+     uma grotesca legível com algum carácter.
+
+     As duas têm as minúsculas mais baixas que as anteriores (a Karla
+     parecia 88% do tamanho da Inter, a Ibarra 85% da Playfair, medido).
+     O font-size-adjust acerta a altura das minúsculas em vez de mexer
+     em todos os tamanhos: se o browser não o suportar, o texto fica
+     só ligeiramente mais pequeno. */
+  --fonte-titulo: "Ibarra Real Nova", "Iowan Old Style", Palatino, Georgia, serif;
+  --fonte-texto:  "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --ajuste-titulo: .48;
+  --ajuste-texto:  .52;
 
   --raio:    12px;
   --raio-sm: 8px;
@@ -75,7 +86,7 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  font-family: var(--fonte-texto);
+  font-family: var(--fonte-texto); font-size-adjust: var(--ajuste-texto);
   font-size: 17px;
   line-height: 1.65;
   color: var(--texto);
@@ -86,7 +97,7 @@ body {
 body.sem-scroll { overflow: hidden; }
 
 h1, h2, h3, h4 {
-  font-family: var(--fonte-titulo);
+  font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo);
   font-weight: 700;
   line-height: 1.14;
   margin: 0 0 .5em;
@@ -209,7 +220,7 @@ main { overflow-x: clip; }
 
 .logo-texto { display: flex; flex-direction: column; line-height: 1.05; }
 .logo-nome {
-  font-family: var(--fonte-titulo);
+  font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo);
   font-size: 1.24rem;
   font-weight: 700;
   white-space: nowrap;
@@ -741,7 +752,7 @@ main { overflow-x: clip; }
 }
 
 .preco-bloco { display: flex; flex-direction: column; }
-.preco { font-family: var(--fonte-titulo); font-size: 1.35rem; font-weight: 700; line-height: 1.1; }
+.preco { font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 1.35rem; font-weight: 700; line-height: 1.1; }
 .volume { font-size: .76rem; color: var(--texto-suave); }
 
 .btn-add {
@@ -909,7 +920,7 @@ main { overflow-x: clip; }
 
 .total-linha { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .3rem; font-size: .9rem; color: var(--texto-suave); }
 .total-linha.grande { margin-bottom: 1rem; font-size: 1.05rem; color: var(--texto); font-weight: 600; }
-.total-linha.grande strong { font-family: var(--fonte-titulo); font-size: 1.6rem; font-weight: 700; }
+.total-linha.grande strong { font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 1.6rem; font-weight: 700; }
 
 /* --- Escolha de como receber a encomenda --- */
 
@@ -998,7 +1009,7 @@ main { overflow-x: clip; }
 }
 .resumo-encomenda strong {
   margin-left: auto;
-  font-family: var(--fonte-titulo);
+  font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo);
   font-size: 1.1rem;
   color: var(--texto);
 }
@@ -1217,7 +1228,7 @@ main { overflow-x: clip; }
 .stats { display: grid; gap: 1rem; margin: 0; }
 .stats > div { padding: 1.2rem 1.4rem; background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--raio); }
 .stats dt { font-size: .73rem; text-transform: uppercase; letter-spacing: .1em; color: var(--texto-suave); margin-bottom: .15rem; }
-.stats dd { margin: 0; font-family: var(--fonte-titulo); font-size: 2rem; font-weight: 700; color: var(--acento); }
+.stats dd { margin: 0; font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 2rem; font-weight: 700; color: var(--acento); }
 
 /* Contacto */
 .contacto-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2rem, 5vw, 3.5rem); align-items: start; }
@@ -1274,7 +1285,7 @@ main { overflow-x: clip; }
 }
 .texto-legal h3:first-of-type { margin-top: 0; }
 .texto-legal h4 {
-  font-family: var(--fonte-texto);
+  font-family: var(--fonte-texto); font-size-adjust: var(--ajuste-texto);
   font-size: .8rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1314,14 +1325,14 @@ main { overflow-x: clip; }
   padding-bottom: 2.2rem;
   border-bottom: 1px solid rgba(252, 246, 238, .15);
 }
-.footer h4 { color: var(--creme); font-family: var(--fonte-texto); font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; margin-bottom: .9rem; }
+.footer h4 { color: var(--creme); font-family: var(--fonte-texto); font-size-adjust: var(--ajuste-texto); font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; margin-bottom: .9rem; }
 .footer p { margin: 0 0 .35rem; }
 .footer ul { list-style: none; margin: 0; padding: 0; }
 .footer li { margin-bottom: .4rem; }
 
 .footer-marca { display: flex; align-items: center; gap: .7rem; margin-bottom: .9rem; }
 .footer-marca img { width: 46px; height: 46px; }
-.footer-marca strong { font-family: var(--fonte-titulo); font-size: 1.2rem; color: var(--creme); display: block; line-height: 1.2; }
+.footer-marca strong { font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 1.2rem; color: var(--creme); display: block; line-height: 1.2; }
 .footer-marca span { font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; color: var(--dourado); }
 
 .redes { display: flex; gap: .6rem; margin-top: 1rem; }

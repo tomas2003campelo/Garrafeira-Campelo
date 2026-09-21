@@ -8,7 +8,7 @@ assim que houver.
 | Ficheiro | Fotógrafo | Origem | Licença |
 |---|---|---|---|
 | `img/corredor.webp` (e versão pequena) | — | [Unsplash](https://unsplash.com/photos/a-long-narrow-room-filled-with-lots-of-bottles) | Unsplash License |
-| `img/capa-social.jpg` | — | Desenhada de raiz para o site | Própria |
+| `img/partilha.jpg` | — | Desenhada de raiz para o site | Própria |
 | `img/adega.webp` (e versão pequena) | Liv Kao (@spacecupcake) | [Unsplash](https://unsplash.com/photos/a-wine-cellar-filled-with-lots-of-bottles-of-wine-ymeKNdGU3R0) | Unsplash License |
 | `img/cave.webp` (e versão pequena) | — | [Unsplash](https://unsplash.com/s/photos/wine-cellar) | Unsplash License |
 
