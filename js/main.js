@@ -448,7 +448,10 @@
       : (p.destaque ? `<span class="badge">${p.destaque}</span>` : "");
 
     const linhaMeta = [CATEGORIAS[p.categoria].nome, p.tipo].join(" · ");
-    const anoTexto = p.ano ? ` · ${p.ano}` : "";
+
+    // Só junta o que existe: sem produtor, o cartão não pode começar
+    // num ponto solto.
+    const origem = [p.produtor, p.regiao, p.ano].filter(Boolean).join(" · ");
 
     card.innerHTML = `
       <div class="card-top">
@@ -458,7 +461,7 @@
       <div class="card-body">
         <p class="card-meta">${linhaMeta}</p>
         <h3 class="card-nome">${p.nome}</h3>
-        <p class="card-produtor">${p.produtor} · ${p.regiao}${anoTexto}</p>
+        ${origem ? `<p class="card-produtor">${origem}</p>` : ""}
         <p class="card-desc">${p.descricao}</p>
         <div class="card-foot">
           <span class="preco-bloco">

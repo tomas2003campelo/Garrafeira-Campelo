@@ -145,6 +145,18 @@ def preco(valor):
     return float(limpo)
 
 
+def volume(valor):
+    """'75cl' -> '75 cl', '1,5L' -> '1,5 l', '33 CL' -> '33 cl'.
+    Um número sem unidade é tratado como centilitros."""
+    texto = str(valor).strip()
+    m = re.fullmatch(r"(\d+(?:[.,]\d+)?)\s*(cl|ml|l|lt|litros?)?\.?", texto, re.I)
+    if not m:
+        return texto
+    numero, unidade = m.group(1).replace(".", ","), (m.group(2) or "cl").lower()
+    unidade = "l" if unidade in ("lt", "litro", "litros") else unidade
+    return f"{numero} {unidade}"
+
+
 def ler_produtos():
     linhas = ler_folha(EXCEL)
     if not linhas:
@@ -191,6 +203,14 @@ def ler_produtos():
 
         if not nome:
             erros.append(f"{sitio}: falta o nome.")
+            continue
+
+        # A linha de exemplo do modelo não pode ir para o site. Basta
+        # apagar o "Não" da coluna Publicar sem querer para ela passar a
+        # contar: por isso é travada pelo nome, não pela coluna.
+        if "(exemplo)" in nome.lower():
+            erros.append(f"{sitio}: esta é a linha de exemplo do modelo. "
+                         "Apaga-a, ou põe Não na coluna Publicar.")
             continue
 
         cat_bruta = str(dados.get("categoria", "")).strip().lower()
@@ -252,7 +272,7 @@ def ler_produtos():
             "produtor": str(dados.get("produtor", "")).strip(),
             "regiao": str(dados.get("regiao", "")).strip(),
             "ano": ano,
-            "volume": str(dados.get("volume", "75 cl")).strip(),
+            "volume": volume(dados.get("volume", "75 cl")),
             "preco": valor,
             "descricao": str(dados.get("descricao", "")).strip(),
             "cor": CORES[tipo],
