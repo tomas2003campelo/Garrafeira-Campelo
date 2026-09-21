@@ -40,6 +40,11 @@
   --linha:           #3E2D30;
   --linha-forte:     #5A4347;
 
+  /* Pormenores a dourado: contornos dos cartões e dos botões, e as
+     divisões dentro dos cartões */
+  --ouro-contorno:   rgba(194, 158, 97, .55);
+  --ouro-fio:        rgba(194, 158, 97, .3);
+
   --branco:          #FFFFFF;
   --verde-ok:        #86CDA8;
   --erro:            #F28B7D;
@@ -269,7 +274,7 @@ main { overflow-x: clip; }
   align-items: center;
   gap: .5rem;
   padding: .55rem 1.1rem;
-  border: 1.5px solid var(--linha);
+  border: 1.5px solid var(--ouro-contorno);
   border-radius: 100px;
   background: var(--superficie);
   color: var(--texto);
@@ -344,7 +349,7 @@ main { overflow-x: clip; }
 .btn-primary { background: var(--marca); color: var(--creme); }
 .btn-primary:hover { background: var(--marca-hover); box-shadow: 0 8px 22px rgba(0, 0, 0, .45); }
 
-.btn-ghost { background: transparent; color: var(--acento); border-color: var(--linha-forte); }
+.btn-ghost { background: transparent; color: var(--acento); border-color: var(--ouro-contorno); }
 .btn-ghost:hover { border-color: var(--acento); background: rgba(214, 178, 123, .07); }
 
 .btn-dourado { background: var(--dourado); color: var(--borgonha-escuro); }
@@ -584,7 +589,7 @@ main { overflow-x: clip; }
   margin: 0;
   border-radius: var(--raio);
   overflow: hidden;
-  border: 1px solid var(--linha);
+  border: 1px solid var(--ouro-contorno);
   background: var(--superficie);
 }
 .foto-emoldurada img {
@@ -644,12 +649,12 @@ main { overflow-x: clip; }
   display: flex;
   flex-direction: column;
   background: var(--superficie);
-  border: 1px solid var(--linha);
+  border: 1px solid var(--ouro-contorno);
   border-radius: var(--raio);
   overflow: hidden;
   transition: transform .22s ease, box-shadow .22s ease, border-color .22s;
 }
-.card:hover { transform: translateY(-4px); box-shadow: var(--sombra); border-color: var(--terracota); }
+.card:hover { transform: translateY(-4px); box-shadow: var(--sombra); border-color: var(--dourado); }
 .card.esgotado { opacity: .62; }
 
 .card-top {
@@ -662,7 +667,7 @@ main { overflow-x: clip; }
      desapareciam no cartão. */
   background:
     radial-gradient(ellipse 58% 70% at 50% 46%, #5E4346 0%, #3F2D30 46%, var(--superficie) 100%);
-  border-bottom: 1px solid var(--linha);
+  border-bottom: 1px solid var(--ouro-fio);
   overflow: hidden;
 }
 .card-top img {
@@ -700,15 +705,15 @@ main { overflow-x: clip; }
   top: .75rem; left: .75rem;
   padding: .24rem .7rem;
   border-radius: 100px;
-  background: var(--marca);
-  color: var(--creme);
+  background: var(--dourado);
+  color: #2A0A10;
   font-size: .68rem;
   font-weight: 700;
   letter-spacing: .05em;
   text-transform: uppercase;
   z-index: 2;
 }
-.badge-esgotado { background: var(--linha-forte); }
+.badge-esgotado { background: var(--linha-forte); color: var(--creme); }
 
 .card-body { padding: 1.15rem 1.25rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
 
@@ -731,7 +736,7 @@ main { overflow-x: clip; }
   justify-content: space-between;
   gap: .7rem;
   padding-top: .9rem;
-  border-top: 1px solid var(--linha);
+  border-top: 1px solid var(--ouro-fio);
 }
 
 .preco-bloco { display: flex; flex-direction: column; }
@@ -743,10 +748,10 @@ main { overflow-x: clip; }
   align-items: center;
   gap: .35rem;
   padding: .5rem 1rem;
-  border: 1.5px solid var(--marca);
+  border: 1.5px solid var(--dourado);
   border-radius: 100px;
-  background: var(--marca);
-  color: var(--creme);
+  background: transparent;
+  color: var(--acento);
   font: inherit;
   font-size: .84rem;
   font-weight: 600;
@@ -754,9 +759,32 @@ main { overflow-x: clip; }
   white-space: nowrap;
   transition: all .18s;
 }
-.btn-add:hover { background: var(--marca-hover); border-color: var(--marca-hover); transform: scale(1.04); }
-.btn-add.feito { background: #2E6B4F; border-color: #2E6B4F; }
-.btn-add:disabled { background: var(--linha-forte); border-color: var(--linha-forte); cursor: not-allowed; transform: none; }
+.btn-add:hover { background: var(--dourado); border-color: var(--dourado); color: #2A0A10; transform: scale(1.04); }
+.btn-add.feito { background: #2E6B4F; border-color: #2E6B4F; color: var(--creme); }
+.btn-add:disabled { background: var(--linha-forte); border-color: var(--linha-forte); color: var(--creme); cursor: not-allowed; transform: none; }
+
+/* Página inicial: os cartões do "Em destaque" são dourados por inteiro,
+   com o texto, a etiqueta e o botão em bordô, as duas cores do
+   logótipo. As garrafas claras continuam a ver-se porque têm as
+   margens sombreadas. */
+.destaques .card {
+  --texto:       #2A0A10;
+  --texto-suave: #43231B;
+  --acento:      #5C0816;
+  --linha:       rgba(58, 0, 10, .18);
+  --ouro-fio:    rgba(58, 0, 10, .18);
+  background: linear-gradient(165deg, #D1B37C 0%, #BF9D61 55%, #B59154 100%);
+  border-color: #CDAE74;
+  color: var(--texto);
+}
+.destaques .card-top {
+  background: radial-gradient(ellipse 58% 70% at 50% 46%, #EEDDB8 0%, #D8BC88 50%, #C4A267 100%);
+}
+.destaques .badge { background: var(--marca); color: var(--creme); }
+.destaques .btn-add { background: var(--marca); border-color: var(--marca); color: var(--creme); }
+.destaques .btn-add:hover { background: var(--marca-hover); border-color: var(--marca-hover); color: var(--creme); }
+.destaques .btn-add.feito { background: #2E6B4F; border-color: #2E6B4F; }
+.destaques .btn-add:disabled { background: var(--linha-forte); border-color: var(--linha-forte); }
 
 .vazio { text-align: center; color: var(--texto-suave); padding: 3rem 0; grid-column: 1 / -1; }
 
@@ -1166,7 +1194,7 @@ main { overflow-x: clip; }
 .info {
   padding: 1.7rem;
   background: var(--superficie);
-  border: 1px solid var(--linha);
+  border: 1px solid var(--ouro-contorno);
   border-radius: var(--raio);
   transition: transform .22s, box-shadow .22s;
 }
@@ -1175,8 +1203,9 @@ main { overflow-x: clip; }
   width: 44px; height: 44px;
   display: grid; place-items: center;
   border-radius: 50%;
-  background: var(--areia);
-  color: var(--acento);
+  background: rgba(194, 158, 97, .14);
+  box-shadow: inset 0 0 0 1px var(--ouro-contorno);
+  color: var(--dourado);
   margin-bottom: 1rem;
 }
 .info-icone svg { width: 22px; height: 22px; }
@@ -1191,14 +1220,14 @@ main { overflow-x: clip; }
   padding: 1.8rem 1.5rem;
   border-radius: var(--raio);
   background: var(--superficie);
-  border: 1px solid var(--linha);
-  border-left: 3px solid var(--acento);
+  border: 1px solid var(--ouro-contorno);
+  border-left: 3px solid var(--dourado);
   color: var(--texto);
   text-decoration: none;
   overflow: hidden;
   transition: transform .22s, box-shadow .22s, border-left-color .22s;
 }
-.categoria-card:hover { transform: translateY(-4px); box-shadow: var(--sombra); text-decoration: none; border-left-color: var(--dourado); }
+.categoria-card:hover { transform: translateY(-4px); box-shadow: var(--sombra); text-decoration: none; border-left-color: var(--acento); }
 .categoria-card h3 { margin-bottom: .35rem; }
 .categoria-card p { font-size: .87rem; color: var(--texto-suave); margin: 0 0 1rem; }
 .categoria-card .seta { font-size: .85rem; font-weight: 600; color: var(--acento); transition: transform .22s; display: inline-block; }
@@ -1209,7 +1238,7 @@ main { overflow-x: clip; }
 .about-text p { color: var(--texto-suave); }
 
 .stats { display: grid; gap: 1rem; margin: 0; }
-.stats > div { padding: 1.2rem 1.4rem; background: var(--superficie); border: 1px solid var(--linha); border-radius: var(--raio); }
+.stats > div { padding: 1.2rem 1.4rem; background: var(--superficie); border: 1px solid var(--ouro-contorno); border-radius: var(--raio); }
 .stats dt { font-size: .73rem; text-transform: uppercase; letter-spacing: .1em; color: var(--texto-suave); margin-bottom: .15rem; }
 .stats dd { margin: 0; font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 2rem; font-weight: 700; color: var(--acento); }
 
@@ -1239,7 +1268,7 @@ main { overflow-x: clip; }
   gap: .55rem;
   margin: 0;
   padding: .6rem 1.15rem .6rem .95rem;
-  border: 1.5px solid var(--linha-forte);
+  border: 1.5px solid var(--ouro-contorno);
   border-radius: 100px;
   color: var(--texto);
   font-size: .9rem;
@@ -1268,7 +1297,7 @@ main { overflow-x: clip; }
   margin-top: 1.4rem;
   padding: 1.5rem 1.7rem;
   background: var(--superficie);
-  border: 1px solid var(--linha);
+  border: 1px solid var(--ouro-contorno);
   border-left: 3px solid var(--dourado);
   border-radius: var(--raio);
 }
@@ -1500,23 +1529,6 @@ main { overflow-x: clip; }
 /* --- Fundo do cartão reage ao hover --- */
 .card-top { transition: background .4s ease; }
 
-/* Página inicial: os cartões do "Em destaque" são dourados, com o
-   texto em bordô, as duas cores do logótipo. As garrafas claras
-   continuam a ver-se porque têm as margens sombreadas. */
-.destaques .card {
-  --texto:       #2A0A10;
-  --texto-suave: #4A2820;
-  --acento:      #6E0A1A;
-  --linha:       rgba(58, 0, 10, .16);
-  --terracota:   #F2DBA8;   /* borda ao passar o rato */
-  background: linear-gradient(165deg, #DCC08A 0%, #CBAA6E 55%, #C29E61 100%);
-  border-color: #D9BC85;
-  color: var(--texto);
-}
-.destaques .card-top {
-  background: radial-gradient(ellipse 58% 70% at 50% 46%, #F6E9CC 0%, #E3C997 50%, #CFAF74 100%);
-  border-bottom-color: rgba(58, 0, 10, .14);
-}
 /* Ao passar o rato, a luz acende um pouco mais */
 .card-top::after {
   content: "";
