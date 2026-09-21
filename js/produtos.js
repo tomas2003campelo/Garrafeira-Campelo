@@ -124,7 +124,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 3.95,
     descricao: "Tinta Barroca, Tinta Roriz e Touriga Franca. Fruta vermelha, taninos suaves e acidez equilibrada. Um tinto do Douro para o dia a dia, com carnes e pratos de forno.",
-    cor: "#53000F"
+    cor: "#53000F",
+    imagem: "img/produtos/castello-de-numao-tinto.webp"
   },
   {
     id: "castello-de-numao-branco",
