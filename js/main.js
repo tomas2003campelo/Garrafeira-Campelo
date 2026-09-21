@@ -433,7 +433,10 @@
       ? '<span class="badge badge-esgotado">Esgotado</span>'
       : (p.destaque ? `<span class="badge">${p.destaque}</span>` : "");
 
-    const linhaMeta = [CATEGORIAS[p.categoria].nome, p.tipo].join(" · ");
+    // Nos espumantes, a cor e a doçura: "Espumante · Branco · Bruto"
+    const linhaMeta = p.categoria === "espumantes"
+      ? ["Espumante", p.tipo === "espumante" ? "" : p.tipo, p.docura].filter(Boolean).join(" · ")
+      : [CATEGORIAS[p.categoria].nome, p.tipo].join(" · ");
 
     // Só junta o que existe: sem produtor, o cartão não pode começar
     // num ponto solto.
@@ -499,6 +502,28 @@
     { chave: "maduro",   nome: "Maduros",        aceita: p => p.categoria === "maduro", semBotao: true }
   ];
 
+  /* Filtros da página dos espumantes: pela cor e pela doçura. Cada
+     grupo só aparece se tiver mais do que uma opção com produtos:
+     com os espumantes todos brutos, filtrar por "Bruto" não serve. */
+  const ORDEM_DOCURAS = ["Bruto Natural", "Extra Bruto", "Bruto", "Extra Seco", "Seco", "Meio Seco", "Doce"];
+
+  function filtrosEspumantes(produtos) {
+    const cor = p => (p.tipo === "espumante" ? "branco" : p.tipo);
+    const cores = [
+      { chave: "branco", nome: "Brancos" },
+      { chave: "rosé",   nome: "Rosés" },
+      { chave: "tinto",  nome: "Tintos" }
+    ].filter(c => produtos.some(p => cor(p) === c.chave))
+     .map(c => ({ ...c, aceita: p => cor(p) === c.chave }));
+
+    const docuras = ORDEM_DOCURAS.filter(d => produtos.some(p => p.docura === d))
+      .map(d => ({ chave: d.toLowerCase().replace(/\s+/g, "-"), nome: d, aceita: p => p.docura === d }));
+
+    return [{ chave: "todos", nome: "Todos", aceita: () => true }]
+      .concat(cores.length > 1 ? cores : [])
+      .concat(docuras.length > 1 ? docuras : []);
+  }
+
   function ligarCatalogo() {
     const lista = document.getElementById("lista-produtos");
     if (!lista) return;
@@ -509,12 +534,14 @@
       ? PRODUTOS.filter(p => permitidas.includes(p.categoria))
       : PRODUTOS;
 
-    // Nos vinhos, os filtros de cima. Nas outras páginas, um botão por
-    // categoria, se houver mais do que uma.
+    // Nos vinhos e nos espumantes, os filtros de cima. Nas outras
+    // páginas, um botão por categoria, se houver mais do que uma.
     const opcoes = permitidas.includes("maduro")
       ? FILTROS_VINHOS
-      : [{ chave: "todos", nome: "Todos", aceita: () => true }]
-          .concat(permitidas.map(c => ({ chave: c, nome: CATEGORIAS[c].nome, aceita: p => p.categoria === c })));
+      : permitidas.includes("espumantes")
+        ? filtrosEspumantes(doCatalogo)
+        : [{ chave: "todos", nome: "Todos", aceita: () => true }]
+            .concat(permitidas.map(c => ({ chave: c, nome: CATEGORIAS[c].nome, aceita: p => p.categoria === c })));
 
     const filtros = document.querySelector(".filtros");
     let ativo = "todos";

@@ -23,7 +23,8 @@ DESTINO = PASTA / "produtos.xlsx"
 LINHAS = 200
 
 CATEGORIAS = ["Verde", "Maduro", "Espumantes", "Cervejas"]
-TIPOS = ["Tinto", "Branco", "Rosé", "Espumante", "Cerveja"]
+TIPOS = ["Tinto", "Branco", "Rosé", "Cerveja"]
+DOCURAS = ["Bruto Natural", "Extra Bruto", "Bruto", "Extra Seco", "Seco", "Meio Seco", "Doce"]
 
 # (cabeçalho, largura, estilo, estilo do exemplo)
 COLUNAS = [
@@ -31,6 +32,7 @@ COLUNAS = [
     ("Nome",                        30, 2, 4),
     ("Categoria",                   14, 2, 4),
     ("Tipo",                        13, 2, 4),
+    ("Doçura",                      14, 2, 4),
     ("Produtor",                    24, 2, 4),
     ("Região",                      22, 2, 4),
     ("Ano",                          8, 9, 10),
@@ -43,7 +45,7 @@ COLUNAS = [
 ]
 
 EXEMPLO = [
-    "Não", "Alvarinho Reserva (exemplo)", "Verde", "Branco",
+    "Não", "Alvarinho Reserva (exemplo)", "Verde", "Branco", "",
     "Quinta de Exemplo", "Monção e Melgaço", 2023, "75 cl", 14.90,
     "Pêssego branco e flor de laranjeira, com acidez viva e final salino. "
     "Vai bem com marisco e peixe grelhado.",
@@ -73,8 +75,12 @@ INSTRUCOES = [
               "coluna Região. Define em que página do site o produto aparece. "
               "Obrigatório."),
     ("negrito", "Tipo"),
-    ("texto", "Escolhe da lista: Tinto, Branco, Rosé, Espumante ou Cerveja. "
-              "Define a cor da garrafa desenhada e o filtro."),
+    ("texto", "Escolhe da lista: Tinto, Branco, Rosé ou Cerveja. Nos espumantes, "
+              "é a cor do espumante. Define a cor da garrafa desenhada e os filtros."),
+    ("negrito", "Doçura"),
+    ("texto", "Só nos espumantes: Bruto Natural, Extra Bruto, Bruto, Extra Seco, "
+              "Seco, Meio Seco ou Doce. Aparece no cartão e nos filtros da página "
+              "dos espumantes. Nos outros produtos, deixa vazio."),
     ("negrito", "Produtor e Região"),
     ("texto", "Aparecem por baixo do nome, no cartão do produto. Nos maduros, a "
               "Região também decide o filtro da página dos vinhos: Douro, "
@@ -170,19 +176,25 @@ def folha_produtos():
                 f'error="{escape(texto)}" sqref="{col}2:{col}{fim}">'
                 f'<formula1>"{escape(",".join(valores))}"</formula1></dataValidation>')
 
+    # A letra de cada coluna sai da lista de colunas, para as listas
+    # pendentes continuarem certas se se acrescentar uma coluna
+    def col(nome):
+        return letra(next(i for i, c in enumerate(COLUNAS, 1) if c[0].startswith(nome)))
+
     validacoes = [
-        lista("A", ["Sim", "Não"], "Publicar", "Escolhe Sim ou Não."),
-        lista("C", CATEGORIAS, "Categoria", "Escolhe uma categoria da lista."),
-        lista("D", TIPOS, "Tipo", "Escolhe um tipo da lista."),
-        lista("L", ["Sim", "Não"], "Esgotado", "Escolhe Sim ou Não."),
+        lista(col("Publicar"), ["Sim", "Não"], "Publicar", "Escolhe Sim ou Não."),
+        lista(col("Categoria"), CATEGORIAS, "Categoria", "Escolhe uma categoria da lista."),
+        lista(col("Tipo"), TIPOS, "Tipo", "Escolhe um tipo da lista."),
+        lista(col("Doçura"), DOCURAS, "Doçura", "Escolhe uma doçura da lista."),
+        lista(col("Esgotado"), ["Sim", "Não"], "Esgotado", "Escolhe Sim ou Não."),
         (f'<dataValidation type="whole" operator="between" allowBlank="1" '
          f'showErrorMessage="1" errorTitle="Ano" '
          f'error="Escreve um ano com quatro algarismos, ou deixa vazio." '
-         f'sqref="G2:G{fim}"><formula1>1900</formula1><formula2>2100</formula2></dataValidation>'),
+         f'sqref="{col("Ano")}2:{col("Ano")}{fim}"><formula1>1900</formula1><formula2>2100</formula2></dataValidation>'),
         (f'<dataValidation type="decimal" operator="greaterThan" allowBlank="1" '
          f'showErrorMessage="1" errorTitle="Preço" '
          f'error="Escreve só o número, maior que zero. Por exemplo: 14,90" '
-         f'sqref="I2:I{fim}"><formula1>0</formula1></dataValidation>'),
+         f'sqref="{col("Preço")}2:{col("Preço")}{fim}"><formula1>0</formula1></dataValidation>'),
     ]
 
     return f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -281,7 +293,7 @@ LIVRO = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <sheet name="Produtos" sheetId="1" r:id="rId1"/>
 <sheet name="Como preencher" sheetId="2" r:id="rId2"/>
 </sheets>
-<definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">Produtos!$A$1:$M$201</definedName></definedNames>
+<definedNames><definedName name="_xlnm._FilterDatabase" localSheetId="0" hidden="1">Produtos!$A$1:$ULTIMA$</definedName></definedNames>
 </workbook>'''
 
 RELACOES_LIVRO = '''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -296,7 +308,7 @@ def criar(destino):
     with zipfile.ZipFile(destino, "w", zipfile.ZIP_DEFLATED) as z:
         z.writestr("[Content_Types].xml", TIPOS_CONTEUDO)
         z.writestr("_rels/.rels", RELACOES)
-        z.writestr("xl/workbook.xml", LIVRO)
+        z.writestr("xl/workbook.xml", LIVRO.replace("ULTIMA$", f"{letra(len(COLUNAS))}${LINHAS + 1}"))
         z.writestr("xl/_rels/workbook.xml.rels", RELACOES_LIVRO)
         z.writestr("xl/styles.xml", ESTILOS)
         z.writestr("xl/worksheets/sheet1.xml", folha_produtos())

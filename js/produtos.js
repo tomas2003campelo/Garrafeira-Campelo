@@ -1,231 +1,308 @@
 /* =========================================================
    CATÁLOGO DE PRODUTOS
-   ---------------------------------------------------------
-   ATENÇÃO: TODOS os produtos aqui em baixo são de EXEMPLO.
-   Nomes, produtores, preços e descrições são inventados, só
-   para o site ter conteúdo enquanto não tens o catálogo real.
-   SUBSTITUI TUDO antes de pores o site online.
 
-   Como adicionar um produto: copia um bloco { ... } inteiro,
-   cola-o a seguir e muda os valores. Campos:
+   ESTE FICHEIRO É GERADO. NÃO O EDITES À MÃO.
 
-     id         texto único, sem espaços (usado pelo carrinho)
-     nome       nome do produto
-     categoria  "verde" | "maduro" | "espumantes" | "cervejas"
-                (o Douro e o Alentejo são maduros)
-     tipo       "tinto" | "branco" | "rosé" | "espumante" | "cerveja"
-     produtor   quinta ou marca
-     regiao     região ou denominação. Nos maduros, decide o filtro
-                da página dos vinhos: Douro, Alentejo ou Outros maduros
-     ano        ano de colheita (usa null nas cervejas)
-     volume     ex: "75 cl", "33 cl"
-     preco      número, em euros. Usa ponto decimal: 12.50
-     descricao  uma ou duas frases para o cartão
-     cor        cor da garrafa desenhada (código hexadecimal)
-     imagem     opcional — caminho de uma fotografia, ex: "img/vinho.webp"
-                Se existir, a foto substitui a garrafa desenhada.
-     destaque   opcional — etiqueta no canto do cartão
-     esgotado   opcional — true esconde o botão de adicionar
+   Os produtos vêm da folha catalogo/produtos.xlsx. Para mudar o
+   catálogo, edita a folha e corre, na pasta do site:
+
+       python3 catalogo/atualizar-site.py
+
+   O que escreveres aqui diretamente é substituído da próxima vez
+   que o comando correr.
    ========================================================= */
 
 const PRODUTOS = [
-
-  /* ---------------- MADUROS DO DOURO ---------------- */
   {
-    id: "douro-reserva-xisto",
-    nome: "Reserva do Xisto",
-    categoria: "maduro", tipo: "tinto",
-    produtor: "Quinta do Exemplo", regiao: "Douro DOC",
-    ano: 2019, volume: "75 cl", preco: 18.50,
-    descricao: "Fruta escura, notas de esteva e um final longo e mineral. Pede carne assada.",
-    cor: "#53000F", destaque: "Reserva"
+    id: "conde-villar-branco",
+    nome: "Conde Villar Branco",
+    categoria: "verde",
+    tipo: "branco",
+    produtor: "Quinta das Arcas",
+    regiao: "Vinho Verde DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 3.95,
+    descricao: "Loureiro, Arinto, Trajadura e Avesso. Citrinos e um toque tropical, fresco e com uma mineralidade suave. Para marisco, peixe grelhado e saladas.",
+    cor: "#C9B35F"
   },
   {
-    id: "douro-encosta-nascente",
-    nome: "Encosta Nascente",
-    categoria: "maduro", tipo: "tinto",
-    produtor: "Quinta do Exemplo", regiao: "Douro DOC",
-    ano: 2021, volume: "75 cl", preco: 11.90,
-    descricao: "Mais leve e fresco. Ameixa, pimenta preta e taninos macios.",
-    cor: "#6B1020"
+    id: "piano-colheita-tinto",
+    nome: "Piano Colheita Tinto",
+    categoria: "maduro",
+    tipo: "tinto",
+    produtor: "Carlos Alonso Douro Wine",
+    regiao: "Douro DOC",
+    ano: 2025,
+    volume: "75 cl",
+    preco: 4.95,
+    descricao: "Touriga Franca e Touriga Nacional, com Tinta Barroca e Tinta Roriz. Frutos vermelhos e ameixa, corpo cheio e taninos macios. Vai bem com carnes, massas cremosas e caça.",
+    cor: "#53000F"
   },
   {
-    id: "douro-branco-altitude",
-    nome: "Branco de Altitude",
-    categoria: "maduro", tipo: "branco",
-    produtor: "Quinta do Exemplo", regiao: "Douro DOC",
-    ano: 2022, volume: "75 cl", preco: 13.40,
-    descricao: "Rabigato e Viosinho de vinha velha. Citrinos, funcho e boa tensão.",
-    cor: "#C29E61"
+    id: "piano-colheita-branco",
+    nome: "Piano Colheita Branco",
+    categoria: "maduro",
+    tipo: "branco",
+    produtor: "Carlos Alonso Douro Wine",
+    regiao: "Douro DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 4.95,
+    descricao: "Viosinho, Gouveio e Moscatel Galego. Fruta elegante com notas minerais e boa acidez. Para peixe, marisco, saladas ou como aperitivo.",
+    cor: "#C9B35F"
   },
   {
-    id: "douro-castelo-numao-branco",
-    nome: "Castelo Numão Branco",
-    categoria: "maduro", tipo: "branco",
-    produtor: "Produtor de exemplo", regiao: "Douro DOC",
-    ano: 2022, volume: "75 cl", preco: 9.90,
-    descricao: "Exemplo com fotografia real, para veres como fica um produto com foto em vez da garrafa desenhada.",
-    cor: "#C29E61",
+    id: "piano-reserva-tinto",
+    nome: "Piano Reserva Tinto",
+    categoria: "maduro",
+    tipo: "tinto",
+    produtor: "Carlos Alonso Douro Wine",
+    regiao: "Douro DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 7.50,
+    descricao: "Tinta Roriz, Touriga Nacional e Touriga Franca, com estágio em barrica. Morango, cassis e ameixa, notas balsâmicas e final longo. Para caça e borrego assado.",
+    cor: "#53000F",
+    destaque: "Reserva"
+  },
+  {
+    id: "piano-reserva-branco",
+    nome: "Piano Reserva Branco",
+    categoria: "maduro",
+    tipo: "branco",
+    produtor: "Carlos Alonso Douro Wine",
+    regiao: "Douro DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 7.95,
+    descricao: "Gouveio, Viosinho e Códega do Larinho, fermentado em barrica de carvalho francês. Fruta madura com toque tropical e tostado, final longo. Para arroz de marisco, peixe grelhado e queijos de pasta mole.",
+    cor: "#C9B35F",
+    destaque: "Reserva"
+  },
+  {
+    id: "quintela-tinto",
+    nome: "Quintela Tinto",
+    categoria: "maduro",
+    tipo: "tinto",
+    produtor: "Carlos Alonso Douro Wine",
+    regiao: "Douro DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 4.50,
+    descricao: "Tinta Roriz, Touriga Franca, Tinta Barroca e Touriga Nacional. Notas florais e de compota de frutos vermelhos, com taninos macios. Para carnes brancas, massas e caça.",
+    cor: "#53000F"
+  },
+  {
+    id: "quintela-branco",
+    nome: "Quintela Branco",
+    categoria: "maduro",
+    tipo: "branco",
+    produtor: "Carlos Alonso Douro Wine",
+    regiao: "Douro DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 4.50,
+    descricao: "Gouveio, Viosinho e Moscatel Galego. Aroma intenso de fruta tropical, fresco e vivo na boca. Para marisco, peixe, carnes brancas e massas.",
+    cor: "#C9B35F"
+  },
+  {
+    id: "castello-de-numao-tinto",
+    nome: "Castello de Numão Tinto",
+    categoria: "maduro",
+    tipo: "tinto",
+    produtor: "Carlos Alonso",
+    regiao: "Douro DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 3.95,
+    descricao: "Tinta Barroca, Tinta Roriz e Touriga Franca. Fruta vermelha, taninos suaves e acidez equilibrada. Um tinto do Douro para o dia a dia, com carnes e pratos de forno.",
+    cor: "#53000F"
+  },
+  {
+    id: "castello-de-numao-branco",
+    nome: "Castello de Numão Branco",
+    categoria: "maduro",
+    tipo: "branco",
+    produtor: "Carlos Alonso",
+    regiao: "Douro DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 3.50,
+    descricao: "Viosinho, Gouveio e Moscatel. Fruta branca, pera e uva fresca, com notas cítricas e minerais. Para peixe, marisco e saladas.",
+    cor: "#C9B35F",
     imagem: "img/castelo-numao-branco.webp"
   },
-
-  /* ---------------- VERDE ---------------- */
   {
-    id: "verde-atlantico",
-    nome: "Minho Atlântico",
-    categoria: "verde", tipo: "branco",
-    produtor: "Quinta do Exemplo", regiao: "Vinho Verde DOC",
-    ano: 2023, volume: "75 cl", preco: 8.20,
-    descricao: "Limão, maçã verde e acidez vibrante. Perfeito com marisco.",
-    cor: "#D4C274"
+    id: "tapada-villar-tinto",
+    nome: "Tapada Villar Tinto",
+    categoria: "maduro",
+    tipo: "tinto",
+    produtor: "Quinta das Arcas",
+    regiao: "Regional Alentejano",
+    ano: null,
+    volume: "75 cl",
+    preco: 4.25,
+    descricao: "Alicante Bouschet, Touriga Nacional e Touriga Franca. Cor granada, fruta vermelha intensa, macio e aveludado. Para grelhados e petiscos.",
+    cor: "#53000F"
   },
   {
-    id: "verde-alvarinho",
-    nome: "Alvarinho de Monção",
-    categoria: "verde", tipo: "branco",
-    produtor: "Quinta do Exemplo", regiao: "Vinho Verde DOC",
-    ano: 2022, volume: "75 cl", preco: 15.40,
-    descricao: "Mais gordo e complexo: pêssego, flor de laranjeira e fundo salino.",
-    cor: "#CFBC6C", destaque: "Favorito"
+    id: "tapada-villar-branco",
+    nome: "Tapada Villar Branco",
+    categoria: "maduro",
+    tipo: "branco",
+    produtor: "Quinta das Arcas",
+    regiao: "Regional Alentejano",
+    ano: null,
+    volume: "75 cl",
+    preco: 4.25,
+    descricao: "Roupeiro, Antão Vaz e Chardonnay. Frutado com um toque floral, seco mas redondo, de acidez viva. Para peixe, saladas e petiscos.",
+    cor: "#C9B35F"
   },
   {
-    id: "verde-rose",
-    nome: "Verde Rosé",
-    categoria: "verde", tipo: "rosé",
-    produtor: "Quinta do Exemplo", regiao: "Vinho Verde DOC",
-    ano: 2023, volume: "75 cl", preco: 7.50,
-    descricao: "Espadeiro. Framboesa, ligeira agulha e final seco. Serve bem fresco.",
-    cor: "#D98A9A"
-  },
-
-  /* ---------------- MADUROS DE OUTRAS REGIÕES ---------------- */
-  {
-    id: "maduro-alentejo-sobreiro",
-    nome: "Herdade do Sobreiro",
-    categoria: "maduro", tipo: "tinto",
-    produtor: "Herdade de exemplo", regiao: "Alentejo DOC",
-    ano: 2022, volume: "75 cl", preco: 9.50,
-    descricao: "Maduro e redondo, com baunilha do estágio em madeira. Fácil de beber.",
-    cor: "#7A1424"
+    id: "tapada-villar-doc-tinto",
+    nome: "Tapada Villar DOC Tinto",
+    categoria: "maduro",
+    tipo: "tinto",
+    produtor: "Quinta das Arcas",
+    regiao: "Alentejo DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 6.25,
+    descricao: "Alicante Bouschet, Touriga Nacional e Syrah. Especiarias e frutos vermelhos maduros, taninos macios e final elegante. Para carnes vermelhas e assados.",
+    cor: "#53000F"
   },
   {
-    id: "maduro-dao-granito",
-    nome: "Pedra Granítica",
-    categoria: "maduro", tipo: "tinto",
-    produtor: "Quinta do Exemplo", regiao: "Dão DOC",
-    ano: 2020, volume: "75 cl", preco: 14.00,
-    descricao: "Elegante e contido. Framboesa, folha de tomate e boa acidez.",
-    cor: "#5E0A18"
+    id: "quinta-da-mata-fidalga-branco-bruto",
+    nome: "Quinta da Mata Fidalga Branco Bruto",
+    categoria: "espumantes",
+    tipo: "branco",
+    docura: "Bruto",
+    produtor: "Quinta da Mata Fidalga",
+    regiao: "Bairrada",
+    ano: null,
+    volume: "75 cl",
+    preco: 8.50,
+    descricao: "Maria Gomes, Baga, Arinto e Chardonnay. Citrinos, pera, ananás e pêssego, com bolha fina e boa persistência. Para aperitivo, marisco e leitão.",
+    cor: "#DCC98A"
   },
   {
-    id: "maduro-bairrada-branco",
-    nome: "Barro Branco",
-    categoria: "maduro", tipo: "branco",
-    produtor: "Quinta do Exemplo", regiao: "Bairrada DOC",
-    ano: 2021, volume: "75 cl", preco: 12.60,
-    descricao: "Bical e Maria Gomes. Pera, avelã e textura cremosa.",
-    cor: "#CBB768"
+    id: "quinta-da-mata-fidalga-tinto-bruto",
+    nome: "Quinta da Mata Fidalga Tinto Bruto",
+    categoria: "espumantes",
+    tipo: "tinto",
+    docura: "Bruto",
+    produtor: "Quinta da Mata Fidalga",
+    regiao: "Bairrada",
+    ano: null,
+    volume: "75 cl",
+    preco: 9.50,
+    descricao: "Baga e Touriga Nacional, pelo método clássico, com nove meses de estágio. Cor rubi, fruta e notas vegetais, bolha fina. Para leitão, enchidos e carnes assadas.",
+    cor: "#53000F"
   },
   {
-    id: "maduro-setubal-rose",
-    nome: "Areia de Setúbal",
-    categoria: "maduro", tipo: "rosé",
-    produtor: "Quinta do Exemplo", regiao: "Península de Setúbal",
-    ano: 2023, volume: "75 cl", preco: 7.80,
-    descricao: "Morango, melancia e final seco. Serve a 8 °C.",
-    cor: "#D07C8E"
+    id: "fraga-da-pena-bruto",
+    nome: "Fraga da Pena Bruto",
+    categoria: "espumantes",
+    tipo: "branco",
+    docura: "Bruto",
+    produtor: "Caves Terras do Demo",
+    regiao: "Távora-Varosa",
+    ano: null,
+    volume: "75 cl",
+    preco: 10.95,
+    descricao: "Malvasia Fina, Verdelho e Folgasão, pelo método clássico. Floral e muito fresco, com notas de fermento e pão torrado. Para aperitivo, marisco e peixe.",
+    cor: "#DCC98A"
   },
   {
-    id: "maduro-moscatel",
-    nome: "Moscatel Velho 10 Anos",
-    categoria: "maduro", tipo: "tinto",
-    produtor: "Quinta do Exemplo", regiao: "Setúbal DOC",
-    ano: 2014, volume: "50 cl", preco: 24.00,
-    descricao: "Laranja cristalizada, mel e noz. Para o fim da refeição.",
-    cor: "#A8642A", destaque: "10 anos"
-  },
-
-  /* ---------------- ESPUMANTES ---------------- */
-  {
-    id: "espumante-metodo-classico",
-    nome: "Método Clássico Bruto",
-    categoria: "espumantes", tipo: "espumante",
-    produtor: "Quinta do Exemplo", regiao: "Bairrada DOC",
-    ano: 2019, volume: "75 cl", preco: 19.90,
-    descricao: "36 meses sobre borras. Bolha fina, pão torrado e maçã assada.",
-    cor: "#DCC98A", destaque: "36 meses"
+    id: "murganheira-reserva-bruto",
+    nome: "Murganheira Reserva Bruto",
+    categoria: "espumantes",
+    tipo: "branco",
+    docura: "Bruto",
+    produtor: "Caves da Murganheira",
+    regiao: "Távora-Varosa",
+    ano: null,
+    volume: "75 cl",
+    preco: 11.95,
+    descricao: "Malvasia Fina, Cerceal, Gouveio Real e Touriga Franca, pelo método clássico. Aroma de frutos secos, fresco e equilibrado, de bolha fina. Para celebrar, com marisco ou peixe.",
+    cor: "#DCC98A",
+    destaque: "Reserva"
   },
   {
-    id: "espumante-rose-baga",
-    nome: "Espumante Rosé Baga",
-    categoria: "espumantes", tipo: "espumante",
-    produtor: "Quinta do Exemplo", regiao: "Bairrada DOC",
-    ano: 2020, volume: "75 cl", preco: 16.50,
-    descricao: "Groselha e brioche. Ótimo como aperitivo ou com entradas.",
-    cor: "#DD94A3"
+    id: "terras-do-demo-bruto",
+    nome: "Terras do Demo Bruto",
+    categoria: "espumantes",
+    tipo: "branco",
+    docura: "Bruto",
+    produtor: "Caves Terras do Demo",
+    regiao: "Távora-Varosa",
+    ano: null,
+    volume: "75 cl",
+    preco: 9.95,
+    descricao: "Malvasia Fina, pelo método clássico, com mais de 12 meses de estágio. Aroma de flor de malvasia, fresco e frutado, bolha fina e persistente. Para marisco, ostras, peixe e aves.",
+    cor: "#DCC98A"
   },
   {
-    id: "espumante-bruto-natural",
-    nome: "Bruto Natural",
-    categoria: "espumantes", tipo: "espumante",
-    produtor: "Quinta do Exemplo", regiao: "Távora-Varosa DOC",
-    ano: 2021, volume: "75 cl", preco: 13.20,
-    descricao: "Sem adição de açúcar. Seco, direto e muito gastronómico.",
-    cor: "#D9C98F"
-  },
-
-  /* ---------------- CERVEJAS ---------------- */
-  {
-    id: "cerveja-ipa-lupulo",
-    nome: "IPA do Lúpulo",
-    categoria: "cervejas", tipo: "cerveja",
-    produtor: "Fábrica de exemplo", regiao: "Portugal",
-    ano: null, volume: "33 cl", preco: 3.20,
-    descricao: "IPA artesanal de amargor médio. Citrinos, resina e final seco.",
-    cor: "#B5701A"
+    id: "conde-villar-bruto-reserva",
+    nome: "Conde Villar Bruto Reserva",
+    categoria: "espumantes",
+    tipo: "branco",
+    docura: "Bruto",
+    produtor: "Quinta das Arcas",
+    regiao: "",
+    ano: null,
+    volume: "75 cl",
+    preco: 9.50,
+    descricao: "Blanc de noirs de Baga, feito pelo método clássico. Bolha fina e persistente, notas de maçã e biscoito, acidez viva. Para aperitivo e pratos de peixe.",
+    cor: "#DCC98A",
+    destaque: "Reserva"
   },
   {
-    id: "cerveja-stout-cafe",
-    nome: "Stout de Café",
-    categoria: "cervejas", tipo: "cerveja",
-    produtor: "Fábrica de exemplo", regiao: "Portugal",
-    ano: null, volume: "33 cl", preco: 3.60,
-    descricao: "Escura e cremosa, com café torrado e chocolate preto.",
-    cor: "#2E1A12", destaque: "Escura"
+    id: "3-monts-75-cl",
+    nome: "3 Monts 75 cl",
+    categoria: "cervejas",
+    tipo: "cerveja",
+    produtor: "Brasserie 3 Monts",
+    regiao: "Flandres, França",
+    ano: null,
+    volume: "75 cl",
+    preco: 7.50,
+    descricao: "Bière de garde loura da Flandres francesa, com 8,5% de álcool. Aromas de fruta, coentro e lúpulo, e final seco. Vai bem com francesinha e queijos.",
+    cor: "#C08A2E"
   },
   {
-    id: "cerveja-lager-artesanal",
-    nome: "Lager Artesanal",
-    categoria: "cervejas", tipo: "cerveja",
-    produtor: "Fábrica de exemplo", regiao: "Portugal",
-    ano: null, volume: "33 cl", preco: 2.40,
-    descricao: "Leve, limpa e refrescante. A escolha fácil para acompanhar petiscos.",
-    cor: "#D9A441"
+    id: "3-monts-33-cl",
+    nome: "3 Monts 33 cl",
+    categoria: "cervejas",
+    tipo: "cerveja",
+    produtor: "Brasserie 3 Monts",
+    regiao: "Flandres, França",
+    ano: null,
+    volume: "33 cl",
+    preco: 2.95,
+    descricao: "A mesma bière de garde loura da Flandres francesa, em garrafa pequena. 8,5% de álcool, aromas de fruta, coentro e lúpulo.",
+    cor: "#C08A2E"
   },
   {
-    id: "cerveja-trigo",
-    nome: "Cerveja de Trigo",
-    categoria: "cervejas", tipo: "cerveja",
-    produtor: "Fábrica de exemplo", regiao: "Portugal",
-    ano: null, volume: "33 cl", preco: 3.10,
-    descricao: "Turva e suave, com banana e cravinho. Serve com uma rodela de laranja.",
-    cor: "#E0B85C"
-  },
-  {
-    id: "cerveja-sem-alcool",
-    nome: "Sem Álcool 0,0",
-    categoria: "cervejas", tipo: "cerveja",
-    produtor: "Fábrica de exemplo", regiao: "Portugal",
-    ano: null, volume: "33 cl", preco: 2.10,
-    descricao: "Todo o sabor sem álcool nenhum. Para quem conduz.",
-    cor: "#C9A15A", esgotado: true
+    id: "3-monts-heritage-cereales",
+    nome: "3 Monts Héritage Céréales",
+    categoria: "cervejas",
+    tipo: "cerveja",
+    produtor: "Brasserie 3 Monts",
+    regiao: "Flandres, França",
+    ano: null,
+    volume: "75 cl",
+    preco: 8.90,
+    descricao: "Tripla loura de 9%, feita com cereais antigos: cevada, aveia, espelta e trigo. Doce de cereal, amargor leve e notas de fruta madura e especiarias.",
+    cor: "#C08A2E"
   }
 ];
 
 /* Nomes bonitos para mostrar no site, por categoria */
 const CATEGORIAS = {
   verde:      { nome: "Verde",      descricao: "Noroeste atlântico. Leves, cítricos e de acidez marcada." },
-  maduro:     { nome: "Maduro",     descricao: "Do Douro ao Alentejo, passando pelo Dão e pela Bairrada. Tintos, brancos e rosés." },
+  maduro:     { nome: "Maduro",     descricao: "Do Douro e do Alentejo, tintos e brancos para todas as ocasiões." },
   espumantes: { nome: "Espumantes", descricao: "Método clássico e bolha fina, para celebrar ou acompanhar a refeição." },
-  cervejas:   { nome: "Cervejas",   descricao: "Artesanais portuguesas, de IPA a stout." }
+  cervejas:   { nome: "Cervejas",   descricao: "Cervejas especiais, para beber devagar e à mesa." }
 };

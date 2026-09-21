@@ -135,8 +135,9 @@ const Ilustracoes = (function () {
   /* ---------- Escolhe o desenho certo para o produto ---------- */
 
   function paraProduto(p) {
-    if (p.categoria === "cervejas") return lata(p.cor, `Lata de ${p.nome}`);
-    const forma = p.tipo === "espumante" ? "borgonha" : "bordeaux";
+    // As cervejas da casa vêm em garrafa, não em lata
+    if (p.categoria === "cervejas") return garrafa(p.cor, "borgonha", `Garrafa de ${p.nome}`);
+    const forma = p.categoria === "espumantes" || p.tipo === "espumante" ? "borgonha" : "bordeaux";
     return garrafa(p.cor, forma, `Garrafa de ${p.nome}`);
   }
 

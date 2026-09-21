@@ -47,6 +47,18 @@ CORES = {
     "espumante": "#DCC98A", "cerveja": "#C08A2E",
 }
 
+# Doçura dos espumantes, pelos nomes da lei portuguesa. Aceita também
+# os nomes franceses que aparecem nos rótulos.
+DOCURAS = {
+    "bruto natural": "Bruto Natural", "brut nature": "Bruto Natural",
+    "extra bruto": "Extra Bruto", "extra brut": "Extra Bruto",
+    "bruto": "Bruto", "brut": "Bruto",
+    "extra seco": "Extra Seco", "extra sec": "Extra Seco",
+    "seco": "Seco", "sec": "Seco",
+    "meio seco": "Meio Seco", "meio-seco": "Meio Seco", "demi-sec": "Meio Seco",
+    "doce": "Doce", "doux": "Doce",
+}
+
 # O que o cabeçalho diz → o nome do campo. Aceita variações, para a
 # folha continuar a funcionar se mudares um pouco o texto do cabeçalho.
 CABECALHOS = {
@@ -54,6 +66,7 @@ CABECALHOS = {
     "nome": "nome",
     "categoria": "categoria",
     "tipo": "tipo",
+    "doçura": "docura", "docura": "docura", "dosagem": "docura",
     "produtor": "produtor",
     "região": "regiao", "regiao": "regiao",
     "ano": "ano", "colheita": "ano",
@@ -233,12 +246,31 @@ def ler_produtos():
 
         tipo_bruto = str(dados.get("tipo", "")).strip().lower()
         tipo = TIPOS.get(tipo_bruto)
+        # Nos espumantes, o tipo é a cor. Uma folha antiga com "Espumante"
+        # no tipo, ou sem tipo, fica branco, que é o mais comum.
+        if categoria == "espumantes" and tipo in (None, "espumante"):
+            tipo = "branco"
         if not tipo:
             # Sem tipo, deduz-se o que for óbvio pela categoria
-            tipo = {"espumantes": "espumante", "cervejas": "cerveja"}.get(categoria)
+            tipo = {"cervejas": "cerveja"}.get(categoria)
             if not tipo:
                 erros.append(f"{sitio}: falta o tipo (Tinto, Branco ou Rosé).")
                 continue
+
+        docura = ""
+        docura_bruta = str(dados.get("docura", "")).strip()
+        if docura_bruta:
+            docura = DOCURAS.get(docura_bruta.lower())
+            if not docura:
+                erros.append(f"{sitio}: a doçura \"{docura_bruta}\" não existe. Usa Bruto Natural, "
+                             "Extra Bruto, Bruto, Extra Seco, Seco, Meio Seco ou Doce.")
+                continue
+            if categoria != "espumantes":
+                avisos.append(f"{sitio}: a doçura só conta nos espumantes. Ignorei-a.")
+                docura = ""
+        elif categoria == "espumantes":
+            avisos.append(f"{sitio}: espumante sem doçura. Escolhe Bruto, Meio Seco ou outra, "
+                          "para aparecer no cartão e nos filtros.")
 
         if "preco" not in dados:
             erros.append(f"{sitio}: falta o preço.")
@@ -286,8 +318,11 @@ def ler_produtos():
             "volume": volume(dados.get("volume", "75 cl")),
             "preco": valor,
             "descricao": str(dados.get("descricao", "")).strip(),
-            "cor": CORES[tipo],
+            # O espumante branco desenha-se mais claro que o vinho branco
+            "cor": CORES["espumante"] if categoria == "espumantes" and tipo == "branco" else CORES[tipo],
         }
+        if docura:
+            produto["docura"] = docura
 
         if not produto["descricao"]:
             avisos.append(f"{sitio}: sem descrição. Fica com o cartão vazio por baixo do nome.")
@@ -332,7 +367,7 @@ def js_valor(v):
 
 
 def bloco_produto(p):
-    ordem = ["id", "nome", "categoria", "tipo", "produtor", "regiao", "ano",
+    ordem = ["id", "nome", "categoria", "tipo", "docura", "produtor", "regiao", "ano",
              "volume", "preco", "descricao", "cor", "imagem", "destaque", "esgotado"]
     linhas = [f"    {k}: {js_valor(p[k])}" for k in ordem if k in p]
     return "  {\n" + ",\n".join(linhas) + "\n  }"
