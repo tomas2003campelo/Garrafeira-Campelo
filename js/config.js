@@ -14,7 +14,7 @@ const CONFIG = {
   /* --- Identidade --- */
   nome: "Garrafeira Campelo",
   tagline: "Retalhista de vinhos · Direto das quintas",
-  descricao: "Vinhos do Douro, Verde, Maduro, Espumantes e Cervejas, comprados diretamente a quem os faz.",
+  descricao: "Vinhos Verdes e maduros do Douro, do Alentejo e de outras regiões, espumantes e cervejas, comprados diretamente a quem os faz.",
 
   /* --- Contactos ---------------------------------------
      POR PREENCHER: troca pelos teus dados reais.          */

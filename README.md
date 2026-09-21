@@ -18,7 +18,7 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 ```
 .
 ├── index.html        Início
-├── vinhos.html       Catálogo de vinhos (Douro, Verde, Maduro)
+├── vinhos.html       Catálogo de vinhos (Verdes e Maduros)
 ├── espumantes.html   Catálogo de espumantes
 ├── cervejas.html     Catálogo de cervejas
 ├── sobre.html        Sobre a casa

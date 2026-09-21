@@ -22,7 +22,7 @@ DESTINO = PASTA / "produtos.xlsx"
 # Linhas preparadas com listas pendentes (dá para 200 produtos)
 LINHAS = 200
 
-CATEGORIAS = ["Douro", "Verde", "Maduro", "Espumantes", "Cervejas"]
+CATEGORIAS = ["Verde", "Maduro", "Espumantes", "Cervejas"]
 TIPOS = ["Tinto", "Branco", "Rosé", "Espumante", "Cerveja"]
 
 # (cabeçalho, largura, estilo, estilo do exemplo)
@@ -68,13 +68,17 @@ INSTRUCOES = [
     ("negrito", "Nome"),
     ("texto", "Como aparece no site. Obrigatório."),
     ("negrito", "Categoria"),
-    ("texto", "Escolhe da lista: Douro, Verde, Maduro, Espumantes ou Cervejas. "
-              "Define em que página do site o produto aparece. Obrigatório."),
+    ("texto", "Escolhe da lista: Verde, Maduro, Espumantes ou Cervejas. O Douro "
+              "e o Alentejo são maduros: escolhe Maduro e escreve a região na "
+              "coluna Região. Define em que página do site o produto aparece. "
+              "Obrigatório."),
     ("negrito", "Tipo"),
     ("texto", "Escolhe da lista: Tinto, Branco, Rosé, Espumante ou Cerveja. "
               "Define a cor da garrafa desenhada e o filtro."),
     ("negrito", "Produtor e Região"),
-    ("texto", "Aparecem por baixo do nome, no cartão do produto."),
+    ("texto", "Aparecem por baixo do nome, no cartão do produto. Nos maduros, a "
+              "Região também decide o filtro da página dos vinhos: Douro, "
+              "Alentejo ou Outros maduros."),
     ("negrito", "Ano"),
     ("texto", "Ano de colheita. Deixa vazio nas cervejas e nos vinhos sem ano."),
     ("negrito", "Volume"),

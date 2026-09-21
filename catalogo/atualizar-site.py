@@ -25,10 +25,17 @@ DESTINO = RAIZ / "js" / "produtos.js"
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 
 CATEGORIAS = {
-    "douro": "douro", "verde": "verde", "maduro": "maduro",
+    "verde": "verde", "verdes": "verde", "vinho verde": "verde",
+    "maduro": "maduro", "maduros": "maduro",
     "espumantes": "espumantes", "espumante": "espumantes",
     "cervejas": "cervejas", "cerveja": "cervejas",
 }
+
+# O Douro e o Alentejo são maduros. Uma folha antiga, em que o Douro
+# era categoria à parte, continua a funcionar: passa a Maduro, e a
+# região fica preenchida se estiver vazia, para o filtro do site o pôr
+# no sítio certo.
+REGIOES_COMO_CATEGORIA = {"douro": "Douro", "alentejo": "Alentejo"}
 TIPOS = {
     "tinto": "tinto", "branco": "branco", "rosé": "rosé", "rose": "rosé",
     "espumante": "espumante", "cerveja": "cerveja",
@@ -214,10 +221,14 @@ def ler_produtos():
             continue
 
         cat_bruta = str(dados.get("categoria", "")).strip().lower()
+        regiao = str(dados.get("regiao", "")).strip()
+        if cat_bruta in REGIOES_COMO_CATEGORIA:
+            regiao = regiao or REGIOES_COMO_CATEGORIA[cat_bruta]
+            cat_bruta = "maduro"
         categoria = CATEGORIAS.get(cat_bruta)
         if not categoria:
             erros.append(f"{sitio}: a categoria \"{dados.get('categoria', '')}\" não existe. "
-                         "Usa Douro, Verde, Maduro, Espumantes ou Cervejas.")
+                         "Usa Verde, Maduro, Espumantes ou Cervejas.")
             continue
 
         tipo_bruto = str(dados.get("tipo", "")).strip().lower()
@@ -270,7 +281,7 @@ def ler_produtos():
             "categoria": categoria,
             "tipo": tipo,
             "produtor": str(dados.get("produtor", "")).strip(),
-            "regiao": str(dados.get("regiao", "")).strip(),
+            "regiao": regiao,
             "ano": ano,
             "volume": volume(dados.get("volume", "75 cl")),
             "preco": valor,
@@ -280,6 +291,9 @@ def ler_produtos():
 
         if not produto["descricao"]:
             avisos.append(f"{sitio}: sem descrição. Fica com o cartão vazio por baixo do nome.")
+        if categoria == "maduro" and not regiao:
+            avisos.append(f"{sitio}: maduro sem região. Aparece no filtro \"Outros maduros\"; "
+                          "escreve Douro ou Alentejo na coluna Região, se for o caso.")
 
         if dados.get("destaque"):
             produto["destaque"] = str(dados["destaque"]).strip()

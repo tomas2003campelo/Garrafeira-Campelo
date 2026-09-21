@@ -11,10 +11,12 @@
 
      id         texto único, sem espaços (usado pelo carrinho)
      nome       nome do produto
-     categoria  "douro" | "verde" | "maduro" | "espumantes" | "cervejas"
+     categoria  "verde" | "maduro" | "espumantes" | "cervejas"
+                (o Douro e o Alentejo são maduros)
      tipo       "tinto" | "branco" | "rosé" | "espumante" | "cerveja"
      produtor   quinta ou marca
-     regiao     região ou denominação
+     regiao     região ou denominação. Nos maduros, decide o filtro
+                da página dos vinhos: Douro, Alentejo ou Outros maduros
      ano        ano de colheita (usa null nas cervejas)
      volume     ex: "75 cl", "33 cl"
      preco      número, em euros. Usa ponto decimal: 12.50
@@ -28,11 +30,11 @@
 
 const PRODUTOS = [
 
-  /* ---------------- DOURO ---------------- */
+  /* ---------------- MADUROS DO DOURO ---------------- */
   {
     id: "douro-reserva-xisto",
     nome: "Reserva do Xisto",
-    categoria: "douro", tipo: "tinto",
+    categoria: "maduro", tipo: "tinto",
     produtor: "Quinta do Exemplo", regiao: "Douro DOC",
     ano: 2019, volume: "75 cl", preco: 18.50,
     descricao: "Fruta escura, notas de esteva e um final longo e mineral. Pede carne assada.",
@@ -41,7 +43,7 @@ const PRODUTOS = [
   {
     id: "douro-encosta-nascente",
     nome: "Encosta Nascente",
-    categoria: "douro", tipo: "tinto",
+    categoria: "maduro", tipo: "tinto",
     produtor: "Quinta do Exemplo", regiao: "Douro DOC",
     ano: 2021, volume: "75 cl", preco: 11.90,
     descricao: "Mais leve e fresco. Ameixa, pimenta preta e taninos macios.",
@@ -50,7 +52,7 @@ const PRODUTOS = [
   {
     id: "douro-branco-altitude",
     nome: "Branco de Altitude",
-    categoria: "douro", tipo: "branco",
+    categoria: "maduro", tipo: "branco",
     produtor: "Quinta do Exemplo", regiao: "Douro DOC",
     ano: 2022, volume: "75 cl", preco: 13.40,
     descricao: "Rabigato e Viosinho de vinha velha. Citrinos, funcho e boa tensão.",
@@ -59,7 +61,7 @@ const PRODUTOS = [
   {
     id: "douro-castelo-numao-branco",
     nome: "Castelo Numão Branco",
-    categoria: "douro", tipo: "branco",
+    categoria: "maduro", tipo: "branco",
     produtor: "Produtor de exemplo", regiao: "Douro DOC",
     ano: 2022, volume: "75 cl", preco: 9.90,
     descricao: "Exemplo com fotografia real, para veres como fica um produto com foto em vez da garrafa desenhada.",
@@ -96,7 +98,7 @@ const PRODUTOS = [
     cor: "#D98A9A"
   },
 
-  /* ---------------- MADURO ---------------- */
+  /* ---------------- MADUROS DE OUTRAS REGIÕES ---------------- */
   {
     id: "maduro-alentejo-sobreiro",
     nome: "Herdade do Sobreiro",
@@ -222,9 +224,8 @@ const PRODUTOS = [
 
 /* Nomes bonitos para mostrar no site, por categoria */
 const CATEGORIAS = {
-  douro:      { nome: "Douro",      descricao: "Encostas de xisto e verões quentes. Tintos estruturados e brancos de altitude." },
   verde:      { nome: "Verde",      descricao: "Noroeste atlântico. Leves, cítricos e de acidez marcada." },
-  maduro:     { nome: "Maduro",     descricao: "Alentejo, Dão, Bairrada e Setúbal. O resto de Portugal, garrafa a garrafa." },
+  maduro:     { nome: "Maduro",     descricao: "Do Douro ao Alentejo, passando pelo Dão e pela Bairrada. Tintos, brancos e rosés." },
   espumantes: { nome: "Espumantes", descricao: "Método clássico e bolha fina, para celebrar ou acompanhar a refeição." },
   cervejas:   { nome: "Cervejas",   descricao: "Artesanais portuguesas, de IPA a stout." }
 };

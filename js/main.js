@@ -392,6 +392,12 @@
 
       if (!interno || modificador || link.target === "_blank") return;
 
+      // Para a mesma página só muda a âncora (vinhos.html#maduro, já
+      // estando nos vinhos): o browser não recarrega, e a página ficava
+      // esbatida. Deixa o link seguir sozinho.
+      const atual = location.pathname.split("/").pop() || "index.html";
+      if (destino.split("#")[0] === atual) return;
+
       e.preventDefault();
       document.body.classList.add("a-sair");
       setTimeout(() => { location.href = destino; }, 240);
@@ -465,53 +471,88 @@
      5. PÁGINAS DE CATÁLOGO (vinhos.html, cervejas.html)
      ======================================================= */
 
+  /* Nos maduros, a região decide o filtro. Vem da coluna Região do
+     Excel, escrita à mão ("Douro DOC", "Vinho Regional Duriense",
+     "Alentejo"), por isso procura só a palavra que importa. */
+  function zonaDoMaduro(p) {
+    const r = (p.regiao || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    if (/douro|durien/.test(r)) return "douro";
+    if (/alentej/.test(r)) return "alentejo";
+    return "outros";
+  }
+
+  /* Filtros da página dos vinhos: os verdes, e os maduros divididos
+     pela região. vinhos.html#maduro mostra os maduros todos, e aí
+     acendem os três botões dos maduros. */
+  const ZONAS_MADURO = ["douro", "alentejo", "outros"];
+  const FILTROS_VINHOS = [
+    { chave: "todos",    nome: "Todos",          aceita: () => true },
+    { chave: "verde",    nome: "Verdes",         aceita: p => p.categoria === "verde" },
+    { chave: "douro",    nome: "Douro",          aceita: p => p.categoria === "maduro" && zonaDoMaduro(p) === "douro" },
+    { chave: "alentejo", nome: "Alentejo",       aceita: p => p.categoria === "maduro" && zonaDoMaduro(p) === "alentejo" },
+    { chave: "outros",   nome: "Outros maduros", aceita: p => p.categoria === "maduro" && zonaDoMaduro(p) === "outros" },
+    { chave: "maduro",   nome: "Maduros",        aceita: p => p.categoria === "maduro", semBotao: true }
+  ];
+
   function ligarCatalogo() {
     const lista = document.getElementById("lista-produtos");
     if (!lista) return;
 
-    // A página diz que categorias mostra: data-categorias="douro,verde,maduro"
+    // A página diz que categorias mostra: data-categorias="verde,maduro"
     const permitidas = (lista.dataset.categorias || "").split(",").filter(Boolean);
     const doCatalogo = permitidas.length
       ? PRODUTOS.filter(p => permitidas.includes(p.categoria))
       : PRODUTOS;
 
+    // Nos vinhos, os filtros de cima. Nas outras páginas, um botão por
+    // categoria, se houver mais do que uma.
+    const opcoes = permitidas.includes("maduro")
+      ? FILTROS_VINHOS
+      : [{ chave: "todos", nome: "Todos", aceita: () => true }]
+          .concat(permitidas.map(c => ({ chave: c, nome: CATEGORIAS[c].nome, aceita: p => p.categoria === c })));
+
     const filtros = document.querySelector(".filtros");
     let ativo = "todos";
 
     function aplicar() {
-      const visiveis = ativo === "todos"
-        ? doCatalogo
-        : doCatalogo.filter(p => p.categoria === ativo || p.tipo === ativo);
-      desenharProdutos(lista, visiveis);
-    }
-
-    if (filtros && permitidas.length > 1) {
-      const botoes = [{ chave: "todos", nome: "Todos" }]
-        .concat(permitidas.map(c => ({ chave: c, nome: CATEGORIAS[c].nome })));
-
-      botoes.forEach(b => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "chip";
-        btn.textContent = b.nome;
-        btn.setAttribute("aria-pressed", String(b.chave === ativo));
-        btn.addEventListener("click", () => {
-          ativo = b.chave;
-          filtros.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === btn)));
-          aplicar();
-        });
-        filtros.appendChild(btn);
+      const filtro = opcoes.find(o => o.chave === ativo) || opcoes[0];
+      desenharProdutos(lista, doCatalogo.filter(filtro.aceita));
+      filtros?.querySelectorAll(".chip").forEach(c => {
+        const chave = c.dataset.filtro;
+        const aceso = chave === ativo || (ativo === "maduro" && ZONAS_MADURO.includes(chave));
+        c.setAttribute("aria-pressed", String(aceso));
       });
     }
 
-    // Permite chegar à página já com um filtro: vinhos.html#douro
-    const ancora = location.hash.replace("#", "");
-    if (ancora && permitidas.includes(ancora)) {
-      ativo = ancora;
-      const btn = [...(filtros?.querySelectorAll(".chip") || [])]
-        .find(c => c.textContent === CATEGORIAS[ancora].nome);
-      if (btn) filtros.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", String(c === btn)));
+    if (filtros && opcoes.length > 2) {
+      opcoes
+        .filter(o => !o.semBotao)
+        // Um botão que não mostrasse nada não serve: sem vinhos do
+        // Alentejo no catálogo, o botão do Alentejo não aparece
+        .filter(o => o.chave === "todos" || doCatalogo.some(o.aceita))
+        .forEach(o => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "chip";
+          btn.dataset.filtro = o.chave;
+          btn.textContent = o.nome;
+          btn.addEventListener("click", () => { ativo = o.chave; aplicar(); });
+          filtros.appendChild(btn);
+        });
     }
+
+    // Permite chegar à página já com um filtro (vinhos.html#maduro) e
+    // mudar de filtro pelos links do rodapé sem sair da página
+    function lerAncora() {
+      const ancora = location.hash.replace("#", "");
+      if (opcoes.some(o => o.chave === ancora)) ativo = ancora;
+    }
+    lerAncora();
+    window.addEventListener("hashchange", () => {
+      lerAncora();
+      aplicar();
+      (filtros || lista).scrollIntoView({ behavior: menosMovimento ? "auto" : "smooth", block: "center" });
+    });
 
     aplicar();
   }
