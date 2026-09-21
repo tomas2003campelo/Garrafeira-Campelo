@@ -80,7 +80,9 @@ essencial:
 - **Etiqueta** — opcional; os produtos com etiqueta aparecem em destaque na
   página inicial.
 - **Fotografia** — opcional; o nome de um ficheiro na pasta `img`. Sem foto, o
-  site desenha uma garrafa na cor do tipo.
+  site desenha uma garrafa na cor do tipo. O site é escuro: fotos com fundo
+  transparente ou escuro ficam integradas na montra; com fundo branco, aparecem
+  como um cartão fotográfico dentro dela.
 
 ### A folha fica só no teu computador
 
