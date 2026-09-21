@@ -1753,7 +1753,7 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .btn-carrinho { padding: .5rem .8rem; }
   .btn-carrinho .etiqueta-carrinho { display: none; }
 
-  .stats { grid-template-columns: repeat(3, 1fr); }
+  .stats { grid-auto-flow: column; grid-auto-columns: 1fr; }
   .form, .footer-grid { grid-template-columns: 1fr; }
   .hero-actions .btn { flex: 1 1 auto; }
   .modal-acoes { flex-direction: column-reverse; }
@@ -1763,7 +1763,7 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 }
 
 @media (max-width: 420px) {
-  .stats { grid-template-columns: 1fr; }
+  .stats { grid-auto-flow: row; }
   .grid { grid-template-columns: 1fr; }
   .card-top { height: 235px; }
   .card-top .ilustracao { height: 195px; }

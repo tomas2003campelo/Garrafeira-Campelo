@@ -289,7 +289,12 @@
         if (!entrada.isIntersecting) return;
         observador.unobserve(entrada.target);
 
-        const alvo = parseInt(entrada.target.textContent.replace(/\D/g, ""), 10);
+        // Guarda o que está à volta do número: "+10" conta até 10 e
+        // mantém o "+"
+        const partes = entrada.target.textContent.trim().match(/^(\D*)(\d+)(\D*)$/);
+        if (!partes) return;
+        const [, antes, numero, depois] = partes;
+        const alvo = parseInt(numero, 10);
         if (!alvo) return;
 
         const duracao = 1100;
@@ -299,10 +304,10 @@
           const t = Math.min((agora - inicio) / duracao, 1);
           // desacelera no fim, para o número assentar
           const suave = 1 - Math.pow(1 - t, 3);
-          entrada.target.textContent = Math.round(alvo * suave);
+          entrada.target.textContent = antes + Math.round(alvo * suave) + depois;
           if (t < 1) requestAnimationFrame(passo);
         }
-        entrada.target.textContent = "0";
+        entrada.target.textContent = antes + "0" + depois;
         requestAnimationFrame(passo);
       });
     }, { threshold: 0.5 });
