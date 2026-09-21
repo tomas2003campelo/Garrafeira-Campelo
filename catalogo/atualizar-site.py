@@ -353,6 +353,10 @@ def escrever(produtos):
 
 # ---------------------------------------------------------------
 
+def plural(n, um, varios):
+    return f"{n} {um if n == 1 else varios}"
+
+
 def main():
     so_verificar = "--verificar" in sys.argv
 
@@ -383,7 +387,7 @@ def main():
         print("Há coisas a corrigir na folha. Não mexi no site.\n")
         for e in erros:
             print(f"  ✗  {e}")
-        print(f"\n{len(erros)} erro(s). Corrige, grava, e corre outra vez.")
+        print(f"\n{plural(len(erros), 'erro', 'erros')}. Corrige, grava, e corre outra vez.")
         sys.exit(1)
 
     if not produtos:
@@ -397,16 +401,18 @@ def main():
     resumo = ", ".join(f"{k} {v}" for k, v in contagem.items())
 
     if so_verificar:
-        print(f"Tudo em ordem: {len(produtos)} produtos prontos a publicar ({resumo}).")
+        print(f"Tudo em ordem: {plural(len(produtos), 'produto pronto', 'produtos prontos')} "
+              f"a publicar ({resumo}).")
         if escondidos:
-            print(f"{escondidos} marcado(s) como não publicar.")
+            print(f"{plural(escondidos, 'marcado', 'marcados')} como não publicar.")
         print("Nada foi alterado. Corre sem --verificar para atualizar o site.")
         return
 
     escrever(produtos)
-    print(f"Site atualizado: {len(produtos)} produtos ({resumo}).")
+    print(f"Site atualizado: {plural(len(produtos), 'produto', 'produtos')} ({resumo}).")
     if escondidos:
-        print(f"{escondidos} marcado(s) como não publicar, ficaram de fora.")
+        print(f"{plural(escondidos, 'marcado', 'marcados')} como não publicar, "
+              f"{'ficou' if escondidos == 1 else 'ficaram'} de fora.")
     print("\nPara ver: abre o index.html. Para publicar: git add -A, git commit, git push.")
 
 
