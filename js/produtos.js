@@ -195,7 +195,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 8.50,
     descricao: "Maria Gomes, Baga, Arinto e Chardonnay. Citrinos, pera, ananás e pêssego, com bolha fina e boa persistência. Para aperitivo, marisco e leitão.",
-    cor: "#DCC98A"
+    cor: "#DCC98A",
+    imagem: "img/produtos/mata-fidalga-branco-bruto.webp"
   },
   {
     id: "quinta-da-mata-fidalga-tinto-bruto",
