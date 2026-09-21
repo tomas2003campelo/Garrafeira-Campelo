@@ -676,7 +676,9 @@ main { overflow-x: clip; }
   max-width: 76%;
   object-fit: contain;
   border-radius: 6px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, .5);
+  /* drop-shadow segue a forma da imagem: numa garrafa recortada, a
+     sombra é da garrafa; numa foto de fundo branco, é do retângulo */
+  filter: drop-shadow(0 10px 16px rgba(0, 0, 0, .5));
   transition: transform .3s ease;
 }
 .card:hover .card-top img { transform: scale(1.06); }

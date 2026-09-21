@@ -1,9 +1,10 @@
 # Créditos das imagens
 
-As fotografias deste site são de banco de imagens e mostram adegas
-genéricas — **não são da Garrafeira Campelo**. Estão cá para o site ter
-ambiente enquanto não há fotografias próprias, e devem ser substituídas
-assim que houver.
+As fotografias de ambiente deste site são de banco de imagens e mostram
+adegas genéricas: **não são da Garrafeira Campelo**. Estão cá para o site
+ter ambiente enquanto não há fotografias próprias, e devem ser substituídas
+assim que houver. As fotografias das garrafas vêm dos produtores (ver o
+fim deste ficheiro).
 
 | Ficheiro | Fotógrafo | Origem | Licença |
 |---|---|---|---|
@@ -31,3 +32,20 @@ concorrente do Unsplash com elas.
   casa. Interiores de adega e garrafeira não levantam esse problema.
 - **Pessoas.** Fotografias com pessoas reconhecíveis têm regras próprias
   para uso comercial, mesmo em bancos gratuitos.
+
+## Fotografias das garrafas
+
+São as imagens oficiais dos produtores e das marcas, tiradas dos sites
+deles, para mostrar os produtos que a loja vende. Os direitos são dos
+produtores: se algum pedir para não as usarmos, trocam-se por
+fotografias próprias. Descarregadas a 21 de setembro de 2026 e reduzidas
+para 600 px de altura.
+
+| Ficheiros (em `img/produtos/`) | Origem |
+|---|---|
+| `piano-*.png`, `quintela-*.png` | [Carlos Alonso Douro Wine](https://carlosalonso.wine/) |
+| `tapada-villar-*.png`, `conde-villar-*.png` | [Quinta das Arcas](https://lojadaquinta.pt/) |
+| `terras-do-demo-bruto.png`, `fraga-da-pena-bruto.png` | [Caves Terras do Demo](https://www.cavesterrasdodemo.pt/) |
+| `murganheira-reserva-bruto.png` | [Murganheira](https://murganheira.com/) |
+| `3-monts-75cl.png`, `3-monts-heritage-cereales.png` | [Brasserie 3 Monts](https://www.3monts.fr/) |
+| `castello-de-numao-branco.webp` | Origem por confirmar: já estava no site desde a primeira versão |

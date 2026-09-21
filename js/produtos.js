@@ -24,7 +24,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 3.95,
     descricao: "Loureiro, Arinto, Trajadura e Avesso. Citrinos e um toque tropical, fresco e com uma mineralidade suave. Para marisco, peixe grelhado e saladas.",
-    cor: "#C9B35F"
+    cor: "#C9B35F",
+    imagem: "img/produtos/conde-villar-branco.png"
   },
   {
     id: "piano-colheita-tinto",
@@ -37,7 +38,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 4.95,
     descricao: "Touriga Franca e Touriga Nacional, com Tinta Barroca e Tinta Roriz. Frutos vermelhos e ameixa, corpo cheio e taninos macios. Vai bem com carnes, massas cremosas e caça.",
-    cor: "#53000F"
+    cor: "#53000F",
+    imagem: "img/produtos/piano-colheita-tinto.png"
   },
   {
     id: "piano-colheita-branco",
@@ -50,7 +52,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 4.95,
     descricao: "Viosinho, Gouveio e Moscatel Galego. Fruta elegante com notas minerais e boa acidez. Para peixe, marisco, saladas ou como aperitivo.",
-    cor: "#C9B35F"
+    cor: "#C9B35F",
+    imagem: "img/produtos/piano-colheita-branco.png"
   },
   {
     id: "piano-reserva-tinto",
@@ -64,6 +67,7 @@ const PRODUTOS = [
     preco: 7.50,
     descricao: "Tinta Roriz, Touriga Nacional e Touriga Franca, com estágio em barrica. Morango, cassis e ameixa, notas balsâmicas e final longo. Para caça e borrego assado.",
     cor: "#53000F",
+    imagem: "img/produtos/piano-reserva-tinto.png",
     destaque: "Reserva"
   },
   {
@@ -78,6 +82,7 @@ const PRODUTOS = [
     preco: 7.95,
     descricao: "Gouveio, Viosinho e Códega do Larinho, fermentado em barrica de carvalho francês. Fruta madura com toque tropical e tostado, final longo. Para arroz de marisco, peixe grelhado e queijos de pasta mole.",
     cor: "#C9B35F",
+    imagem: "img/produtos/piano-reserva-branco.png",
     destaque: "Reserva"
   },
   {
@@ -91,7 +96,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 4.50,
     descricao: "Tinta Roriz, Touriga Franca, Tinta Barroca e Touriga Nacional. Notas florais e de compota de frutos vermelhos, com taninos macios. Para carnes brancas, massas e caça.",
-    cor: "#53000F"
+    cor: "#53000F",
+    imagem: "img/produtos/quintela-tinto.png"
   },
   {
     id: "quintela-branco",
@@ -104,7 +110,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 4.50,
     descricao: "Gouveio, Viosinho e Moscatel Galego. Aroma intenso de fruta tropical, fresco e vivo na boca. Para marisco, peixe, carnes brancas e massas.",
-    cor: "#C9B35F"
+    cor: "#C9B35F",
+    imagem: "img/produtos/quintela-branco.png"
   },
   {
     id: "castello-de-numao-tinto",
@@ -131,7 +138,7 @@ const PRODUTOS = [
     preco: 3.50,
     descricao: "Viosinho, Gouveio e Moscatel. Fruta branca, pera e uva fresca, com notas cítricas e minerais. Para peixe, marisco e saladas.",
     cor: "#C9B35F",
-    imagem: "img/castelo-numao-branco.webp"
+    imagem: "img/produtos/castello-de-numao-branco.webp"
   },
   {
     id: "tapada-villar-tinto",
@@ -144,7 +151,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 4.25,
     descricao: "Alicante Bouschet, Touriga Nacional e Touriga Franca. Cor granada, fruta vermelha intensa, macio e aveludado. Para grelhados e petiscos.",
-    cor: "#53000F"
+    cor: "#53000F",
+    imagem: "img/produtos/tapada-villar-tinto.png"
   },
   {
     id: "tapada-villar-branco",
@@ -157,7 +165,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 4.25,
     descricao: "Roupeiro, Antão Vaz e Chardonnay. Frutado com um toque floral, seco mas redondo, de acidez viva. Para peixe, saladas e petiscos.",
-    cor: "#C9B35F"
+    cor: "#C9B35F",
+    imagem: "img/produtos/tapada-villar-branco.png"
   },
   {
     id: "tapada-villar-doc-tinto",
@@ -170,7 +179,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 6.25,
     descricao: "Alicante Bouschet, Touriga Nacional e Syrah. Especiarias e frutos vermelhos maduros, taninos macios e final elegante. Para carnes vermelhas e assados.",
-    cor: "#53000F"
+    cor: "#53000F",
+    imagem: "img/produtos/tapada-villar-doc-tinto.png"
   },
   {
     id: "quinta-da-mata-fidalga-branco-bruto",
@@ -212,7 +222,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 10.95,
     descricao: "Malvasia Fina, Verdelho e Folgasão, pelo método clássico. Floral e muito fresco, com notas de fermento e pão torrado. Para aperitivo, marisco e peixe.",
-    cor: "#DCC98A"
+    cor: "#DCC98A",
+    imagem: "img/produtos/fraga-da-pena-bruto.png"
   },
   {
     id: "murganheira-reserva-bruto",
@@ -227,6 +238,7 @@ const PRODUTOS = [
     preco: 11.95,
     descricao: "Malvasia Fina, Cerceal, Gouveio Real e Touriga Franca, pelo método clássico. Aroma de frutos secos, fresco e equilibrado, de bolha fina. Para celebrar, com marisco ou peixe.",
     cor: "#DCC98A",
+    imagem: "img/produtos/murganheira-reserva-bruto.png",
     destaque: "Reserva"
   },
   {
@@ -241,7 +253,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 9.95,
     descricao: "Malvasia Fina, pelo método clássico, com mais de 12 meses de estágio. Aroma de flor de malvasia, fresco e frutado, bolha fina e persistente. Para marisco, ostras, peixe e aves.",
-    cor: "#DCC98A"
+    cor: "#DCC98A",
+    imagem: "img/produtos/terras-do-demo-bruto.png"
   },
   {
     id: "conde-villar-bruto-reserva",
@@ -256,6 +269,7 @@ const PRODUTOS = [
     preco: 9.50,
     descricao: "Blanc de noirs de Baga, feito pelo método clássico. Bolha fina e persistente, notas de maçã e biscoito, acidez viva. Para aperitivo e pratos de peixe.",
     cor: "#DCC98A",
+    imagem: "img/produtos/conde-villar-bruto-reserva.png",
     destaque: "Reserva"
   },
   {
@@ -269,7 +283,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 7.50,
     descricao: "Bière de garde loura da Flandres francesa, com 8,5% de álcool. Aromas de fruta, coentro e lúpulo, e final seco. Vai bem com francesinha e queijos.",
-    cor: "#C08A2E"
+    cor: "#C08A2E",
+    imagem: "img/produtos/3-monts-75cl.png"
   },
   {
     id: "3-monts-33-cl",
@@ -295,7 +310,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 8.90,
     descricao: "Tripla loura de 9%, feita com cereais antigos: cevada, aveia, espelta e trigo. Doce de cereal, amargor leve e notas de fruta madura e especiarias.",
-    cor: "#C08A2E"
+    cor: "#C08A2E",
+    imagem: "img/produtos/3-monts-heritage-cereales.png"
   }
 ];
 
