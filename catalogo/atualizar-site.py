@@ -406,6 +406,35 @@ def plural(n, um, varios):
     return f"{n} {um if n == 1 else varios}"
 
 
+def carimbar_versoes():
+    """Põe em cada página uma marca de versão nos ficheiros .css e .js
+    (por exemplo js/produtos.js?v=3f9a1c2e), tirada do conteúdo de cada
+    um. O browser de quem já visitou o site guarda estes ficheiros durante
+    uns minutos; quando um muda, a marca muda, e o browser vai buscar o
+    novo em vez de mostrar o antigo. Devolve quantas páginas mudaram."""
+    import hashlib
+    versoes = {}
+    for caminho in sorted((RAIZ / "css").glob("*.css")) + sorted((RAIZ / "js").glob("*.js")):
+        rel = caminho.relative_to(RAIZ).as_posix()
+        versoes[rel] = hashlib.sha1(caminho.read_bytes()).hexdigest()[:8]
+
+    padrao = re.compile(r'((?:href|src)=")((?:css|js)/[\w.-]+\.(?:css|js))(?:\?v=[0-9a-f]+)?(")')
+
+    def marca(m):
+        if m.group(2) not in versoes:
+            return m.group(0)
+        return f"{m.group(1)}{m.group(2)}?v={versoes[m.group(2)]}{m.group(3)}"
+
+    mudadas = 0
+    for pagina in sorted(RAIZ.glob("*.html")):
+        texto = pagina.read_text(encoding="utf-8")
+        novo = padrao.sub(marca, texto)
+        if novo != texto:
+            pagina.write_text(novo, encoding="utf-8")
+            mudadas += 1
+    return mudadas
+
+
 def main():
     so_verificar = "--verificar" in sys.argv
 
@@ -458,6 +487,7 @@ def main():
         return
 
     escrever(produtos)
+    carimbar_versoes()
     print(f"Site atualizado: {plural(len(produtos), 'produto', 'produtos')} ({resumo}).")
     if escondidos:
         print(f"{plural(escondidos, 'marcado', 'marcados')} como não publicar, "
