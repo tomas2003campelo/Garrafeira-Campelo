@@ -34,3 +34,6 @@ npm-debug.log*
 # partir dela vai para o GitHub. Guarda uma cópia no iCloud ou Drive.
 catalogo/*.xlsx
 catalogo/~$*
+
+# Fotografias originais que o Tomás junta, antes de recortadas (ficam só no computador)
+catalogo/imagens-originais/

@@ -209,7 +209,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 9.50,
     descricao: "Baga e Touriga Nacional, pelo método clássico, com nove meses de estágio. Cor rubi, fruta e notas vegetais, bolha fina. Para leitão, enchidos e carnes assadas.",
-    cor: "#53000F"
+    cor: "#53000F",
+    imagem: "img/produtos/mata-fidalga-tinto-bruto.webp"
   },
   {
     id: "fraga-da-pena-bruto",

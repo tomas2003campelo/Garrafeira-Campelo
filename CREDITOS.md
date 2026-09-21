@@ -50,3 +50,4 @@ as margens e passaram a WebP com 600 px de altura.
 | `murganheira-reserva-bruto.webp` | [Murganheira](https://murganheira.com/) |
 | `3-monts-*.webp` | [Brasserie 3 Monts](https://www.3monts.fr/) |
 | `castello-de-numao-branco.webp` | Origem por confirmar: já estava no site desde a primeira versão |
+| `castello-de-numao-tinto.webp`, `mata-fidalga-tinto-bruto.webp` | Enviadas pelo Tomás |
