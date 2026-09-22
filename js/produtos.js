@@ -264,7 +264,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 3.50,
     descricao: "Tinto do Douro feito com castas tradicionais da região, com 13% de álcool. Para o dia a dia, com carnes e petiscos.",
-    cor: "#53000F"
+    cor: "#53000F",
+    imagem: "img/produtos/dom-xisto.webp"
   },
   {
     id: "dom-xisto-branco",
@@ -277,7 +278,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 3.50,
     descricao: "Branco do Douro feito com castas tradicionais da região. Para o dia a dia, com peixe, saladas e petiscos.",
-    cor: "#C9B35F"
+    cor: "#C9B35F",
+    imagem: "img/produtos/dom-xisto.webp"
   },
   {
     id: "tapada-villar-tinto",

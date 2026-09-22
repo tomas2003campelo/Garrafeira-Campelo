@@ -53,4 +53,4 @@ as margens e passaram a WebP com 600 px de altura.
 | `castello-de-numao-reserva-tinto.webp` | Loja [Garrafeira Diálogo](https://www.garrafeiradialogo.com/) (o produtor não tem site) |
 | `castello-de-numao-reserva-branco.webp` | Loja [Garrafeira Scorpio](https://www.garrafeirascorpio.pt/) (o produtor não tem site) |
 | `castello-de-numao-branco.webp` | Origem por confirmar: já estava no site desde a primeira versão |
-| `castello-de-numao-tinto.webp`, `mata-fidalga-tinto-bruto.webp`, `mata-fidalga-branco-bruto.webp` | Enviadas pelo Tomás |
+| `castello-de-numao-tinto.webp`, `mata-fidalga-tinto-bruto.webp`, `mata-fidalga-branco-bruto.webp`, `dom-xisto.webp` | Enviadas pelo Tomás |
