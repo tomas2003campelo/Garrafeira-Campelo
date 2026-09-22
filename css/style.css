@@ -150,52 +150,12 @@ main { overflow-x: clip; }
 .salta-para-conteudo:focus { left: 0; }
 
 /* =========================================================
-   FAIXA DE PRÉ-VISUALIZAÇÃO
-   Temporária: sai quando o catálogo for real.
-   ========================================================= */
-
-.faixa-rascunho {
-  position: sticky;
-  top: 0;
-  z-index: 70;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .6rem;
-  flex-wrap: wrap;
-  padding: .55rem clamp(1rem, 4vw, 3rem);
-  background: var(--dourado);
-  color: var(--borgonha-escuro);
-  font-size: .84rem;
-  text-align: center;
-  line-height: 1.4;
-}
-.faixa-rascunho strong {
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  font-size: .72rem;
-  padding: .15rem .55rem;
-  border-radius: 100px;
-  background: var(--borgonha-escuro);
-  color: var(--dourado);
-  white-space: nowrap;
-}
-
-
-@media (max-width: 560px) {
-  .faixa-rascunho { font-size: .78rem; padding-block: .5rem; }
-}
-
-@media print { .faixa-rascunho { display: none; } }
-
-/* =========================================================
    CABEÇALHO
    ========================================================= */
 
 .topbar {
   position: sticky;
-  top: var(--altura-faixa, 0px);   /* por baixo da faixa de pré-visualização, se houver */
+  top: 0;
   z-index: 60;
   background: rgba(26, 18, 20, .88);
   backdrop-filter: saturate(180%) blur(14px);
@@ -711,7 +671,7 @@ main { overflow-x: clip; }
   z-index: 5;
   max-width: 540px;
   margin: 0 0 1.6rem;
-  scroll-margin-top: calc(var(--altura-faixa, 0px) + var(--topo) + 1rem);
+  scroll-margin-top: calc(var(--topo) + 1rem);
 }
 .pesquisa-inicio input { box-shadow: 0 10px 30px rgba(0, 0, 0, .28); }
 .pesquisa-inicio input:focus { box-shadow: 0 0 0 3px rgba(214, 178, 123, .22), 0 10px 30px rgba(0, 0, 0, .28); }
@@ -1664,7 +1624,7 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 }
 .carrinho-pagina .carrinho-fundo {
   position: sticky;
-  top: calc(var(--altura-faixa, 0px) + var(--topo) + 1rem);
+  top: calc(var(--topo) + 1rem);
   padding: 1.4rem 1.4rem 0;
   border: 1px solid var(--ouro-contorno);
   border-radius: var(--raio);

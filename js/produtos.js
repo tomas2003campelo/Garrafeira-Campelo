@@ -392,7 +392,8 @@ const PRODUTOS = [
     caixa: 6,
     preco: 3.68,
     descricao: "Roupeiro e Arinto, com parte do vinho fermentada em barrica de carvalho francês. Fruta e flores, volume na boca, mineral e de final fresco. Para peixe no forno, bacalhau e carnes brancas.",
-    cor: "#C9B35F"
+    cor: "#C9B35F",
+    imagem: "img/produtos/tapada-villar-doc-branco.webp"
   },
   {
     id: "quinta-da-mata-fidalga-branco-bruto",

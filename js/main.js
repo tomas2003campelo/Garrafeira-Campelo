@@ -223,23 +223,6 @@
      nenhumas — nem as que são feitas por JavaScript.          */
   const menosMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* --- Faixa de pré-visualização ---
-     Mede a altura real da faixa e diz ao cabeçalho onde colar.
-     Sem isto, o cabeçalho tapava a faixa em ecrãs estreitos,
-     onde o texto quebra para duas linhas.                     */
-  function ajustarFaixaRascunho() {
-    const faixa = document.querySelector(".faixa-rascunho");
-    if (!faixa) return;
-
-    function medir() {
-      document.documentElement.style.setProperty(
-        "--altura-faixa", faixa.offsetHeight + "px");
-    }
-    medir();
-    window.addEventListener("resize", medir, { passive: true });
-    if ("ResizeObserver" in window) new ResizeObserver(medir).observe(faixa);
-  }
-
   /* --- Barra de progresso de leitura --- */
   function ligarProgresso() {
     if (menosMovimento) return;
@@ -1735,7 +1718,6 @@
     ligarVerificacaoIdade();
     ligarFormulario();
     ligarAnimacoes();
-    ajustarFaixaRascunho();
     ligarProgresso();
     ligarCabecalhoEncolhido();
     ligarContadores();

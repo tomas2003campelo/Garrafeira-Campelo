@@ -139,12 +139,13 @@ declarar idade para ler a política de privacidade.
 - [ ] Rever a política de privacidade com quem trata da contabilidade
 - [ ] Indicar a entidade de resolução de litígios (o link só aparece depois de preenchida)
 - [ ] Preencher os contactos reais no `js/config.js`
-- [ ] Preencher `catalogo/produtos.xlsx` com os produtos reais e correr `atualizar-site.py`
-- [ ] Trocar as garrafas desenhadas por fotografias dos produtos
+- [x] Preencher `catalogo/produtos.xlsx` com os produtos reais e correr `atualizar-site.py`
+- [x] Trocar as garrafas desenhadas por fotografias dos produtos
 - [ ] Trocar as fotos de banco de imagens por fotos da loja
 - [ ] Ligar o formulário de contacto a um serviço a sério (Formspree, Netlify
       Forms ou um backend próprio) — hoje só valida no browser
 - [ ] Escrever a política de privacidade e os termos, se passar a vender online
+- [ ] Deixar o Google encontrar o site: apagar a linha `FORA DO GOOGLE` de todas as páginas
 
 ## Notas
 
@@ -166,19 +167,13 @@ campo `imagem` e a fotografia passa à frente do desenho.
 *reduzir movimento*: quem a tiver ligada não vê animação nenhuma — nem as
 de scroll, nem os contadores, nem o parallax.
 
-## Modo de pré-visualização
+## Fora do Google
 
-O site está publicado como **rascunho**, com duas coisas temporárias:
+O site está publicado, mas escondido das pesquisas: todas as páginas têm a
+marca `<meta name="robots" content="noindex, nofollow">`, assinalada com o
+comentário `FORA DO GOOGLE`. Quem tiver a ligação vê o site normalmente.
 
-- Uma **faixa dourada** no topo de todas as páginas a dizer que os produtos
-  são exemplos
-- Uma marca `<meta name="robots" content="noindex, nofollow">` que impede o
-  Google de indexar o site
-
-**Quando o catálogo for real, apaga as duas em todas as páginas.** Ambas estão
-assinaladas com um comentário `PRÉ-VISUALIZAÇÃO` no HTML, e o estilo da faixa
-está em `css/style.css`, na secção com o mesmo nome. Enquanto a marca `noindex`
-lá estiver, o site não aparece nas pesquisas — por muito bom que seja.
+Quando quiseres que o Google o encontre, apaga essa linha em todas as páginas.
 
 ## Publicar
 
