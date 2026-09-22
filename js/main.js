@@ -82,6 +82,13 @@
       encodeURIComponent(`${m.rua.replace(",", "")}, ${m.codigoPostal} ${m.localidade}`);
     document.querySelectorAll("[data-mapa]").forEach(el => { el.href = mapa; });
 
+    // "Como chegar": o caminho até à loja no Google Maps. No telemóvel
+    // abre a aplicação, pronta para o GPS.
+    const destino = `${m.rua.replace(",", "")}, ${m.codigoPostal} ${m.localidade}`;
+    document.querySelectorAll("[data-direcoes]").forEach(el => {
+      el.href = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(destino);
+    });
+
     // Redes sociais: esconde as que não estão preenchidas, e os blocos
     // que fiquem sem nenhuma
     document.querySelectorAll("[data-rede]").forEach(el => {
@@ -140,13 +147,78 @@
   }
 
   function preencherHorario() {
-    const alvo = document.querySelector("[data-horario]");
-    if (!alvo) return;
-    alvo.innerHTML = CONFIG.horario.map(d => `
-      <tr>
-        <th scope="row">${d.dia}</th>
-        <td${d.horas ? "" : ' class="fechado"'}>${d.horas || "Encerrado"}</td>
-      </tr>`).join("");
+    document.querySelectorAll("[data-horario]").forEach(alvo => {
+      alvo.innerHTML = CONFIG.horario.map(d => `
+        <tr>
+          <th scope="row">${d.dia}</th>
+          <td${d.horas ? "" : ' class="fechado"'}>${d.horas || "Encerrado"}</td>
+        </tr>`).join("");
+    });
+  }
+
+  /* "Agora estamos abertos, até às 19:00", ou quando voltamos a abrir.
+     Conta pela hora de Portugal, mesmo para quem visita de fora.     */
+  function preencherEstadoDaLoja() {
+    const alvos = document.querySelectorAll("[data-estado-loja]");
+    if (!alvos.length) return;
+    const agora = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Lisbon" }));
+    const minutos = t => { const [h, mm] = t.split(":").map(Number); return h * 60 + mm; };
+    const agoraMin = agora.getHours() * 60 + agora.getMinutes();
+    const hoje = Carrinho.horasDoDia(agora.getDay());
+
+    let texto = "";
+    let aberto = false;
+    if (hoje && agoraMin < minutos(hoje.fecha)) {
+      aberto = agoraMin >= minutos(hoje.abre);
+      texto = aberto ? `Agora estamos abertos, até às ${hoje.fecha}.` : `Hoje abrimos às ${hoje.abre}.`;
+    } else {
+      for (let i = 1; i <= 7; i++) {
+        const dia = new Date(agora);
+        dia.setDate(agora.getDate() + i);
+        const h = Carrinho.horasDoDia(dia.getDay());
+        if (!h) continue;
+        const nome = dia.toLocaleDateString("pt-PT", { weekday: "long" });
+        const quando = i === 1 ? "amanhã" : `${nome.endsWith("feira") ? "na" : "no"} ${nome}`;
+        texto = `Agora estamos fechados. Abrimos ${quando} às ${h.abre}.`;
+        break;
+      }
+    }
+    alvos.forEach(el => {
+      el.textContent = texto;
+      el.classList.toggle("aberto", aberto);
+    });
+  }
+
+  /* --- Mapa da loja ---
+     Vem do Google Maps, por isso só abre quando a pessoa carrega em
+     "Ver o mapa": antes disso não se liga nada à Google. Quem já o
+     abriu uma vez vê-o logo nas visitas seguintes.                  */
+  function ligarMapas() {
+    const caixas = document.querySelectorAll("[data-mapa-embutido]");
+    if (!caixas.length) return;
+    const CHAVE_MAPA = "garrafeira-campelo-mapa";
+
+    function mostrar(caixa) {
+      const m = CONFIG.morada;
+      const q = encodeURIComponent(`${m.rua.replace(",", "")}, ${m.codigoPostal} ${m.localidade}`);
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.google.com/maps?q=${q}&z=15&output=embed`;
+      iframe.title = `Mapa com a localização da ${CONFIG.nome}`;
+      iframe.loading = "lazy";
+      iframe.referrerPolicy = "no-referrer-when-downgrade";
+      caixa.replaceChildren(iframe);
+    }
+
+    let jaAceite = false;
+    try { jaAceite = localStorage.getItem(CHAVE_MAPA) === "sim"; } catch (e) {}
+
+    caixas.forEach(caixa => {
+      if (jaAceite) return mostrar(caixa);
+      caixa.querySelector(".mapa-carregar")?.addEventListener("click", () => {
+        try { localStorage.setItem(CHAVE_MAPA, "sim"); } catch (e) {}
+        caixas.forEach(mostrar);
+      });
+    });
   }
 
   /* =======================================================
@@ -1908,6 +1980,8 @@
     preencherIdentificacao();
     preencherLitigios();
     preencherHorario();
+    preencherEstadoDaLoja();
+    ligarMapas();
     marcarPaginaAtual();
     ligarMenu();
     ligarDestaques();
