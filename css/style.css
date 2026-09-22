@@ -1664,9 +1664,54 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
   position: static;
 }
 
+/* Sugestões para juntar à encomenda: por baixo da lista, na coluna da
+   esquerda, em cartões compactos, sem descrição nem produtor. O resumo
+   ocupa a coluna da direita toda: como desce com a página, se as
+   sugestões fossem até lá passava-lhes por cima. */
+.carrinho-pagina .carrinho-fundo { grid-column: 2; grid-row: 2 / span 2; }
+.carrinho-sugestoes { grid-column: 1; grid-row: 3; min-width: 0; margin-top: 1rem; }
+.carrinho-pagina[data-passo="vazio"] .carrinho-sugestoes { grid-column: 1 / -1; }
+.carrinho-sugestoes-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .3rem 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid var(--ouro-fio);
+}
+.carrinho-sugestoes-topo h2 { margin: 0; font-size: 1.5rem; }
+.nota-sugestoes { margin: 0; font-size: .95rem; font-weight: 600; color: var(--acento); }
+.grid-sugestoes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+.grid-sugestoes .card-desc,
+.grid-sugestoes .card-produtor { display: none; }
+.grid-sugestoes .card-top { height: 200px; }
+.grid-sugestoes .card-top img { height: 168px; }
+.grid-sugestoes .card-top .ilustracao { height: 170px; }
+.grid-sugestoes .card-nome { margin-bottom: .9rem; }
+/* Cartão estreito: o preço por cima, o botão a toda a largura */
+.grid-sugestoes .card-foot { flex-direction: column; align-items: stretch; gap: .7rem; }
+.grid-sugestoes .btn-add { justify-content: center; }
+
 @media (max-width: 900px) {
-  .carrinho.carrinho-pagina { grid-template-columns: 1fr; }
+  /* minmax(0, ...): sem isto, a fila das sugestões alargava a coluna
+     para lá do ecrã, e o resumo ficava cortado */
+  .carrinho.carrinho-pagina { grid-template-columns: minmax(0, 1fr); }
   .carrinho-pagina .carrinho-fundo { position: static; }
+  /* Uma coluna: a lista, as sugestões e depois o resumo */
+  .carrinho-pagina .carrinho-fundo,
+  .carrinho-sugestoes { grid-column: auto; grid-row: auto; }
+  .carrinho-sugestoes { margin-top: 0; }
+  /* No telemóvel, as sugestões passam numa fila que se arrasta para o lado */
+  .grid-sugestoes {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: .4rem 0 .8rem;
+  }
+  .grid-sugestoes .card { flex: 0 0 min(250px, 72%); scroll-snap-align: start; }
 }
 
 /* Aviso de "adicionado", com atalho para o carrinho */

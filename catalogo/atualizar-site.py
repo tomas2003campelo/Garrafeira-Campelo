@@ -80,6 +80,7 @@ CABECALHOS = {
     "fotografia": "imagem", "foto": "imagem", "imagem": "imagem",
     "álcool": "alcool", "alcool": "alcool", "teor": "alcool",
     "unidades": "caixa", "caixa": "caixa",
+    "sempre": "inicio",
 }
 
 # Cabeçalhos de duas palavras, que se leem antes dos de uma
@@ -87,6 +88,8 @@ CABECALHOS_COMPOSTOS = {
     "preço loja": "preco_loja", "preco loja": "preco_loja", "preço na loja": "preco_loja",
     "preço site": "preco_site", "preco site": "preco_site", "preço no site": "preco_site",
     "preço online": "preco_site", "preco online": "preco_site",
+    "sempre no início": "inicio", "sempre no inicio": "inicio",
+    "destaque no início": "inicio", "destaque no inicio": "inicio",
 }
 
 # Sem a aba Definições, o preço do site é o da loja mais isto
@@ -452,6 +455,8 @@ def ler_produtos():
             produto["destaque"] = str(dados["destaque"]).strip()
         if dados.get("esgotado") and sim(dados["esgotado"]):
             produto["esgotado"] = True
+        if dados.get("inicio") and sim(dados["inicio"]):
+            produto["inicio"] = True
         if dados.get("imagem"):
             ficheiro = str(dados["imagem"]).strip()
             if not ficheiro.startswith("img/"):
@@ -463,6 +468,11 @@ def ler_produtos():
                 produto["imagem"] = ficheiro
 
         produtos.append(produto)
+
+    fixos = [p["nome"] for p in produtos if p.get("inicio")]
+    if len(fixos) > 4:
+        avisos.append(f"Há {len(fixos)} produtos com \"Sempre no início\", mas a página inicial só "
+                      f"mostra 4: ficam os primeiros da folha ({', '.join(fixos[:4])}).")
 
     return produtos, erros, avisos, escondidos, (aumento if "preco_loja" in mapa.values() else None)
 
@@ -487,7 +497,7 @@ def js_valor(v):
 def bloco_produto(p):
     ordem = ["id", "nome", "categoria", "tipo", "docura", "produtor", "regiao", "ano",
              "volume", "alcool", "caixa", "preco", "descricao", "cor", "imagem", "destaque",
-             "esgotado"]
+             "inicio", "esgotado"]
     linhas = [f"    {k}: {js_valor(p[k])}" for k in ordem if k in p]
     return "  {\n" + ",\n".join(linhas) + "\n  }"
 

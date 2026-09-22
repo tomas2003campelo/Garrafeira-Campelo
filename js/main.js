@@ -416,6 +416,16 @@
       : [CATEGORIAS[p.categoria].nome, p.tipo].join(" · ");
   }
 
+  /* Baralha uma lista, sem mexer na original */
+  function baralhar(lista) {
+    const copia = lista.slice();
+    for (let i = copia.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copia[i], copia[j]] = [copia[j], copia[i]];
+    }
+    return copia;
+  }
+
   function urlDoProduto(p) {
     return `produto.html?id=${encodeURIComponent(p.id)}`;
   }
@@ -1119,13 +1129,17 @@
     else document.getElementById("relacionados")?.remove();
   }
 
-  /* Destaques na página inicial */
+  /* Destaques na página inicial: primeiro os marcados "Sempre no
+     início" na folha; os lugares que sobram enchem-se à sorte com
+     outros produtos, e mudam em cada visita. */
   function ligarDestaques() {
     const lista = document.getElementById("lista-destaques");
     if (!lista) return;
     const quantos = parseInt(lista.dataset.quantos || "4", 10);
-    const destaques = PRODUTOS.filter(p => p.destaque && !p.esgotado).slice(0, quantos);
-    desenharProdutos(lista, destaques.length ? destaques : PRODUTOS.slice(0, quantos));
+    const disponiveis = PRODUTOS.filter(p => !p.esgotado);
+    const fixos = disponiveis.filter(p => p.inicio).slice(0, quantos);
+    const aSorte = baralhar(disponiveis.filter(p => !p.inicio)).slice(0, quantos - fixos.length);
+    desenharProdutos(lista, fixos.concat(aSorte));
   }
 
   /* Contagem de produtos nos cartões de categoria da página inicial */
@@ -1215,6 +1229,11 @@
     }
 
     function desenhar() {
+      desenharCarrinho();
+      desenharSugestoes();
+    }
+
+    function desenharCarrinho() {
       const linhas = Carrinho.linhas();
       const total = Carrinho.totalEuros();
 
@@ -1329,6 +1348,68 @@
       document.getElementById("btn-esvaziar").addEventListener("click", () => {
         if (confirm("Esvaziar o carrinho?")) Carrinho.esvaziar();
       });
+    }
+
+    /* ---------- Sugestões para juntar à encomenda ----------
+       Produtos à sorte que ainda não estão no carrinho. Primeiro das
+       famílias que faltam na encomenda (a quem leva só vinho sugere-se
+       um espumante e uma cerveja), depois de qualquer uma. Enquanto se
+       mexe nas quantidades ficam as mesmas: só se troca a que foi para
+       o carrinho, no mesmo lugar.                                     */
+    const secaoSugestoes = document.getElementById("carrinho-sugestoes");
+    const listaSugestoes = document.getElementById("lista-sugestoes");
+    const tituloSugestoes = document.getElementById("titulo-sugestoes");
+    const notaSugestoes = document.getElementById("nota-sugestoes");
+    const QUANTAS_SUGESTOES = 3;
+    const cartoesSugestao = new Map();
+    let sugeridos = [];
+
+    const familia = p => (p.categoria === "verde" || p.categoria === "maduro" ? "vinhos" : p.categoria);
+
+    function desenharSugestoes() {
+      if (!secaoSugestoes || !listaSugestoes) return;
+      if (passo === 2) {
+        secaoSugestoes.hidden = true;
+        return;
+      }
+
+      const linhas = Carrinho.linhas();
+      const noCarrinho = new Set(linhas.map(l => l.produto.id));
+      const elegiveis = PRODUTOS.filter(p => !p.esgotado && !noCarrinho.has(p.id));
+
+      // As que continuam a servir ficam; as outras deixam uma vaga
+      const anteriores = sugeridos.map(id => elegiveis.find(p => p.id === id) || null);
+      const ficam = anteriores.filter(Boolean);
+      const vistas = new Set(linhas.map(l => familia(l.produto)).concat(ficam.map(familia)));
+      const resto = baralhar(elegiveis.filter(p => !ficam.includes(p)));
+      const novos = [];
+      const falta = () => QUANTAS_SUGESTOES - ficam.length - novos.length;
+      for (const p of resto) {
+        if (falta() <= 0) break;
+        if (!vistas.has(familia(p))) { vistas.add(familia(p)); novos.push(p); }
+      }
+      for (const p of resto) {
+        if (falta() <= 0) break;
+        if (!novos.includes(p)) novos.push(p);
+      }
+      const escolhidos = anteriores.map(p => p || novos.shift()).filter(Boolean).concat(novos);
+
+      secaoSugestoes.hidden = !escolhidos.length;
+      tituloSugestoes.textContent = linhas.length ? "Para juntar à encomenda" : "Sugestões da casa";
+      const faltaEntrega = Carrinho.faltaParaEntrega();
+      notaSugestoes.textContent = linhas.length && Carrinho.entregaDisponivel() && faltaEntrega > 0
+        ? `Faltam ${euros(faltaEntrega)} para a entrega em mão.`
+        : "";
+      notaSugestoes.hidden = !notaSugestoes.textContent;
+
+      const ids = escolhidos.map(p => p.id);
+      if (ids.join() === sugeridos.join() && listaSugestoes.children.length) return;
+      sugeridos = ids;
+      listaSugestoes.replaceChildren(...escolhidos.map(p => {
+        if (!cartoesSugestao.has(p.id)) cartoesSugestao.set(p.id, criarCartao(p));
+        return cartoesSugestao.get(p.id);
+      }));
+      ligarAnimacoes();
     }
 
     /* ---------- Passo 2: dados do cliente ---------- */
@@ -1568,9 +1649,10 @@
 
       const produto = PRODUTOS.find(p => p.id === id);
       const caixa = Carrinho.unidadesPorCaixa(produto);
+      const noCarrinho = !!document.querySelector("#painel-carrinho[data-pagina]");
       mostrarToast(caixa > 1
         ? `${produto.nome}: caixa de ${caixa} no carrinho`
-        : `${produto.nome} adicionado ao carrinho`, true);
+        : `${produto.nome} adicionado ao carrinho`, !noCarrinho);
     });
   }
 

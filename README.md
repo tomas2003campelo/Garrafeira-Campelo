@@ -82,8 +82,9 @@ essencial:
 - **Preço site**: não se escreve. Calcula-se sozinho, com o preço da loja mais
   5%, e é o que aparece no site. A percentagem está na aba **Definições**: se a
   mudares, todos os preços do site acompanham.
-- **Etiqueta** — opcional; os produtos com etiqueta aparecem em destaque na
-  página inicial.
+- **Etiqueta**: opcional, aparece no canto do cartão (Reserva, DOC, Novidade).
+- **Sempre no início**: Sim para o produto estar sempre no "Em destaque" da
+  página inicial. Os lugares que sobram enchem-se à sorte, e mudam em cada visita.
 - **Fotografia** — opcional; o nome de um ficheiro na pasta `img`. Sem foto, o
   site desenha uma garrafa na cor do tipo. O site é escuro: fotos com fundo
   transparente ou escuro ficam integradas na montra; com fundo branco, aparecem

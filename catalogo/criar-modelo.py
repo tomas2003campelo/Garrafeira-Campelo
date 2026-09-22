@@ -46,6 +46,7 @@ COLUNAS = [
     ("Preço site (€, com IVA)",     13, 11, 5),
     ("Descrição",                   60, 2, 4),
     ("Etiqueta",                    14, 2, 4),
+    ("Sempre no início",            12, 9, 10),
     ("Esgotado",                    11, 2, 4),
     ("Fotografia",                  24, 2, 4),
     ("Álcool (%)",                  10, 9, 10),
@@ -57,7 +58,7 @@ EXEMPLO = [
     "Quinta de Exemplo", "Monção e Melgaço", 2023, "75 cl", 14.90, None,
     "Pêssego branco e flor de laranjeira, com acidez viva e final salino. "
     "Vai bem com marisco e peixe grelhado.",
-    "Novidade", "Não", "", 12.5, 6,
+    "Novidade", "Não", "Não", "", 12.5, 6,
 ]
 
 INSTRUCOES = [
@@ -111,8 +112,11 @@ INSTRUCOES = [
               "se é para beber já ou guardar."),
     ("negrito", "Etiqueta"),
     ("texto", "Opcional. Aparece no canto do cartão: Reserva, Novidade, "
-              "Favorito. Os produtos com etiqueta aparecem em destaque na "
-              "página inicial."),
+              "Favorito."),
+    ("negrito", "Sempre no início"),
+    ("texto", "Sim para o produto aparecer sempre no \"Em destaque\" da página "
+              "inicial, que mostra 4. Os lugares que sobram enchem-se à sorte com "
+              "outros produtos, e mudam em cada visita."),
     ("negrito", "Esgotado"),
     ("texto", "Sim esconde o botão de comprar, mas o produto continua visível."),
     ("negrito", "Álcool (%)"),
@@ -260,6 +264,7 @@ def folha_produtos(produtos=None, aumento=AUMENTO_SITE):
         lista(col("Tipo"), TIPOS, "Tipo", "Escolhe um tipo da lista."),
         lista(col("Doçura"), DOCURAS, "Doçura", "Escolhe uma doçura da lista."),
         lista(col("Esgotado"), ["Sim", "Não"], "Esgotado", "Escolhe Sim ou Não."),
+        lista(col("Sempre"), ["Sim", "Não"], "Sempre no início", "Escolhe Sim ou Não."),
         (f'<dataValidation type="whole" operator="between" allowBlank="1" '
          f'showErrorMessage="1" errorTitle="Ano" '
          f'error="Escreve um ano com quatro algarismos, ou deixa vazio." '

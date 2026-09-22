@@ -287,7 +287,8 @@ const PRODUTOS = [
     descricao: "Touriga Nacional, Touriga Franca, Tinta Amarela e Tinta Roriz, com 10 meses em barrica. Fruta vermelha, violeta e especiarias, final fresco e persistente. Para cozinha tradicional, carnes e queijos.",
     cor: "#53000F",
     imagem: "img/produtos/bafarela-reserva-tinto.webp",
-    destaque: "Reserva"
+    destaque: "Reserva",
+    inicio: true
   },
   {
     id: "bafarela-grande-reserva-tinto",
@@ -304,7 +305,8 @@ const PRODUTOS = [
     descricao: "Touriga Nacional, Touriga Franca e Tinta Roriz, com 12 meses em barrica de carvalho francês. Intenso e floral, de taninos densos mas finos. Para carnes nobres, caça e queijos fortes.",
     cor: "#53000F",
     imagem: "img/produtos/bafarela-grande-reserva-tinto.webp",
-    destaque: "Grande Reserva"
+    destaque: "Grande Reserva",
+    inicio: true
   },
   {
     id: "dom-xisto-tinto",
@@ -338,8 +340,8 @@ const PRODUTOS = [
     imagem: "img/produtos/dom-xisto.webp"
   },
   {
-    id: "tapada-villar-tinto",
-    nome: "Tapada Villar Tinto",
+    id: "tapada-de-villar-tinto",
+    nome: "Tapada de Villar Tinto",
     categoria: "maduro",
     tipo: "tinto",
     produtor: "Quinta das Arcas",
@@ -354,8 +356,8 @@ const PRODUTOS = [
     imagem: "img/produtos/tapada-villar-tinto.webp"
   },
   {
-    id: "tapada-villar-branco",
-    nome: "Tapada Villar Branco",
+    id: "tapada-de-villar-branco",
+    nome: "Tapada de Villar Branco",
     categoria: "maduro",
     tipo: "branco",
     produtor: "Quinta das Arcas",
@@ -370,8 +372,8 @@ const PRODUTOS = [
     imagem: "img/produtos/tapada-villar-branco.webp"
   },
   {
-    id: "tapada-villar-doc-tinto",
-    nome: "Tapada Villar DOC Tinto",
+    id: "tapada-de-villar-doc-tinto",
+    nome: "Tapada de Villar DOC Tinto",
     categoria: "maduro",
     tipo: "tinto",
     produtor: "Quinta das Arcas",
@@ -387,8 +389,8 @@ const PRODUTOS = [
     destaque: "DOC"
   },
   {
-    id: "tapada-villar-doc-branco",
-    nome: "Tapada Villar DOC Branco",
+    id: "tapada-de-villar-doc-branco",
+    nome: "Tapada de Villar DOC Branco",
     categoria: "maduro",
     tipo: "branco",
     produtor: "Quinta das Arcas",
