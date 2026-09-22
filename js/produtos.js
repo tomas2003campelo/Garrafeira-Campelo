@@ -43,11 +43,12 @@ const PRODUTOS = [
     preco: 4.73,
     descricao: "Vinhão feito em lagares tradicionais, uma edição especial da Quinta das Arcas. Cor rubi intensa, ameixa e amoras silvestres bem maduras, estrutura firme e taninos macios. Para carnes vermelhas, enchidos, sarrabulho, lampreia e cabidela.",
     cor: "#53000F",
-    imagem: "img/produtos/arca-nova-vinhao-primoris.webp"
+    imagem: "img/produtos/arca-nova-vinhao-primoris.webp",
+    destaque: "Primoris"
   },
   {
-    id: "piano-colheita-tinto",
-    nome: "Piano Colheita Tinto",
+    id: "piano-colheita-tinto-doc",
+    nome: "Piano Colheita Tinto DOC",
     categoria: "maduro",
     tipo: "tinto",
     produtor: "Carlos Alonso Douro Wine",
@@ -59,11 +60,12 @@ const PRODUTOS = [
     preco: 3.51,
     descricao: "Touriga Franca e Touriga Nacional, com Tinta Barroca e Tinta Roriz. Frutos vermelhos e ameixa, corpo cheio e taninos macios. Vai bem com carnes, massas cremosas e caça.",
     cor: "#53000F",
-    imagem: "img/produtos/piano-colheita-tinto.webp"
+    imagem: "img/produtos/piano-colheita-tinto.webp",
+    destaque: "DOC"
   },
   {
-    id: "piano-colheita-branco",
-    nome: "Piano Colheita Branco",
+    id: "piano-branco-doc",
+    nome: "Piano Branco DOC",
     categoria: "maduro",
     tipo: "branco",
     produtor: "Carlos Alonso Douro Wine",
@@ -74,7 +76,8 @@ const PRODUTOS = [
     preco: 3.51,
     descricao: "Viosinho, Gouveio e Moscatel Galego. Fruta elegante com notas minerais e boa acidez. Para peixe, marisco, saladas ou como aperitivo.",
     cor: "#C9B35F",
-    imagem: "img/produtos/piano-colheita-branco.webp"
+    imagem: "img/produtos/piano-colheita-branco.webp",
+    destaque: "DOC"
   },
   {
     id: "piano-reserva-tinto",
@@ -123,7 +126,8 @@ const PRODUTOS = [
     preco: 19.95,
     descricao: "Tinta Roriz, Tinta Barroca e Touriga Franca, com 17% de álcool, 24 meses em barrica e 24 em garrafa. Frutos silvestres, cacau e tabaco, encorpado e envolvente. Para estufados e queijos fortes.",
     cor: "#53000F",
-    imagem: "img/produtos/piano-17-reserva.webp"
+    imagem: "img/produtos/piano-17-reserva.webp",
+    destaque: "Reserva"
   },
   {
     id: "piano-vinhas-velhas-premium",
@@ -138,7 +142,8 @@ const PRODUTOS = [
     preco: 25.56,
     descricao: "Vinhas velhas do Douro, com 24 meses em barricas novas de carvalho francês. Denso e complexo, de fruta concentrada, mineral e com final longo. Para pratos de caça e assados no forno.",
     cor: "#53000F",
-    imagem: "img/produtos/piano-vinhas-velhas-premium.webp"
+    imagem: "img/produtos/piano-vinhas-velhas-premium.webp",
+    destaque: "Premium"
   },
   {
     id: "quintela-tinto",
@@ -247,7 +252,8 @@ const PRODUTOS = [
     preco: 7.88,
     descricao: "Tinta Roriz, Touriga Nacional e Touriga Franca, com 12 meses em barrica nova. Cassis, morango e ameixa, taninos de qualidade e final longo. Para caça e cabrito assado.",
     cor: "#53000F",
-    imagem: "img/produtos/castello-de-numao-reserva-tinto.webp"
+    imagem: "img/produtos/castello-de-numao-reserva-tinto.webp",
+    destaque: "Reserva"
   },
   {
     id: "castello-de-numao-reserva-branco",
@@ -263,7 +269,8 @@ const PRODUTOS = [
     preco: 7.88,
     descricao: "Gouveio, Viosinho e Códega do Larinho, com 9 meses em barrica de carvalho francês. Fruta branca e tropical com um toque tostado, final longo e elegante. Para peixe no forno, marisco e carnes brancas.",
     cor: "#C9B35F",
-    imagem: "img/produtos/castello-de-numao-reserva-branco.webp"
+    imagem: "img/produtos/castello-de-numao-reserva-branco.webp",
+    destaque: "Reserva"
   },
   {
     id: "bafarela-reserva-tinto",
@@ -393,7 +400,8 @@ const PRODUTOS = [
     preco: 3.68,
     descricao: "Roupeiro e Arinto, com parte do vinho fermentada em barrica de carvalho francês. Fruta e flores, volume na boca, mineral e de final fresco. Para peixe no forno, bacalhau e carnes brancas.",
     cor: "#C9B35F",
-    imagem: "img/produtos/tapada-villar-doc-branco.webp"
+    imagem: "img/produtos/tapada-villar-doc-branco.webp",
+    destaque: "DOC"
   },
   {
     id: "quinta-da-mata-fidalga-branco-bruto",
@@ -494,7 +502,8 @@ const PRODUTOS = [
     preco: 13.13,
     descricao: "Malvasia Fina, Cerceal e Tinta Roriz, pelo método clássico. Aroma harmonioso com notas de baunilha, final longo e equilibrado. Para peixe grelhado e marisco.",
     cor: "#DCC98A",
-    imagem: "img/produtos/murganheira-super-reserva-bruto.webp"
+    imagem: "img/produtos/murganheira-super-reserva-bruto.webp",
+    destaque: "Super Reserva"
   },
   {
     id: "terras-do-demo-branco-bruto",
@@ -596,7 +605,8 @@ const PRODUTOS = [
     preco: 7.88,
     descricao: "O espumante clássico de Lamego, feito pelo método clássico. Equilibrado, fino e de acidez viva. Para aperitivo, peixe e marisco.",
     cor: "#DCC98A",
-    imagem: "img/produtos/raposeira-reserva-bruto.webp"
+    imagem: "img/produtos/raposeira-reserva-bruto.webp",
+    destaque: "Reserva"
   },
   {
     id: "raposeira-reserva-meio-seco",
@@ -612,7 +622,8 @@ const PRODUTOS = [
     preco: 7.88,
     descricao: "O espumante clássico de Lamego, pelo método clássico, num estilo meio seco. Cor palha, aroma fresco e frutado, boca suave. Para sobremesas, bolos e para brindar.",
     cor: "#DCC98A",
-    imagem: "img/produtos/raposeira-reserva-meio-seco.webp"
+    imagem: "img/produtos/raposeira-reserva-meio-seco.webp",
+    destaque: "Reserva"
   },
   {
     id: "raposeira-reserva-doce",
@@ -628,7 +639,8 @@ const PRODUTOS = [
     preco: 7.88,
     descricao: "O espumante clássico de Lamego, pelo método clássico, na versão doce. Aroma fresco e frutado, boca macia. Para bolos, doces e para brindar.",
     cor: "#DCC98A",
-    imagem: "img/produtos/raposeira-reserva-doce.webp"
+    imagem: "img/produtos/raposeira-reserva-doce.webp",
+    destaque: "Reserva"
   },
   {
     id: "3-monts-75-cl",
@@ -692,7 +704,8 @@ const PRODUTOS = [
     preco: 4.38,
     descricao: "Tripla de 9,5%, feita com duas leveduras. Dourada, com aromas de banana madura, fruta de caroço e pão fresco, notas de caramelo e baunilha e um amargor longo. Para grelhados, pato e queijos curados.",
     cor: "#C08A2E",
-    imagem: "img/produtos/3-monts-triple-grande-reserve.webp"
+    imagem: "img/produtos/3-monts-triple-grande-reserve.webp",
+    destaque: "Reserva"
   },
   {
     id: "la-divine",
