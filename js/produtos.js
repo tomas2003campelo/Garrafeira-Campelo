@@ -590,6 +590,33 @@ const PRODUTOS = [
     descricao: "Tripla loura de 9%, feita com cereais antigos: cevada, aveia, espelta e trigo. Doce de cereal, amargor leve e notas de fruta madura e especiarias.",
     cor: "#C08A2E",
     imagem: "img/produtos/3-monts-heritage-cereales.webp"
+  },
+  {
+    id: "3-monts-triple-grande-reserve",
+    nome: "3 Monts Triple Grande Réserve",
+    categoria: "cervejas",
+    tipo: "cerveja",
+    produtor: "Brasserie 3 Monts",
+    regiao: "Flandres, França",
+    ano: null,
+    volume: "75 cl",
+    preco: 6.95,
+    descricao: "Tripla de 9,5%, feita com duas leveduras. Dourada, com aromas de banana madura, fruta de caroço e pão fresco, notas de caramelo e baunilha e um amargor longo. Para grelhados, pato e queijos curados.",
+    cor: "#C08A2E",
+    imagem: "img/produtos/3-monts-triple-grande-reserve.webp"
+  },
+  {
+    id: "la-divine",
+    nome: "La Divine",
+    categoria: "cervejas",
+    tipo: "cerveja",
+    produtor: "Saint-Landelin (Brasserie Goudale)",
+    regiao: "Norte de França",
+    ano: null,
+    volume: "75 cl",
+    preco: 5.50,
+    descricao: "Loura de guarda do norte de França, com 8,5% de álcool. Aromas de fruta, madeira e caramelo suave, com um amargor leve e persistente.",
+    cor: "#C08A2E"
   }
 ];
 
