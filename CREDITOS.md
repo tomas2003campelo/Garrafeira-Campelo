@@ -47,7 +47,9 @@ as margens e passaram a WebP com 600 px de altura.
 | `piano-*.webp`, `quintela-*.webp` | [Carlos Alonso Douro Wine](https://carlosalonso.wine/) |
 | `tapada-villar-*.webp`, `conde-villar-*.webp`, `arca-nova-vinhao-primoris.webp` | [Quinta das Arcas](https://lojadaquinta.pt/) |
 | `terras-do-demo-bruto.webp`, `fraga-da-pena-bruto.webp` | [Caves Terras do Demo](https://www.cavesterrasdodemo.pt/) |
-| `murganheira-reserva-bruto.webp` | [Murganheira](https://murganheira.com/) |
+| `murganheira-*.webp` | [Murganheira](https://murganheira.com/) |
+| `raposeira-*.webp` | [Caves da Raposeira](https://cavesdaraposeira.com/) |
+| `mata-fidalga-rose-bruto.webp` | [Quinta da Mata Fidalga](https://qmf.pt/) |
 | `3-monts-*.webp` | [Brasserie 3 Monts](https://www.3monts.fr/) |
 | `bafarela-*.webp` | [Brites Aguiar](https://www.britesaguiar.com/) |
 | `castello-de-numao-reserva-tinto.webp` | Loja [Garrafeira Diálogo](https://www.garrafeiradialogo.com/) (o produtor não tem site) |

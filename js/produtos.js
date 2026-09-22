@@ -368,6 +368,21 @@ const PRODUTOS = [
     imagem: "img/produtos/mata-fidalga-tinto-bruto.webp"
   },
   {
+    id: "quinta-da-mata-fidalga-rose-bruto",
+    nome: "Quinta da Mata Fidalga Rosé Bruto",
+    categoria: "espumantes",
+    tipo: "rosé",
+    docura: "Bruto",
+    produtor: "Quinta da Mata Fidalga",
+    regiao: "Bairrada",
+    ano: null,
+    volume: "75 cl",
+    preco: 8.95,
+    descricao: "Baga e Touriga Nacional, pelo método clássico. Cor rosa definida, bolha fina e aroma intenso de frutos vermelhos frescos, com ataque suave. Para aperitivo, marisco e pratos leves.",
+    cor: "#D98A9A",
+    imagem: "img/produtos/mata-fidalga-rose-bruto.webp"
+  },
+  {
     id: "fraga-da-pena-bruto",
     nome: "Fraga da Pena Bruto",
     categoria: "espumantes",
@@ -488,6 +503,51 @@ const PRODUTOS = [
     descricao: "Gouveio, Malvasia Fina e Moscatel Galego, pelo método clássico. Floral e fresco, com fruta verde e um toque de pão torrado, cremoso na boca. Para aperitivo, entradas e peixe.",
     cor: "#DCC98A",
     imagem: "img/produtos/piano-espumante-bruto.webp"
+  },
+  {
+    id: "raposeira-reserva-bruto",
+    nome: "Raposeira Reserva Bruto",
+    categoria: "espumantes",
+    tipo: "branco",
+    docura: "Bruto",
+    produtor: "Caves da Raposeira",
+    regiao: "Távora-Varosa",
+    ano: null,
+    volume: "75 cl",
+    preco: 8.75,
+    descricao: "O espumante clássico de Lamego, feito pelo método clássico. Equilibrado, fino e de acidez viva. Para aperitivo, peixe e marisco.",
+    cor: "#DCC98A",
+    imagem: "img/produtos/raposeira-reserva-bruto.webp"
+  },
+  {
+    id: "raposeira-reserva-meio-seco",
+    nome: "Raposeira Reserva Meio Seco",
+    categoria: "espumantes",
+    tipo: "branco",
+    docura: "Meio Seco",
+    produtor: "Caves da Raposeira",
+    regiao: "Távora-Varosa",
+    ano: null,
+    volume: "75 cl",
+    preco: 8.75,
+    descricao: "O espumante clássico de Lamego, pelo método clássico, num estilo meio seco. Cor palha, aroma fresco e frutado, boca suave. Para sobremesas, bolos e para brindar.",
+    cor: "#DCC98A",
+    imagem: "img/produtos/raposeira-reserva-meio-seco.webp"
+  },
+  {
+    id: "raposeira-reserva-doce",
+    nome: "Raposeira Reserva Doce",
+    categoria: "espumantes",
+    tipo: "branco",
+    docura: "Doce",
+    produtor: "Caves da Raposeira",
+    regiao: "Távora-Varosa",
+    ano: null,
+    volume: "75 cl",
+    preco: 8.75,
+    descricao: "O espumante clássico de Lamego, pelo método clássico, na versão doce. Aroma fresco e frutado, boca macia. Para bolos, doces e para brindar.",
+    cor: "#DCC98A",
+    imagem: "img/produtos/raposeira-reserva-doce.webp"
   },
   {
     id: "3-monts-75-cl",
