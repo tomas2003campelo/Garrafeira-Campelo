@@ -28,6 +28,20 @@ const PRODUTOS = [
     imagem: "img/produtos/conde-villar-branco.webp"
   },
   {
+    id: "arca-nova-vinhao-primoris",
+    nome: "Arca Nova Vinhão Primoris",
+    categoria: "verde",
+    tipo: "tinto",
+    produtor: "Quinta das Arcas",
+    regiao: "Vinho Verde DOC",
+    ano: null,
+    volume: "75 cl",
+    preco: 7.50,
+    descricao: "Vinhão feito em lagares tradicionais, uma edição especial da Quinta das Arcas. Cor rubi intensa, ameixa e amoras silvestres bem maduras, estrutura firme e taninos macios. Para carnes vermelhas, enchidos, sarrabulho, lampreia e cabidela.",
+    cor: "#53000F",
+    imagem: "img/produtos/arca-nova-vinhao-primoris.webp"
+  },
+  {
     id: "piano-colheita-tinto",
     nome: "Piano Colheita Tinto",
     categoria: "maduro",

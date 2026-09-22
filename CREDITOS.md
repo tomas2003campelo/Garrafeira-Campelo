@@ -45,7 +45,7 @@ as margens e passaram a WebP com 600 px de altura.
 | Ficheiros (em `img/produtos/`) | Origem |
 |---|---|
 | `piano-*.webp`, `quintela-*.webp` | [Carlos Alonso Douro Wine](https://carlosalonso.wine/) |
-| `tapada-villar-*.webp`, `conde-villar-*.webp` | [Quinta das Arcas](https://lojadaquinta.pt/) |
+| `tapada-villar-*.webp`, `conde-villar-*.webp`, `arca-nova-vinhao-primoris.webp` | [Quinta das Arcas](https://lojadaquinta.pt/) |
 | `terras-do-demo-bruto.webp`, `fraga-da-pena-bruto.webp` | [Caves Terras do Demo](https://www.cavesterrasdodemo.pt/) |
 | `murganheira-reserva-bruto.webp` | [Murganheira](https://murganheira.com/) |
 | `3-monts-*.webp` | [Brasserie 3 Monts](https://www.3monts.fr/) |
