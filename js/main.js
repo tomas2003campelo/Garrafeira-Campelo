@@ -392,7 +392,7 @@
       if (!link) return;
 
       const destino = link.getAttribute("href") || "";
-      const interno = /^[\w-]+\.html(#.*)?$/.test(destino);
+      const interno = /^[\w-]+\.html(\?[^#]*)?(#.*)?$/.test(destino);
       const modificador = e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0;
 
       if (!interno || modificador || link.target === "_blank") return;
@@ -425,6 +425,17 @@
     return Ilustracoes.paraProduto(p);
   }
 
+  /* "Maduro · Tinto"; nos espumantes, a cor e a doçura: "Espumante · Branco · Bruto" */
+  function metaDoProduto(p) {
+    return p.categoria === "espumantes"
+      ? ["Espumante", p.tipo === "espumante" ? "" : p.tipo, p.docura].filter(Boolean).join(" · ")
+      : [CATEGORIAS[p.categoria].nome, p.tipo].join(" · ");
+  }
+
+  function urlDoProduto(p) {
+    return `produto.html?id=${encodeURIComponent(p.id)}`;
+  }
+
   function criarCartao(p) {
     const card = document.createElement("article");
     card.className = "card revelar" + (p.esgotado ? " esgotado" : "");
@@ -433,29 +444,28 @@
       ? '<span class="badge badge-esgotado">Esgotado</span>'
       : (p.destaque ? `<span class="badge">${p.destaque}</span>` : "");
 
-    // Nos espumantes, a cor e a doçura: "Espumante · Branco · Bruto"
-    const linhaMeta = p.categoria === "espumantes"
-      ? ["Espumante", p.tipo === "espumante" ? "" : p.tipo, p.docura].filter(Boolean).join(" · ")
-      : [CATEGORIAS[p.categoria].nome, p.tipo].join(" · ");
+    const linhaMeta = metaDoProduto(p);
+    const url = urlDoProduto(p);
+    const caixa = Carrinho.unidadesPorCaixa(p);
 
     // Só junta o que existe: sem produtor, o cartão não pode começar
     // num ponto solto.
     const origem = [p.produtor, p.regiao, p.ano].filter(Boolean).join(" · ");
 
     card.innerHTML = `
-      <div class="card-top">
+      <a class="card-top" href="${url}" aria-label="Ver ${p.nome}">
         ${etiqueta}
         ${arteDoProduto(p)}
-      </div>
+      </a>
       <div class="card-body">
         <p class="card-meta">${linhaMeta}</p>
-        <h3 class="card-nome">${p.nome}</h3>
+        <h3 class="card-nome"><a href="${url}">${p.nome}</a></h3>
         ${origem ? `<p class="card-produtor">${origem}</p>` : ""}
         <p class="card-desc">${p.descricao}</p>
         <div class="card-foot">
           <span class="preco-bloco">
             <span class="preco">${euros(p.preco)}</span>
-            <span class="volume">${p.volume}</span>
+            <span class="volume">${p.volume}${caixa > 1 ? ` · caixa de ${caixa}` : ""}</span>
             <span class="volume">IVA incluído</span>
           </span>
           <button class="btn-add" data-add="${p.id}" ${p.esgotado ? "disabled" : ""}>
@@ -590,6 +600,93 @@
     aplicar();
   }
 
+  /* =======================================================
+     PÁGINA DE PRODUTO (produto.html?id=...)
+     Uma só página serve todos os produtos: lê o id do endereço e
+     desenha a ficha. O endereço de cada produto pode partilhar-se.
+     ======================================================= */
+
+  function ligarFichaProduto() {
+    const alvo = document.getElementById("ficha-produto");
+    if (!alvo) return;
+
+    const id = new URLSearchParams(location.search).get("id");
+    const p = PRODUTOS.find(x => x.id === id);
+    if (!p) {
+      alvo.innerHTML = `
+        <div class="ficha-vazia">
+          <h1 class="titulo-pagina">Produto não encontrado</h1>
+          <p>Este produto já não está no catálogo, ou a ligação veio incompleta.</p>
+          <a class="btn btn-primary" href="vinhos.html">Ver os vinhos</a>
+        </div>`;
+      document.getElementById("relacionados")?.remove();
+      return;
+    }
+
+    const pagina = { espumantes: "espumantes.html", cervejas: "cervejas.html" }[p.categoria] || "vinhos.html";
+    const familia = { verde: "Verdes", maduro: "Maduros", espumantes: "Espumantes", cervejas: "Cervejas" }[p.categoria];
+    const ancora = { verde: "#verde", maduro: "#maduro" }[p.categoria] || "";
+    document.querySelectorAll(".nav > a").forEach(a => {
+      if (a.getAttribute("href") === pagina) a.setAttribute("aria-current", "page");
+    });
+    document.title = `${p.nome} | ${CONFIG.nome}`;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", p.descricao);
+
+    const caixa = Carrinho.unidadesPorCaixa(p);
+    const numero = n => Number(n).toLocaleString("pt-PT", { maximumFractionDigits: 1 });
+    const dados = [
+      ["Produtor", p.produtor],
+      ["Região", p.regiao],
+      ["Ano", p.ano],
+      ["Teor alcoólico", p.alcool ? `${numero(p.alcool)}% vol.` : ""],
+      ["Volume", p.volume],
+      ["Doçura", p.docura],
+      ["Venda", caixa > 1 ? `Caixa de ${caixa} garrafas` : "À unidade"]
+    ].filter(([, v]) => v);
+
+    const etiqueta = p.esgotado
+      ? '<span class="badge badge-esgotado">Esgotado</span>'
+      : (p.destaque ? `<span class="badge">${p.destaque}</span>` : "");
+    const botao = p.esgotado ? "Esgotado" : (caixa > 1 ? `Adicionar caixa de ${caixa}` : "Adicionar ao carrinho");
+    const partilha = "https://wa.me/?text=" + encodeURIComponent(`${p.nome}, na ${CONFIG.nome}: ${location.href}`);
+
+    alvo.innerHTML = `
+      <nav class="migalhas" aria-label="Estás em">
+        <a href="index.html">Início</a><span aria-hidden="true">/</span>
+        <a href="${pagina}${ancora}">${familia}</a><span aria-hidden="true">/</span>
+        <span aria-current="page">${p.nome}</span>
+      </nav>
+      <div class="ficha">
+        <div class="ficha-foto">${etiqueta}${arteDoProduto(p)}</div>
+        <div class="ficha-texto">
+          <p class="card-meta">${metaDoProduto(p)}</p>
+          <h1 class="ficha-nome">${p.nome}</h1>
+          <p class="ficha-desc">${p.descricao}</p>
+          <div class="ficha-compra">
+            <div class="ficha-preco">
+              <span class="preco">${euros(p.preco)}</span>
+              <span class="volume">${caixa > 1 ? "por garrafa · " : ""}IVA incluído</span>
+              ${caixa > 1 ? `<span class="ficha-caixa">Caixa de ${caixa}: <strong>${euros(p.preco * caixa)}</strong></span>` : ""}
+            </div>
+            <button class="btn btn-primary btn-comprar" data-add="${p.id}" ${p.esgotado ? "disabled" : ""}>${botao}</button>
+          </div>
+          <dl class="ficha-dados">
+            ${dados.map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("")}
+          </dl>
+          <p class="ficha-partilhar"><a href="${partilha}" target="_blank" rel="noopener">Partilhar no WhatsApp</a></p>
+        </div>
+      </div>`;
+
+    // Da mesma família, primeiro os do mesmo tipo (um tinto sugere tintos)
+    const lista = document.getElementById("lista-relacionados");
+    const parecidos = PRODUTOS
+      .filter(x => x.id !== p.id && x.categoria === p.categoria && !x.esgotado)
+      .sort((a, b) => (b.tipo === p.tipo) - (a.tipo === p.tipo))
+      .slice(0, 4);
+    if (lista && parecidos.length) desenharProdutos(lista, parecidos);
+    else document.getElementById("relacionados")?.remove();
+  }
+
   /* Destaques na página inicial */
   function ligarDestaques() {
     const lista = document.getElementById("lista-destaques");
@@ -654,6 +751,7 @@
 
     function linhaHTML(l) {
       const p = l.produto;
+      const caixa = Carrinho.unidadesPorCaixa(p);
       const arte = p.imagem
         ? `<img src="${p.imagem}" alt="">`
         : Ilustracoes.paraProduto(p);
@@ -663,11 +761,11 @@
           <span class="linha-arte">${arte}</span>
           <div class="linha-info">
             <p class="linha-nome">${p.nome}</p>
-            <p class="linha-meta">${p.volume} · ${euros(p.preco)}</p>
+            <p class="linha-meta">${p.volume} · ${euros(p.preco)}${caixa > 1 ? ` · caixa de ${caixa}` : ""}</p>
             <span class="qtd">
-              <button type="button" data-menos="${p.id}" aria-label="Menos um ${p.nome}">−</button>
-              <span>${l.qtd}</span>
-              <button type="button" data-mais="${p.id}" aria-label="Mais um ${p.nome}">+</button>
+              <button type="button" data-menos="${p.id}" aria-label="${caixa > 1 ? "Menos uma caixa de" : "Menos um"} ${p.nome}">−</button>
+              <span>${caixa > 1 ? `${l.qtd / caixa} cx.` : l.qtd}</span>
+              <button type="button" data-mais="${p.id}" aria-label="${caixa > 1 ? "Mais uma caixa de" : "Mais um"} ${p.nome}">+</button>
             </span>
           </div>
           <div class="linha-direita">
@@ -967,8 +1065,10 @@
       const { mais, menos, remover } = btn.dataset;
       const linha = id => Carrinho.linhas().find(l => l.produto.id === id);
 
-      if (mais)    Carrinho.definirQuantidade(mais, linha(mais).qtd + 1);
-      if (menos)   Carrinho.definirQuantidade(menos, linha(menos).qtd - 1);
+      // Nos produtos à caixa, o + e o − andam uma caixa inteira
+      const passo = id => Carrinho.unidadesPorCaixa(linha(id).produto);
+      if (mais)    Carrinho.definirQuantidade(mais, linha(mais).qtd + passo(mais));
+      if (menos)   Carrinho.definirQuantidade(menos, linha(menos).qtd - passo(menos));
       if (remover) Carrinho.remover(remover);
     });
 
@@ -1016,7 +1116,10 @@
       }, 1300);
 
       const produto = PRODUTOS.find(p => p.id === id);
-      mostrarToast(`${produto.nome} adicionado ao carrinho`);
+      const caixa = Carrinho.unidadesPorCaixa(produto);
+      mostrarToast(caixa > 1
+        ? `${produto.nome}: caixa de ${caixa} no carrinho`
+        : `${produto.nome} adicionado ao carrinho`);
     });
   }
 
@@ -1154,6 +1257,7 @@
     ligarMenu();
     ligarDestaques();
     ligarCatalogo();
+    ligarFichaProduto();
     preencherContagens();
     ligarCarrinho();
     ligarContador();

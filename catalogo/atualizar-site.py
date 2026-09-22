@@ -76,6 +76,8 @@ CABECALHOS = {
     "etiqueta": "destaque", "destaque": "destaque",
     "esgotado": "esgotado",
     "fotografia": "imagem", "foto": "imagem", "imagem": "imagem",
+    "álcool": "alcool", "alcool": "alcool", "teor": "alcool",
+    "unidades": "caixa", "caixa": "caixa",
 }
 
 
@@ -324,6 +326,30 @@ def ler_produtos():
         if docura:
             produto["docura"] = docura
 
+        if dados.get("alcool") not in (None, ""):
+            try:
+                graus = float(str(dados["alcool"]).lower().replace("%", "").replace("vol", "")
+                              .replace(",", ".").strip())
+                if not 0 < graus <= 80:
+                    raise ValueError
+                produto["alcool"] = round(graus, 1)
+            except ValueError:
+                erros.append(f"{sitio}: o álcool \"{dados['alcool']}\" não é válido. "
+                             "Escreve só o número, por exemplo 13,5.")
+                continue
+
+        if dados.get("caixa") not in (None, ""):
+            try:
+                caixa = int(float(str(dados["caixa"]).replace(",", ".")))
+                if not 1 <= caixa <= 48:
+                    raise ValueError
+                if caixa > 1:
+                    produto["caixa"] = caixa
+            except ValueError:
+                erros.append(f"{sitio}: as unidades por caixa \"{dados['caixa']}\" não são válidas. "
+                             "Escreve um número inteiro, como 6, ou deixa vazio.")
+                continue
+
         if not produto["descricao"]:
             avisos.append(f"{sitio}: sem descrição. Fica com o cartão vazio por baixo do nome.")
         if categoria == "maduro" and not regiao:
@@ -368,7 +394,8 @@ def js_valor(v):
 
 def bloco_produto(p):
     ordem = ["id", "nome", "categoria", "tipo", "docura", "produtor", "regiao", "ano",
-             "volume", "preco", "descricao", "cor", "imagem", "destaque", "esgotado"]
+             "volume", "alcool", "caixa", "preco", "descricao", "cor", "imagem", "destaque",
+             "esgotado"]
     linhas = [f"    {k}: {js_valor(p[k])}" for k in ordem if k in p]
     return "  {\n" + ",\n".join(linhas) + "\n  }"
 

@@ -42,6 +42,8 @@ COLUNAS = [
     ("Etiqueta",                    14, 2, 4),
     ("Esgotado",                    11, 2, 4),
     ("Fotografia",                  24, 2, 4),
+    ("Álcool (%)",                  10, 9, 10),
+    ("Unidades por caixa",          12, 9, 10),
 ]
 
 EXEMPLO = [
@@ -49,7 +51,7 @@ EXEMPLO = [
     "Quinta de Exemplo", "Monção e Melgaço", 2023, "75 cl", 14.90,
     "Pêssego branco e flor de laranjeira, com acidez viva e final salino. "
     "Vai bem com marisco e peixe grelhado.",
-    "Novidade", "Não", "",
+    "Novidade", "Não", "", 12.5, 6,
 ]
 
 INSTRUCOES = [
@@ -102,6 +104,13 @@ INSTRUCOES = [
               "página inicial."),
     ("negrito", "Esgotado"),
     ("texto", "Sim esconde o botão de comprar, mas o produto continua visível."),
+    ("negrito", "Álcool (%)"),
+    ("texto", "Opcional. O teor alcoólico, só o número: 13,5. Aparece na página "
+              "do produto."),
+    ("negrito", "Unidades por caixa"),
+    ("texto", "Quantas garrafas tem a caixa: 6, 12, 24. Com um número, o produto só "
+              "se vende à caixa: o botão acrescenta a caixa inteira e o carrinho "
+              "anda de caixa em caixa. Vazio, vende-se à unidade."),
     ("negrito", "Fotografia"),
     ("texto", "Opcional. Nome do ficheiro da foto, que tem de estar na pasta img "
               "do site. Por exemplo: alvarinho-reserva.webp. Sem foto, o site "
@@ -195,6 +204,14 @@ def folha_produtos():
          f'showErrorMessage="1" errorTitle="Preço" '
          f'error="Escreve só o número, maior que zero. Por exemplo: 14,90" '
          f'sqref="{col("Preço")}2:{col("Preço")}{fim}"><formula1>0</formula1></dataValidation>'),
+        (f'<dataValidation type="decimal" operator="between" allowBlank="1" '
+         f'showErrorMessage="1" errorTitle="Álcool" '
+         f'error="Escreve só o número, entre 0 e 80. Por exemplo: 13,5" '
+         f'sqref="{col("Álcool")}2:{col("Álcool")}{fim}"><formula1>0</formula1><formula2>80</formula2></dataValidation>'),
+        (f'<dataValidation type="whole" operator="between" allowBlank="1" '
+         f'showErrorMessage="1" errorTitle="Unidades por caixa" '
+         f'error="Escreve um número inteiro, por exemplo 6, ou deixa vazio para vender à unidade." '
+         f'sqref="{col("Unidades")}2:{col("Unidades")}{fim}"><formula1>1</formula1><formula2>48</formula2></dataValidation>'),
     ]
 
     return f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>

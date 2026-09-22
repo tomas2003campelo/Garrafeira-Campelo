@@ -64,7 +64,8 @@ const Carrinho = (function () {
       for (const [id, qtd] of Object.entries(guardado)) {
         const p = PRODUTOS.find(x => x.id === id);
         const n = Math.floor(Number(qtd));
-        if (p && !p.esgotado && n > 0) limpo[id] = n;
+        // Um produto que passou a vender-se à caixa fica com caixas completas
+        if (p && !p.esgotado && n > 0) limpo[id] = caixasCompletas(p, n);
       }
       if (JSON.stringify(limpo) !== JSON.stringify(guardado)) {
         localStorage.setItem(CHAVE, JSON.stringify(limpo));
@@ -105,10 +106,24 @@ const Carrinho = (function () {
 
   /* ---------- Alterar ---------- */
 
-  function adicionar(id, quantidade = 1) {
+  /* Venda à caixa: produtos com "caixa" (unidades por caixa) só se
+     vendem em caixas completas. Arredonda para cima, para ninguém ficar
+     com meia caixa no carrinho. */
+  function unidadesPorCaixa(produto) {
+    return produto && produto.caixa > 1 ? produto.caixa : 1;
+  }
+
+  function caixasCompletas(produto, quantidade) {
+    const c = unidadesPorCaixa(produto);
+    return Math.ceil(quantidade / c) * c;
+  }
+
+  /* Sem quantidade, junta uma caixa (ou uma garrafa, se não for à caixa) */
+  function adicionar(id, quantidade) {
     const produto = produtoPorId(id);
     if (!produto || produto.esgotado) return false;
-    itens[id] = (itens[id] || 0) + quantidade;
+    const passo = unidadesPorCaixa(produto);
+    itens[id] = caixasCompletas(produto, (itens[id] || 0) + (quantidade || passo));
     guardar();
     avisar();
     return true;
@@ -116,7 +131,7 @@ const Carrinho = (function () {
 
   function definirQuantidade(id, quantidade) {
     if (quantidade <= 0) return remover(id);
-    itens[id] = quantidade;
+    itens[id] = caixasCompletas(produtoPorId(id), quantidade);
     guardar();
     avisar();
   }
@@ -258,7 +273,11 @@ const Carrinho = (function () {
     const p = [`Olá! Gostaria de encomendar na ${CONFIG.nome}:`, ""];
 
     linhas().forEach(l => {
-      p.push(`• ${l.qtd}x ${l.produto.nome} (${l.produto.volume}) · ${euros(l.produto.preco * l.qtd)}`);
+      const c = unidadesPorCaixa(l.produto);
+      const quanto = c > 1
+        ? `${l.qtd / c} ${l.qtd / c === 1 ? "caixa" : "caixas"} de ${c} (${l.qtd} garrafas):`
+        : `${l.qtd}x`;
+      p.push(`• ${quanto} ${l.produto.nome} (${l.produto.volume}) · ${euros(l.produto.preco * l.qtd)}`);
     });
     p.push("", titulo(`Total: ${euros(totalEuros())}`), "");
 
@@ -322,6 +341,6 @@ const Carrinho = (function () {
     adicionar, definirQuantidade, remover, esvaziar,
     modoAtual, definirModo, entregaDisponivel, faltaParaEntrega, podeEncomendar,
     dadosCliente, definirDados, validarDados, nifValido,
-    aoMudar, textoEncomenda, linkEncomenda, euros
+    aoMudar, textoEncomenda, linkEncomenda, euros, unidadesPorCaixa
   };
 })();
