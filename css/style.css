@@ -1714,6 +1714,30 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
   .grid-sugestoes .card { flex: 0 0 min(250px, 72%); scroll-snap-align: start; }
 }
 
+/* Guardar o dia da recolha no calendário */
+.calendario {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem .6rem;
+  margin-top: 1rem;
+  font-size: .86rem;
+  color: var(--texto-suave);
+}
+.calendario > span { flex-basis: 100%; }
+.btn-calendario {
+  display: inline-flex;
+  align-items: center;
+  padding: .45rem 1rem;
+  border: 1.5px solid var(--ouro-contorno);
+  border-radius: 100px;
+  font-weight: 600;
+  color: var(--acento);
+  text-decoration: none;
+  transition: border-color .18s, background .18s;
+}
+.btn-calendario:hover { border-color: var(--acento); background: var(--superficie-2); text-decoration: none; }
+
 /* Aviso de "adicionado", com atalho para o carrinho */
 .toast-link {
   margin-left: .3rem;

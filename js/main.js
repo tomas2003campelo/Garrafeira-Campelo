@@ -1155,6 +1155,80 @@
      6. PAINEL DO CARRINHO
      ======================================================= */
 
+  /* ---------- Guardar a recolha no calendário ----------
+     Um evento de dia inteiro, no dia escolhido, com a morada da loja,
+     o horário desse dia e o que se vai buscar. O Google abre com uma
+     ligação; o iPhone, o Mac e o Outlook abrem um ficheiro .ics.    */
+
+  function dataISO(data) {                     // Date -> "2026-09-26", no dia local
+    const dd = n => String(n).padStart(2, "0");
+    return `${data.getFullYear()}-${dd(data.getMonth() + 1)}-${dd(data.getDate())}`;
+  }
+
+  function diaSeguinte(texto) {                 // "2026-09-26" -> "2026-09-27"
+    const dia = Carrinho.dataLocal(texto);
+    dia.setDate(dia.getDate() + 1);
+    return dataISO(dia);
+  }
+
+  function dadosDoEvento(dia, horas) {
+    const m = CONFIG.morada;
+    const itens = Carrinho.linhas().map(l => {
+      const c = Carrinho.unidadesPorCaixa(l.produto);
+      const n = c > 1 ? l.qtd / c : l.qtd;
+      return c > 1 ? `${n} ${n === 1 ? "caixa" : "caixas"} de ${l.produto.nome}` : `${n}x ${l.produto.nome}`;
+    });
+    return {
+      titulo: `Recolher encomenda na ${CONFIG.nome}`,
+      local: `${CONFIG.nome}, ${m.rua}, ${m.codigoPostal} ${m.localidade}`,
+      descricao: [`Aberto das ${horas.abre} às ${horas.fecha}.`, "", ...itens, "",
+                  `Contacto: ${CONFIG.telefone || ""}`].join("\n").trim(),
+      inicio: dia.replace(/-/g, ""),
+      fim: diaSeguinte(dia).replace(/-/g, "")   // num dia inteiro, o fim é o dia a seguir
+    };
+  }
+
+  function linkGoogleCalendar(dia, horas) {
+    const e = dadosDoEvento(dia, horas);
+    const q = new URLSearchParams({
+      action: "TEMPLATE", text: e.titulo, dates: `${e.inicio}/${e.fim}`,
+      details: e.descricao, location: e.local
+    });
+    return `https://calendar.google.com/calendar/render?${q}`;
+  }
+
+  function eventoIcs(dia, horas) {
+    const e = dadosDoEvento(dia, horas);
+    const texto = t => t.replace(/\\/g, "\\\\").replace(/[,;]/g, "\\$&").replace(/\n/g, "\\n");
+    const agora = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+    const linhas = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", `PRODID:-//${CONFIG.nome}//Encomendas//PT`,
+      "CALSCALE:GREGORIAN", "METHOD:PUBLISH", "BEGIN:VEVENT",
+      `UID:recolha-${e.inicio}-${Date.now()}@garrafeira-campelo`,
+      `DTSTAMP:${agora}`,
+      `DTSTART;VALUE=DATE:${e.inicio}`,
+      `DTEND;VALUE=DATE:${e.fim}`,
+      `SUMMARY:${texto(e.titulo)}`,
+      `LOCATION:${texto(e.local)}`,
+      `DESCRIPTION:${texto(e.descricao)}`,
+      "END:VEVENT", "END:VCALENDAR"
+    ];
+    // As linhas de um .ics não passam de 75 bytes: as compridas partem-se,
+    // e a continuação começa por um espaço
+    const bytes = t => new TextEncoder().encode(t).length;
+    const partir = linha => {
+      const partes = [];
+      let atual = "";
+      for (const ch of linha) {
+        if (bytes(atual + ch) > (partes.length ? 74 : 75)) { partes.push(atual); atual = ""; }
+        atual += ch;
+      }
+      partes.push(atual);
+      return partes.join("\r\n ");
+    };
+    return linhas.map(partir).join("\r\n") + "\r\n";
+  }
+
   function ligarCarrinho() {
     const painel = document.getElementById("painel-carrinho");
     const veu = document.getElementById("veu");
@@ -1456,9 +1530,27 @@
               <legend>Contacto</legend>
               ${campo("nome", "nome", "Nome completo", 'autocomplete="name" required')}
               ${campo("telefone", "telefone", "Telemóvel", 'type="tel" autocomplete="tel" inputmode="tel" required')}
-              ${campo("email", "email", "Email", 'type="email" autocomplete="email" inputmode="email"', true)}
+              ${campo("email", "email", "Email", 'type="email" autocomplete="email" inputmode="email" required')}
               <p class="ajuda">Para te enviarmos a fatura.</p>
             </fieldset>
+
+            ${modo === "recolha" ? `
+            <fieldset class="bloco-dados">
+              <legend>Recolha na loja</legend>
+              <div class="campo">
+                <label for="d-diaRecolha">Dia em que vens buscar</label>
+                <input id="d-diaRecolha" name="diaRecolha" type="date" value="${esc(d.diaRecolha)}"
+                       min="${dataISO(new Date())}" max="${dataISO(new Date(Date.now() + 90 * 864e5))}"
+                       aria-describedby="e-diaRecolha a-diaRecolha" required>
+                <p class="campo-erro" id="e-diaRecolha"></p>
+                <p class="ajuda" id="a-diaRecolha"></p>
+              </div>
+              <div class="calendario" id="calendario" hidden>
+                <span>Guardar o dia no calendário:</span>
+                <a class="btn-calendario" id="cal-google" target="_blank" rel="noopener">Google Calendar</a>
+                <a class="btn-calendario" id="cal-ics" download="recolha-garrafeira-campelo.ics">iPhone, Mac ou Outlook</a>
+              </div>
+            </fieldset>` : ""}
 
             ${precisaMorada ? `
             <fieldset class="bloco-dados">
@@ -1507,7 +1599,7 @@
             <div class="campo">
               <label for="d-observacoes">Observações <span class="opcional">opcional</span></label>
               <textarea id="d-observacoes" name="observacoes" rows="2"
-                placeholder="${modo === "recolha" ? "Quando pensas passar pela loja" : "Horário que dá jeito, indicações para chegar"}">${esc(d.observacoes)}</textarea>
+                placeholder="${modo === "recolha" ? "A que horas contas passar, ou outra coisa que devamos saber" : "Horário que dá jeito, indicações para chegar"}">${esc(d.observacoes)}</textarea>
             </div>
 
             <label class="opcao-caixa lembrar">
@@ -1539,6 +1631,35 @@
         Carrinho.definirDados(v);
         botao.href = Carrinho.linkEncomenda();
       }
+
+      /* Dia da recolha: diz logo se a loja está aberta nesse dia, e a
+         que horas; com um dia que serve, mostra os botões do calendário */
+      const campoDia = form.querySelector("#d-diaRecolha");
+      function atualizarDia(mostrarErro) {
+        if (!campoDia) return;
+        const ajuda = fundo.querySelector("#a-diaRecolha");
+        const erroEl = fundo.querySelector("#e-diaRecolha");
+        const erro = campoDia.value ? Carrinho.erroNoDiaDeRecolha(campoDia.value) : "";
+        const horas = campoDia.value && !erro ? Carrinho.horasDoDia(Carrinho.dataLocal(campoDia.value).getDay()) : null;
+        ajuda.textContent = horas
+          ? `Nesse dia estamos abertos das ${horas.abre} às ${horas.fecha}.`
+          : (CONFIG.horario || []).filter(h => h.horas).map(h => `${h.dia}, das ${h.horas.replace(/\s*[–-]\s*/, " às ")}`).join(". ") + ".";
+        if (mostrarErro) {
+          erroEl.textContent = erro;
+          if (erro) campoDia.setAttribute("aria-invalid", "true");
+          else campoDia.removeAttribute("aria-invalid");
+        }
+        const cal = fundo.querySelector("#calendario");
+        cal.hidden = !horas;
+        if (horas) {
+          fundo.querySelector("#cal-google").href = linkGoogleCalendar(campoDia.value, horas);
+          const ics = fundo.querySelector("#cal-ics");
+          if (ics.href.startsWith("blob:")) URL.revokeObjectURL(ics.href);
+          ics.href = URL.createObjectURL(new Blob([eventoIcs(campoDia.value, horas)], { type: "text/calendar;charset=utf-8" }));
+        }
+      }
+      campoDia?.addEventListener("change", () => atualizarDia(true));
+      atualizarDia(false);
 
       form.addEventListener("input", e => {
         // Quem corrige um campo deixa de ver o erro dele

@@ -25,15 +25,15 @@ const Carrinho = (function () {
 
   /* Dados do cliente para a encomenda. Vivem em memória; só ficam
      guardados no browser se o próprio cliente o pedir (caixa
-     "Lembrar os meus dados"). As observações nunca se guardam: são
-     de cada encomenda. */
+     "Lembrar os meus dados"). As observações e o dia da recolha
+     nunca se guardam: são de cada encomenda. */
   const CHAVE_DADOS = "garrafeira-campelo-cliente";
   const DADOS_VAZIOS = {
     nome: "", telefone: "", email: "",
     fatura: false, nif: "", nomeFatura: "",
     mesmaMorada: true, moradaFatura: "", codigoPostalFatura: "", localidadeFatura: "",
     morada: "", codigoPostal: "", localidade: "", concelho: "", pais: "Portugal",
-    observacoes: "", lembrar: false
+    diaRecolha: "", observacoes: "", lembrar: false
   };
   let dados = carregarDados();
 
@@ -178,7 +178,7 @@ const Carrinho = (function () {
     dados = Object.assign({}, dados, parcial);
     try {
       if (dados.lembrar) {
-        const { observacoes, lembrar, ...guardar } = dados;
+        const { observacoes, diaRecolha, lembrar, ...guardar } = dados;
         localStorage.setItem(CHAVE_DADOS, JSON.stringify(guardar));
       } else {
         localStorage.removeItem(CHAVE_DADOS);
@@ -189,6 +189,66 @@ const Carrinho = (function () {
   /* A morada fiscal tem de ser escrita à parte? */
   function precisaMoradaFatura() {
     return dados.fatura && (modo === "recolha" || !dados.mesmaMorada);
+  }
+
+  /* ---------- Dia da recolha na loja ----------
+     O horário vem do config.js, escrito para pessoas ("Segunda a
+     Sexta", "09:00 – 19:00"). Daqui sai, para cada dia da semana, a
+     hora a que a loja abre e fecha, ou null se estiver fechada. Se o
+     horário mudar no config.js, os dias aceites mudam com ele. */
+  const DIAS_SEMANA = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+
+  function horasDoDia(diaSemana) {           // 0 = domingo ... 6 = sábado
+    for (const h of CONFIG.horario || []) {
+      const nomes = h.dia.toLowerCase().replace(/-feira/g, "").split(/\s+a\s+/).map(n => n.trim());
+      const ini = DIAS_SEMANA.indexOf(nomes[0]);
+      const fim = DIAS_SEMANA.indexOf(nomes[nomes.length - 1]);
+      if (ini < 0 || fim < 0) continue;
+      const dentro = ini <= fim
+        ? diaSemana >= ini && diaSemana <= fim
+        : diaSemana >= ini || diaSemana <= fim;
+      if (!dentro) continue;
+      const m = (h.horas || "").match(/(\d{1,2})[:h](\d{2})?\D+(\d{1,2})[:h]?(\d{2})?/);
+      if (!m) return null;
+      const hora = (hh, mm) => `${hh.padStart(2, "0")}:${mm || "00"}`;
+      return { abre: hora(m[1], m[2]), fecha: hora(m[3], m[4]) };
+    }
+    return null;
+  }
+
+  /* "2026-09-26", como vem da caixa de data, em data do dia local */
+  function dataLocal(texto) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texto || "");
+    return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : null;
+  }
+
+  /* "sábado, 26 de setembro" */
+  function textoDoDia(texto) {
+    const dia = dataLocal(texto);
+    return dia ? dia.toLocaleDateString("pt-PT", { weekday: "long", day: "numeric", month: "long" }) : "";
+  }
+
+  /* Mensagem de erro para o dia escolhido, ou "" se servir */
+  function erroNoDiaDeRecolha(texto) {
+    const dia = dataLocal(texto);
+    if (!dia) return "Escolhe o dia em que vens buscar a encomenda.";
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    if (dia < hoje) return "Esse dia já passou. Escolhe outro.";
+    if (dia - hoje > 90 * 864e5) return "Escolhe um dia nos próximos três meses.";
+    const horas = horasDoDia(dia.getDay());
+    if (!horas) {
+      const nome = dia.toLocaleDateString("pt-PT", { weekday: "long" });
+      return `${nome.endsWith("feira") ? "À" : "Ao"} ${nome} estamos fechados. Escolhe outro dia.`;
+    }
+    if (dia.getTime() === hoje.getTime()) {
+      // No próprio dia, só até uma hora antes de fechar
+      const agora = new Date();
+      const [h, m] = horas.fecha.split(":").map(Number);
+      if (agora.getHours() * 60 + agora.getMinutes() > h * 60 + m - 60)
+        return "Hoje já não dá tempo de prepararmos a encomenda. Escolhe outro dia.";
+    }
+    return "";
   }
 
   /* NIF português: 9 dígitos, o último é de controlo */
@@ -213,8 +273,14 @@ const Carrinho = (function () {
     if (!digitos) e.telefone = "Precisamos de um número para confirmar a encomenda.";
     else if (digitos.length < 9) e.telefone = "O número parece curto. Confirma se falta algum algarismo.";
 
-    if (d.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim()))
+    if (!d.email.trim()) e.email = "Escreve o teu email: é para lá que enviamos a fatura.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim()))
       e.email = "Este email não parece completo.";
+
+    if (modo === "recolha") {
+      const erroDia = erroNoDiaDeRecolha(d.diaRecolha);
+      if (erroDia) e.diaRecolha = erroDia;
+    }
 
     if (d.fatura) {
       if (!d.nif.trim()) e.nif = "Escreve o NIF para a fatura.";
@@ -290,6 +356,7 @@ const Carrinho = (function () {
     p.push(titulo("Receção"));
     if (modo === "recolha") {
       p.push("Recolha na loja");
+      if (d.diaRecolha) p.push(`Dia: ${textoDoDia(d.diaRecolha)}`);
     } else {
       p.push(modo === "entrega"
         ? `Entrega em mão em ${d.concelho}`
@@ -341,6 +408,7 @@ const Carrinho = (function () {
     adicionar, definirQuantidade, remover, esvaziar,
     modoAtual, definirModo, entregaDisponivel, faltaParaEntrega, podeEncomendar,
     dadosCliente, definirDados, validarDados, nifValido,
+    horasDoDia, dataLocal, textoDoDia, erroNoDiaDeRecolha,
     aoMudar, textoEncomenda, linkEncomenda, euros, unidadesPorCaixa
   };
 })();
