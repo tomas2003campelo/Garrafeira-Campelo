@@ -24,7 +24,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 10.00,
     caixa: 6,
-    preco: 4.15,
+    preco: 2.28,
     descricao: "Loureiro, Arinto, Trajadura e Avesso. Citrinos e um toque tropical, fresco e com uma mineralidade suave. Para marisco, peixe grelhado e saladas.",
     cor: "#C9B35F",
     imagem: "img/produtos/conde-villar-branco.webp"
@@ -40,7 +40,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.00,
     caixa: 6,
-    preco: 7.88,
+    preco: 4.73,
     descricao: "Vinhão feito em lagares tradicionais, uma edição especial da Quinta das Arcas. Cor rubi intensa, ameixa e amoras silvestres bem maduras, estrutura firme e taninos macios. Para carnes vermelhas, enchidos, sarrabulho, lampreia e cabidela.",
     cor: "#53000F",
     imagem: "img/produtos/arca-nova-vinhao-primoris.webp"
@@ -56,7 +56,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 13.50,
     caixa: 6,
-    preco: 5.20,
+    preco: 3.51,
     descricao: "Touriga Franca e Touriga Nacional, com Tinta Barroca e Tinta Roriz. Frutos vermelhos e ameixa, corpo cheio e taninos macios. Vai bem com carnes, massas cremosas e caça.",
     cor: "#53000F",
     imagem: "img/produtos/piano-colheita-tinto.webp"
@@ -71,7 +71,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 6,
-    preco: 5.20,
+    preco: 3.51,
     descricao: "Viosinho, Gouveio e Moscatel Galego. Fruta elegante com notas minerais e boa acidez. Para peixe, marisco, saladas ou como aperitivo.",
     cor: "#C9B35F",
     imagem: "img/produtos/piano-colheita-branco.webp"
@@ -87,7 +87,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 14.00,
     caixa: 6,
-    preco: 7.88,
+    preco: 5.61,
     descricao: "Tinta Roriz, Touriga Nacional e Touriga Franca, com estágio em barrica. Morango, cassis e ameixa, notas balsâmicas e final longo. Para caça e borrego assado.",
     cor: "#53000F",
     imagem: "img/produtos/piano-reserva-tinto.webp",
@@ -103,7 +103,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 6,
-    preco: 8.35,
+    preco: 5.61,
     descricao: "Gouveio, Viosinho e Códega do Larinho, fermentado em barrica de carvalho francês. Fruta madura com toque tropical e tostado, final longo. Para arroz de marisco, peixe grelhado e queijos de pasta mole.",
     cor: "#C9B35F",
     imagem: "img/produtos/piano-reserva-branco.webp",
@@ -120,7 +120,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 17.00,
     caixa: 6,
-    preco: 27.83,
+    preco: 19.95,
     descricao: "Tinta Roriz, Tinta Barroca e Touriga Franca, com 17% de álcool, 24 meses em barrica e 24 em garrafa. Frutos silvestres, cacau e tabaco, encorpado e envolvente. Para estufados e queijos fortes.",
     cor: "#53000F",
     imagem: "img/produtos/piano-17-reserva.webp"
@@ -135,7 +135,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 6,
-    preco: 28.88,
+    preco: 25.56,
     descricao: "Vinhas velhas do Douro, com 24 meses em barricas novas de carvalho francês. Denso e complexo, de fruta concentrada, mineral e com final longo. Para pratos de caça e assados no forno.",
     cor: "#53000F",
     imagem: "img/produtos/piano-vinhas-velhas-premium.webp"
@@ -151,7 +151,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 13.00,
     caixa: 6,
-    preco: 4.73,
+    preco: 2.89,
     descricao: "Tinta Roriz, Touriga Franca, Tinta Barroca e Touriga Nacional. Notas florais e de compota de frutos vermelhos, com taninos macios. Para carnes brancas, massas e caça.",
     cor: "#53000F",
     imagem: "img/produtos/quintela-tinto.webp"
@@ -166,7 +166,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 6,
-    preco: 4.73,
+    preco: 2.89,
     descricao: "Gouveio, Viosinho e Moscatel Galego. Aroma intenso de fruta tropical, fresco e vivo na boca. Para marisco, peixe, carnes brancas e massas.",
     cor: "#C9B35F",
     imagem: "img/produtos/quintela-branco.webp"
@@ -182,7 +182,7 @@ const PRODUTOS = [
     volume: "37,5 cl",
     alcool: 13.00,
     caixa: 6,
-    preco: 3.10,
+    preco: 1.63,
     descricao: "A meia garrafa do Quintela Tinto: Tinta Roriz, Touriga Franca, Tinta Barroca e Touriga Nacional, com notas florais e de compota de frutos vermelhos. Boa para uma refeição a dois.",
     cor: "#53000F",
     imagem: "img/produtos/quintela-tinto.webp"
@@ -197,7 +197,7 @@ const PRODUTOS = [
     ano: null,
     volume: "37,5 cl",
     caixa: 6,
-    preco: 3.10,
+    preco: 1.63,
     descricao: "A meia garrafa do Quintela Branco: Gouveio, Viosinho e Moscatel Galego, com fruta tropical e boca fresca. Boa para uma refeição a dois.",
     cor: "#C9B35F",
     imagem: "img/produtos/quintela-branco.webp"
@@ -213,7 +213,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 13.00,
     caixa: 6,
-    preco: 4.15,
+    preco: 3.51,
     descricao: "Tinta Barroca, Tinta Roriz e Touriga Franca. Fruta vermelha, taninos suaves e acidez equilibrada. Um tinto do Douro para o dia a dia, com carnes e pratos de forno.",
     cor: "#53000F",
     imagem: "img/produtos/castello-de-numao-tinto.webp"
@@ -228,7 +228,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 6,
-    preco: 3.68,
+    preco: 3.51,
     descricao: "Viosinho, Gouveio e Moscatel. Fruta branca, pera e uva fresca, com notas cítricas e minerais. Para peixe, marisco e saladas.",
     cor: "#C9B35F",
     imagem: "img/produtos/castello-de-numao-branco.webp"
@@ -244,7 +244,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 14.00,
     caixa: 6,
-    preco: 7.30,
+    preco: 7.88,
     descricao: "Tinta Roriz, Touriga Nacional e Touriga Franca, com 12 meses em barrica nova. Cassis, morango e ameixa, taninos de qualidade e final longo. Para caça e cabrito assado.",
     cor: "#53000F",
     imagem: "img/produtos/castello-de-numao-reserva-tinto.webp"
@@ -260,7 +260,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 13.50,
     caixa: 6,
-    preco: 9.40,
+    preco: 7.88,
     descricao: "Gouveio, Viosinho e Códega do Larinho, com 9 meses em barrica de carvalho francês. Fruta branca e tropical com um toque tostado, final longo e elegante. Para peixe no forno, marisco e carnes brancas.",
     cor: "#C9B35F",
     imagem: "img/produtos/castello-de-numao-reserva-branco.webp"
@@ -276,10 +276,11 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 14.00,
     caixa: 6,
-    preco: 7.88,
+    preco: 8.58,
     descricao: "Touriga Nacional, Touriga Franca, Tinta Amarela e Tinta Roriz, com 10 meses em barrica. Fruta vermelha, violeta e especiarias, final fresco e persistente. Para cozinha tradicional, carnes e queijos.",
     cor: "#53000F",
-    imagem: "img/produtos/bafarela-reserva-tinto.webp"
+    imagem: "img/produtos/bafarela-reserva-tinto.webp",
+    destaque: "Reserva"
   },
   {
     id: "bafarela-grande-reserva-tinto",
@@ -292,10 +293,11 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 14.00,
     caixa: 6,
-    preco: 15.70,
+    preco: 13.83,
     descricao: "Touriga Nacional, Touriga Franca e Tinta Roriz, com 12 meses em barrica de carvalho francês. Intenso e floral, de taninos densos mas finos. Para carnes nobres, caça e queijos fortes.",
     cor: "#53000F",
-    imagem: "img/produtos/bafarela-grande-reserva-tinto.webp"
+    imagem: "img/produtos/bafarela-grande-reserva-tinto.webp",
+    destaque: "Grande Reserva"
   },
   {
     id: "dom-xisto-tinto",
@@ -308,7 +310,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 13.00,
     caixa: 6,
-    preco: 3.68,
+    preco: 2.36,
     descricao: "Tinto do Douro feito com castas tradicionais da região, com 13% de álcool. Para o dia a dia, com carnes e petiscos.",
     cor: "#53000F",
     imagem: "img/produtos/dom-xisto.webp"
@@ -323,7 +325,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 6,
-    preco: 3.68,
+    preco: 2.36,
     descricao: "Branco do Douro feito com castas tradicionais da região. Para o dia a dia, com peixe, saladas e petiscos.",
     cor: "#C9B35F",
     imagem: "img/produtos/dom-xisto.webp"
@@ -339,7 +341,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 13.50,
     caixa: 6,
-    preco: 4.46,
+    preco: 2.63,
     descricao: "Alicante Bouschet, Touriga Nacional e Touriga Franca. Cor granada, fruta vermelha intensa, macio e aveludado. Para grelhados e petiscos.",
     cor: "#53000F",
     imagem: "img/produtos/tapada-villar-tinto.webp"
@@ -355,7 +357,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.50,
     caixa: 6,
-    preco: 4.46,
+    preco: 2.63,
     descricao: "Roupeiro, Antão Vaz e Chardonnay. Frutado com um toque floral, seco mas redondo, de acidez viva. Para peixe, saladas e petiscos.",
     cor: "#C9B35F",
     imagem: "img/produtos/tapada-villar-branco.webp"
@@ -371,10 +373,26 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 14.00,
     caixa: 6,
-    preco: 6.56,
+    preco: 3.68,
     descricao: "Alicante Bouschet, Touriga Nacional e Syrah. Especiarias e frutos vermelhos maduros, taninos macios e final elegante. Para carnes vermelhas e assados.",
     cor: "#53000F",
-    imagem: "img/produtos/tapada-villar-doc-tinto.webp"
+    imagem: "img/produtos/tapada-villar-doc-tinto.webp",
+    destaque: "DOC"
+  },
+  {
+    id: "tapada-villar-doc-branco",
+    nome: "Tapada Villar DOC Branco",
+    categoria: "maduro",
+    tipo: "branco",
+    produtor: "Quinta das Arcas",
+    regiao: "Alentejo DOC",
+    ano: null,
+    volume: "75 cl",
+    alcool: 13.50,
+    caixa: 6,
+    preco: 3.68,
+    descricao: "Roupeiro e Arinto, com parte do vinho fermentada em barrica de carvalho francês. Fruta e flores, volume na boca, mineral e de final fresco. Para peixe no forno, bacalhau e carnes brancas.",
+    cor: "#C9B35F"
   },
   {
     id: "quinta-da-mata-fidalga-branco-bruto",
@@ -387,7 +405,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 6,
-    preco: 8.93,
+    preco: 7.00,
     descricao: "Maria Gomes, Baga, Arinto e Chardonnay. Citrinos, pera, ananás e pêssego, com bolha fina e boa persistência. Para aperitivo, marisco e leitão.",
     cor: "#DCC98A",
     imagem: "img/produtos/mata-fidalga-branco-bruto.webp"
@@ -404,7 +422,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.70,
     caixa: 6,
-    preco: 9.98,
+    preco: 7.00,
     descricao: "Baga e Touriga Nacional, pelo método clássico, com nove meses de estágio. Cor rubi, fruta e notas vegetais, bolha fina. Para leitão, enchidos e carnes assadas.",
     cor: "#53000F",
     imagem: "img/produtos/mata-fidalga-tinto-bruto.webp"
@@ -420,7 +438,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 6,
-    preco: 9.40,
+    preco: 7.00,
     descricao: "Baga e Touriga Nacional, pelo método clássico. Cor rosa definida, bolha fina e aroma intenso de frutos vermelhos frescos, com ataque suave. Para aperitivo, marisco e pratos leves.",
     cor: "#D98A9A",
     imagem: "img/produtos/mata-fidalga-rose-bruto.webp"
@@ -437,7 +455,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.50,
     caixa: 3,
-    preco: 11.50,
+    preco: 9.98,
     descricao: "Malvasia Fina, Verdelho e Folgasão, pelo método clássico. Floral e muito fresco, com notas de fermento e pão torrado. Para aperitivo, marisco e peixe.",
     cor: "#DCC98A",
     imagem: "img/produtos/fraga-da-pena-bruto.webp"
@@ -454,7 +472,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.50,
     caixa: 3,
-    preco: 12.55,
+    preco: 11.03,
     descricao: "Malvasia Fina, Cerceal, Gouveio Real e Touriga Franca, pelo método clássico. Aroma de frutos secos, fresco e equilibrado, de bolha fina. Para celebrar, com marisco ou peixe.",
     cor: "#DCC98A",
     imagem: "img/produtos/murganheira-reserva-bruto.webp",
@@ -472,14 +490,14 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.50,
     caixa: 3,
-    preco: 15.23,
+    preco: 13.13,
     descricao: "Malvasia Fina, Cerceal e Tinta Roriz, pelo método clássico. Aroma harmonioso com notas de baunilha, final longo e equilibrado. Para peixe grelhado e marisco.",
     cor: "#DCC98A",
     imagem: "img/produtos/murganheira-super-reserva-bruto.webp"
   },
   {
-    id: "terras-do-demo-bruto",
-    nome: "Terras do Demo Bruto",
+    id: "terras-do-demo-branco-bruto",
+    nome: "Terras do Demo Branco Bruto",
     categoria: "espumantes",
     tipo: "branco",
     docura: "Bruto",
@@ -489,7 +507,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.00,
     caixa: 3,
-    preco: 10.45,
+    preco: 9.28,
     descricao: "Malvasia Fina, pelo método clássico, com mais de 12 meses de estágio. Aroma de flor de malvasia, fresco e frutado, bolha fina e persistente. Para marisco, ostras, peixe e aves.",
     cor: "#DCC98A",
     imagem: "img/produtos/terras-do-demo-bruto.webp"
@@ -506,7 +524,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.50,
     caixa: 3,
-    preco: 10.45,
+    preco: 9.28,
     descricao: "Touriga Nacional. Cor salmão, morango fresco e um toque floral, com acidez viva e corpo leve. Para massas, marisco grelhado e carnes brancas.",
     cor: "#D98A9A",
     imagem: "img/produtos/terras-do-demo-rose-bruto.webp"
@@ -523,7 +541,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.00,
     caixa: 3,
-    preco: 10.45,
+    preco: 9.28,
     descricao: "Touriga Franca, pelo método clássico. Tons violáceos, rosa e amora, com notas de levedura e pão torrado. Para leitão, cabrito e carnes assadas.",
     cor: "#53000F",
     imagem: "img/produtos/terras-do-demo-tinto-bruto.webp"
@@ -540,7 +558,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.00,
     caixa: 3,
-    preco: 9.98,
+    preco: 6.30,
     descricao: "Blanc de noirs de Baga, feito pelo método clássico. Bolha fina e persistente, notas de maçã e biscoito, acidez viva. Para aperitivo e pratos de peixe.",
     cor: "#DCC98A",
     imagem: "img/produtos/conde-villar-bruto-reserva.webp",
@@ -558,7 +576,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 12.00,
     caixa: 3,
-    preco: 6.83,
+    preco: 5.60,
     descricao: "Gouveio, Malvasia Fina e Moscatel Galego, pelo método clássico. Floral e fresco, com fruta verde e um toque de pão torrado, cremoso na boca. Para aperitivo, entradas e peixe.",
     cor: "#DCC98A",
     imagem: "img/produtos/piano-espumante-bruto.webp"
@@ -574,7 +592,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 3,
-    preco: 9.19,
+    preco: 7.88,
     descricao: "O espumante clássico de Lamego, feito pelo método clássico. Equilibrado, fino e de acidez viva. Para aperitivo, peixe e marisco.",
     cor: "#DCC98A",
     imagem: "img/produtos/raposeira-reserva-bruto.webp"
@@ -590,7 +608,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 3,
-    preco: 9.19,
+    preco: 7.88,
     descricao: "O espumante clássico de Lamego, pelo método clássico, num estilo meio seco. Cor palha, aroma fresco e frutado, boca suave. Para sobremesas, bolos e para brindar.",
     cor: "#DCC98A",
     imagem: "img/produtos/raposeira-reserva-meio-seco.webp"
@@ -606,7 +624,7 @@ const PRODUTOS = [
     ano: null,
     volume: "75 cl",
     caixa: 3,
-    preco: 9.19,
+    preco: 7.88,
     descricao: "O espumante clássico de Lamego, pelo método clássico, na versão doce. Aroma fresco e frutado, boca macia. Para bolos, doces e para brindar.",
     cor: "#DCC98A",
     imagem: "img/produtos/raposeira-reserva-doce.webp"
@@ -622,7 +640,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 8.50,
     caixa: 6,
-    preco: 7.88,
+    preco: 3.94,
     descricao: "Bière de garde loura da Flandres francesa, com 8,5% de álcool. Aromas de fruta, coentro e lúpulo, e final seco. Vai bem com francesinha e queijos.",
     cor: "#C08A2E",
     imagem: "img/produtos/3-monts-75cl.webp"
@@ -638,7 +656,7 @@ const PRODUTOS = [
     volume: "33 cl",
     alcool: 8.50,
     caixa: 12,
-    preco: 3.10,
+    preco: 2.28,
     descricao: "A mesma bière de garde loura da Flandres francesa, em garrafa pequena. 8,5% de álcool, aromas de fruta, coentro e lúpulo.",
     cor: "#C08A2E",
     imagem: "img/produtos/3-monts-33cl.webp"
@@ -654,7 +672,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 9.00,
     caixa: 6,
-    preco: 9.35,
+    preco: 5.95,
     descricao: "Tripla loura de 9%, feita com cereais antigos: cevada, aveia, espelta e trigo. Doce de cereal, amargor leve e notas de fruta madura e especiarias.",
     cor: "#C08A2E",
     imagem: "img/produtos/3-monts-heritage-cereales.webp"
@@ -670,7 +688,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 9.50,
     caixa: 6,
-    preco: 7.30,
+    preco: 4.38,
     descricao: "Tripla de 9,5%, feita com duas leveduras. Dourada, com aromas de banana madura, fruta de caroço e pão fresco, notas de caramelo e baunilha e um amargor longo. Para grelhados, pato e queijos curados.",
     cor: "#C08A2E",
     imagem: "img/produtos/3-monts-triple-grande-reserve.webp"
@@ -686,7 +704,7 @@ const PRODUTOS = [
     volume: "75 cl",
     alcool: 8.50,
     caixa: 6,
-    preco: 5.78,
+    preco: 4.12,
     descricao: "Loura de guarda do norte de França, com 8,5% de álcool. Aromas de fruta, madeira e caramelo suave, com um amargor leve e persistente.",
     cor: "#C08A2E",
     imagem: "img/produtos/la-divine.webp"
