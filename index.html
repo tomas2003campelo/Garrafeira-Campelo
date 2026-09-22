@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=ee32169f">
+  <link rel="stylesheet" href="css/style.css?v=2d9919c6">
 </head>
 <body>
 
@@ -113,6 +113,18 @@
           Verdes, maduros do Douro e do Alentejo, espumantes e cervejas
           artesanais, com quem te explica o que estás a levar.
         </p>
+        <form class="pesquisa pesquisa-inicio" id="pesquisa-inicio" role="search" action="vinhos.html">
+          <svg class="pesquisa-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+          <input type="search" name="q" placeholder="Nome, produtor, região ou casta" aria-label="Pesquisar vinhos, espumantes e cervejas" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="sugestoes-lista" autocomplete="off" spellcheck="false" enterkeyhint="search">
+          <button type="button" class="pesquisa-limpar" aria-label="Limpar a pesquisa" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          </button>
+          <div class="sugestoes" hidden>
+            <div class="sugestoes-lista" id="sugestoes-lista" role="listbox" aria-label="Produtos encontrados"></div>
+            <p class="sugestoes-rodape"></p>
+          </div>
+          <p class="so-leitores" aria-live="polite"></p>
+        </form>
         <div class="hero-actions">
           <a class="btn btn-dourado" href="vinhos.html">Ver os vinhos</a>
           <a class="btn btn-ghost-claro" href="contacto.html">Falar connosco</a>
@@ -372,6 +384,6 @@
 <script src="js/produtos.js?v=6ba3df65"></script>
 <script src="js/ilustracoes.js?v=6c830521"></script>
 <script src="js/carrinho.js?v=d056be8c"></script>
-<script src="js/main.js?v=52ae96e8"></script>
+<script src="js/main.js?v=49be8260"></script>
 </body>
 </html>

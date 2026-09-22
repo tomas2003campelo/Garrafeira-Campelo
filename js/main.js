@@ -914,6 +914,142 @@
   }
 
   /* =======================================================
+     PESQUISA DA PÁGINA INICIAL
+     Procura na loja toda e mostra os produtos por baixo da
+     caixa, enquanto se escreve. O Enter leva à página com mais
+     resultados, já com a pesquisa feita (vinhos.html?q=piano).
+     ======================================================= */
+
+  function ligarPesquisaInicio() {
+    const form = document.getElementById("pesquisa-inicio");
+    if (!form) return;
+
+    const campo = form.querySelector("input");
+    const botaoLimpar = form.querySelector(".pesquisa-limpar");
+    const caixa = form.querySelector(".sugestoes");
+    const lista = form.querySelector(".sugestoes-lista");
+    const rodape = form.querySelector(".sugestoes-rodape");
+    const aviso = form.querySelector(".so-leitores");
+    const MAXIMO = 6;
+    let ativa = -1;   // a sugestão escolhida com as setas do teclado
+
+    const opcoes = () => [...lista.querySelectorAll('[role="option"]')];
+
+    function escolher(n) {
+      ativa = n;
+      opcoes().forEach((o, i) => o.setAttribute("aria-selected", String(i === n)));
+      const escolhida = opcoes()[n];
+      if (escolhida) campo.setAttribute("aria-activedescendant", escolhida.id);
+      else campo.removeAttribute("aria-activedescendant");
+    }
+
+    function abrir(aberta) {
+      caixa.hidden = !aberta;
+      campo.setAttribute("aria-expanded", String(aberta));
+      if (!aberta) escolher(-1);
+    }
+
+    function atualizar() {
+      const q = campo.value.trim();
+      botaoLimpar.hidden = !campo.value;
+      if (!q) {
+        abrir(false);
+        aviso.textContent = "";
+        return;
+      }
+
+      const niveis = pesquisar(prepararPesquisa(q));
+      const encontrados = PRODUTOS
+        .filter(p => niveis.get(p))
+        .sort((a, b) => niveis.get(b) - niveis.get(a));
+
+      // Quantos há em cada página, primeiro a que tem mais
+      const contas = new Map();
+      encontrados.forEach(p => {
+        const pagina = paginaDaCategoria(p.categoria);
+        contas.set(pagina, (contas.get(pagina) || 0) + 1);
+      });
+      const paginas = [...contas].sort((a, b) => b[1] - a[1]);
+
+      lista.innerHTML = encontrados.slice(0, MAXIMO).map((p, i) => `
+        <a class="sugestao" id="sugestao-${i}" role="option" aria-selected="false" tabindex="-1" href="${urlDoProduto(p)}">
+          <span class="sugestao-foto" aria-hidden="true">${p.imagem ? `<img src="${p.imagem}" alt="">` : Ilustracoes.paraProduto(p)}</span>
+          <span class="sugestao-texto">
+            <span class="sugestao-nome">${p.nome}</span>
+            <span class="sugestao-meta">${metaDoProduto(p)}</span>
+          </span>
+          <span class="sugestao-preco">${euros(p.preco)}${p.volume ? `<small>${p.volume}</small>` : ""}</span>
+        </a>`).join("");
+
+      rodape.innerHTML = paginas.length
+        ? paginas.map(([pagina, n]) => {
+            const nome = NOMES_DAS_PAGINAS[pagina];
+            return `<a href="${pagina}?q=${encodeURIComponent(q)}">Ver ${n} ${n === 1 ? nome.um : nome.varios}</a>`;
+          }).join("")
+        : `Não encontrámos nada com “${escapar(q)}”. Experimenta o nome do produtor ou da região.`;
+
+      const n = encontrados.length;
+      aviso.textContent = n ? `${n} ${n === 1 ? "produto encontrado" : "produtos encontrados"}` : "Nenhum produto encontrado";
+      abrir(document.activeElement === campo);
+      escolher(-1);
+    }
+
+    campo.addEventListener("input", atualizar);
+
+    campo.addEventListener("focus", () => {
+      atualizar();
+      // No telemóvel, o teclado tapa metade do ecrã: a caixa sobe para
+      // o topo, e as sugestões aparecem por baixo dela
+      if (window.matchMedia("(max-width: 760px)").matches) {
+        setTimeout(() => form.scrollIntoView({ block: "start", behavior: menosMovimento ? "auto" : "smooth" }), 250);
+      }
+    });
+
+    campo.addEventListener("keydown", e => {
+      const total = opcoes().length;
+      if ((e.key === "ArrowDown" || e.key === "ArrowUp") && !caixa.hidden && total) {
+        e.preventDefault();
+        escolher(e.key === "ArrowDown"
+          ? (ativa + 1) % total
+          : (ativa <= 0 ? total - 1 : ativa - 1));
+      } else if (e.key === "Escape") {
+        if (!caixa.hidden) {
+          e.preventDefault();
+          abrir(false);
+        } else if (campo.value) {
+          e.preventDefault();
+          campo.value = "";
+          atualizar();
+        }
+      }
+    });
+
+    // Enter: abre a sugestão escolhida com as setas; sem nenhuma,
+    // vai para a página com mais resultados
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const destino = opcoes()[ativa] || rodape.querySelector("a");
+      if (destino) destino.click();
+    });
+
+    botaoLimpar.addEventListener("click", () => {
+      campo.value = "";
+      atualizar();
+      campo.focus();
+    });
+
+    // Um clique numa sugestão não pode tirar o foco à caixa antes de
+    // contar; sem isto, a lista fechava e o clique perdia-se
+    caixa.addEventListener("mousedown", e => e.preventDefault());
+    form.addEventListener("focusout", e => {
+      if (!form.contains(e.relatedTarget)) abrir(false);
+    });
+
+    // Ao voltar atrás para esta página, a lista não fica aberta sozinha
+    window.addEventListener("pageshow", () => abrir(false));
+  }
+
+  /* =======================================================
      PÁGINA DE PRODUTO (produto.html?id=...)
      Uma só página serve todos os produtos: lê o id do endereço e
      desenha a ficha. O endereço de cada produto pode partilhar-se.
@@ -1590,6 +1726,7 @@
     ligarMenu();
     ligarDestaques();
     ligarCatalogo();
+    ligarPesquisaInicio();
     ligarFichaProduto();
     preencherContagens();
     ligarCarrinho();
