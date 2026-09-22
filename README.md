@@ -78,7 +78,10 @@ essencial:
 - **Publicar** — Sim para aparecer no site, Não para esconder. Útil para
   produtos fora de época.
 - **Categoria** e **Tipo** — escolhe da lista, para não haver erros de escrita.
-- **Preço PVP** — com IVA incluído, só o número.
+- **Preço loja**: o preço na loja, com IVA incluído, só o número.
+- **Preço site**: não se escreve. Calcula-se sozinho, com o preço da loja mais
+  5%, e é o que aparece no site. A percentagem está na aba **Definições**: se a
+  mudares, todos os preços do site acompanham.
 - **Etiqueta** — opcional; os produtos com etiqueta aparecem em destaque na
   página inicial.
 - **Fotografia** — opcional; o nome de um ficheiro na pasta `img`. Sem foto, o

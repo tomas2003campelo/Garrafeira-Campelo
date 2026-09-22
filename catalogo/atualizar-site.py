@@ -16,6 +16,7 @@ import sys
 import unicodedata
 import zipfile
 import xml.etree.ElementTree as ET
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -71,6 +72,7 @@ CABECALHOS = {
     "região": "regiao", "regiao": "regiao",
     "ano": "ano", "colheita": "ano",
     "volume": "volume",
+    # Uma folha antiga, com uma só coluna de preço, mostra esse preço no site
     "preço": "preco", "preco": "preco", "pvp": "preco",
     "descrição": "descricao", "descricao": "descricao",
     "etiqueta": "destaque", "destaque": "destaque",
@@ -80,6 +82,16 @@ CABECALHOS = {
     "unidades": "caixa", "caixa": "caixa",
 }
 
+# Cabeçalhos de duas palavras, que se leem antes dos de uma
+CABECALHOS_COMPOSTOS = {
+    "preço loja": "preco_loja", "preco loja": "preco_loja", "preço na loja": "preco_loja",
+    "preço site": "preco_site", "preco site": "preco_site", "preço no site": "preco_site",
+    "preço online": "preco_site", "preco online": "preco_site",
+}
+
+# Sem a aba Definições, o preço do site é o da loja mais isto
+AUMENTO_SITE = 0.05
+
 
 # ---------------------------------------------------------------
 # Ler o .xlsx
@@ -88,17 +100,8 @@ CABECALHOS = {
 def ler_folha(caminho):
     """Devolve a primeira folha como lista de linhas: [(nº, {coluna: valor})]."""
     with zipfile.ZipFile(caminho) as z:
-        # Texto partilhado: quando o Excel grava, guarda aqui os textos
-        # e as células passam a ter só o índice.
-        partilhados = []
-        if "xl/sharedStrings.xml" in z.namelist():
-            raiz = ET.fromstring(z.read("xl/sharedStrings.xml"))
-            for si in raiz.findall("m:si", NS):
-                # Junta todos os pedaços: um texto com negrito numa palavra
-                # vem partido em vários <t>
-                partilhados.append("".join(t.text or "" for t in si.iter(f"{{{NS['m']}}}t")))
-
-        folha = ET.fromstring(z.read(primeira_folha(z)))
+        partilhados = textos_partilhados(z)
+        folha = ET.fromstring(z.read(caminho_da_folha(z, "Produtos") or caminho_da_folha(z)))
 
     linhas = []
     for row in folha.iter(f"{{{NS['m']}}}row"):
@@ -113,16 +116,48 @@ def ler_folha(caminho):
     return linhas
 
 
-def primeira_folha(z):
-    """O caminho da folha 'Produtos', ou da primeira, se não houver."""
+def textos_partilhados(z):
+    """Quando o Excel grava, guarda os textos à parte e as células passam
+    a ter só o índice."""
+    partilhados = []
+    if "xl/sharedStrings.xml" in z.namelist():
+        raiz = ET.fromstring(z.read("xl/sharedStrings.xml"))
+        for si in raiz.findall("m:si", NS):
+            # Junta todos os pedaços: um texto com negrito numa palavra
+            # vem partido em vários <t>
+            partilhados.append("".join(t.text or "" for t in si.iter(f"{{{NS['m']}}}t")))
+    return partilhados
+
+
+def caminho_da_folha(z, nome=None):
+    """O caminho da folha com este nome (sem nome, a primeira), ou None."""
     livro = ET.fromstring(z.read("xl/workbook.xml"))
     rels = ET.fromstring(z.read("xl/_rels/workbook.xml.rels"))
     alvo = {r.get("Id"): r.get("Target") for r in rels}
     folhas = livro.findall("m:sheets/m:sheet", NS)
     rid = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
-    escolhida = next((f for f in folhas if f.get("name") == "Produtos"), folhas[0])
+    escolhida = next((f for f in folhas if f.get("name") == nome), None) if nome else folhas[0]
+    if escolhida is None:
+        return None
     destino = alvo[escolhida.get(rid)].lstrip("/")
     return destino if destino.startswith("xl/") else "xl/" + destino
+
+
+def ler_aumento(caminho):
+    """O aumento dos preços no site, da célula com o nome AumentoSite (na
+    aba Definições). None se a folha não o tiver."""
+    with zipfile.ZipFile(caminho) as z:
+        livro = ET.fromstring(z.read("xl/workbook.xml"))
+        nome = next((d for d in livro.iter(f"{{{NS['m']}}}definedName")
+                     if d.get("name") == "AumentoSite"), None)
+        sitio = re.fullmatch(r"'?(.+?)'?!\$?([A-Z]+)\$?(\d+)", (nome.text or "").strip()) if nome is not None else None
+        caminho_folha = caminho_da_folha(z, sitio.group(1)) if sitio else None
+        if not caminho_folha:
+            return None
+        ref = sitio.group(2) + sitio.group(3)
+        folha = ET.fromstring(z.read(caminho_folha))
+        celula = next((c for c in folha.iter(f"{{{NS['m']}}}c") if c.get("r") == ref), None)
+        return valor_da_celula(celula, textos_partilhados(z)) if celula is not None else None
 
 
 def valor_da_celula(c, partilhados):
@@ -167,6 +202,29 @@ def preco(valor):
     return float(limpo)
 
 
+def com_aumento(loja, aumento):
+    """O preço da loja com o aumento, arredondado ao cêntimo como o ARRED
+    do Excel: 4,95 + 5% = 5,1975, que fica 5,20."""
+    valor = Decimal(str(loja)) * (1 + Decimal(str(aumento)))
+    return float(valor.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+
+
+def euros(valor):
+    """5.2 -> '5,20 €'"""
+    return f"{valor:.2f} €".replace(".", ",")
+
+
+def percentagem(valor):
+    """5% vem do Excel como 0,05. Aceita também "5%" e 5 escritos à mão."""
+    texto = str(valor).replace("%", "").replace(",", ".").strip()
+    n = float(texto)
+    if "%" in str(valor) or n > 1:
+        n /= 100
+    if not 0 <= n <= 1:
+        raise ValueError
+    return n
+
+
 def volume(valor):
     """'75cl' -> '75 cl', '1,5L' -> '1,5 l', '33 CL' -> '33 cl'.
     Um número sem unidade é tratado como centilitros."""
@@ -188,16 +246,33 @@ def ler_produtos():
     _, cabecalho = linhas[0]
     mapa = {}
     for coluna, texto in cabecalho.items():
-        chave = str(texto).strip().lower().split(" (")[0].split(" ")[0]
-        if chave in CABECALHOS:
+        inteiro = " ".join(str(texto).strip().lower().split(" (")[0].split())
+        chave = inteiro.split(" ")[0]
+        if inteiro in CABECALHOS_COMPOSTOS:
+            mapa[coluna] = CABECALHOS_COMPOSTOS[inteiro]
+        elif chave in CABECALHOS:
             mapa[coluna] = CABECALHOS[chave]
 
-    em_falta = {"nome", "categoria", "preco"} - set(mapa.values())
+    em_falta = {"nome", "categoria"} - set(mapa.values())
+    if not {"preco", "preco_loja", "preco_site"} & set(mapa.values()):
+        em_falta.add("preço")
     if em_falta:
         return [], [f"Não encontrei a coluna: {', '.join(sorted(em_falta))}. "
                     "Confirma que o cabeçalho na linha 1 não foi apagado."], []
 
     produtos, erros, avisos = [], [], []
+
+    # O preço do site é o da loja mais o aumento da aba Definições
+    aumento = AUMENTO_SITE
+    bruto = ler_aumento(EXCEL)
+    if bruto not in (None, ""):
+        try:
+            aumento = percentagem(bruto)
+        except (ValueError, TypeError):
+            return [], [f"Na aba Definições, o aumento \"{bruto}\" não é uma percentagem válida. "
+                        "Escreve, por exemplo, 5%."], []
+    elif "preco_loja" in mapa.values():
+        avisos.append("Não encontrei o aumento na aba Definições. Usei 5%.")
     ids_vistos = {}
     escondidos = 0
 
@@ -274,16 +349,33 @@ def ler_produtos():
             avisos.append(f"{sitio}: espumante sem doçura. Escolhe Bruto, Meio Seco ou outra, "
                           "para aparecer no cartão e nos filtros.")
 
-        if "preco" not in dados:
-            erros.append(f"{sitio}: falta o preço.")
-            continue
+        # O preço que vai para o site: o da coluna Preço site, que a folha
+        # calcula. Se a célula ainda não tiver o resultado (a folha não foi
+        # aberta no Excel depois de escrita), faz-se aqui a mesma conta.
+        # Numa folha antiga, a coluna Preço.
         try:
-            valor = round(preco(dados["preco"]), 2)
+            if "preco_loja" in dados:
+                loja = round(preco(dados["preco_loja"]), 2)
+                if loja <= 0:
+                    raise ValueError
+            if "preco_site" in dados:
+                valor = round(preco(dados["preco_site"]), 2)
+            elif "preco_loja" in dados:
+                valor = com_aumento(loja, aumento)
+            elif "preco" in dados:
+                valor = round(preco(dados["preco"]), 2)
+            else:
+                erros.append(f"{sitio}: falta o preço da loja.")
+                continue
             if valor <= 0:
                 raise ValueError
         except (ValueError, TypeError):
-            erros.append(f"{sitio}: o preço \"{dados['preco']}\" não é um número válido.")
+            errado = dados.get("preco_loja", dados.get("preco_site", dados.get("preco")))
+            erros.append(f"{sitio}: o preço \"{errado}\" não é um número válido.")
             continue
+        if "preco_loja" in dados and valor < loja:
+            avisos.append(f"{sitio}: o preço do site ({euros(valor)}) é mais baixo que o da loja "
+                          f"({euros(loja)}). Confirma a coluna Preço site.")
 
         ano = dados.get("ano")
         if ano not in (None, ""):
@@ -372,7 +464,7 @@ def ler_produtos():
 
         produtos.append(produto)
 
-    return produtos, erros, avisos, escondidos
+    return produtos, erros, avisos, escondidos, (aumento if "preco_loja" in mapa.values() else None)
 
 
 # ---------------------------------------------------------------
@@ -479,9 +571,9 @@ def main():
 
     if len(resultado) == 3:            # erro antes de ler as linhas
         produtos, erros, avisos = resultado
-        escondidos = 0
+        escondidos, aumento = 0, None
     else:
-        produtos, erros, avisos, escondidos = resultado
+        produtos, erros, avisos, escondidos, aumento = resultado
 
     for a in avisos:
         print(f"  aviso  {a}")
@@ -516,6 +608,9 @@ def main():
     escrever(produtos)
     carimbar_versoes()
     print(f"Site atualizado: {plural(len(produtos), 'produto', 'produtos')} ({resumo}).")
+    if aumento is not None:
+        pct = f"{round(aumento * 100, 2):g}".replace(".", ",")
+        print(f"Preços no site: os da loja mais {pct}%.")
     if escondidos:
         print(f"{plural(escondidos, 'marcado', 'marcados')} como não publicar, "
               f"{'ficou' if escondidos == 1 else 'ficaram'} de fora.")
