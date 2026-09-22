@@ -474,9 +474,22 @@
      4. CARTÕES DE PRODUTO
      ======================================================= */
 
+  /* As garrafas pequenas (33 cl, 37,5 cl) aparecem mais baixas do que
+     as de 75 cl, como na prateleira. Sem isto tinham todas a mesma
+     altura, e a 3 Monts de 33 cl parecia maior do que a de 75 cl. */
+  function escalaDaGarrafa(p) {
+    const m = /([\d.,]+)\s*(cl|ml|l)\b/i.exec(p.volume || "");
+    if (!m) return 1;
+    const n = parseFloat(m[1].replace(",", "."));
+    const unidade = m[2].toLowerCase();
+    const cl = unidade === "l" ? n * 100 : unidade === "ml" ? n / 10 : n;
+    return cl < 50 ? 0.8 : 1;
+  }
+
   function arteDoProduto(p) {
     if (p.imagem) {
-      return `<img src="${p.imagem}" alt="${p.nome}" loading="lazy">`;
+      const escala = escalaDaGarrafa(p);
+      return `<img src="${p.imagem}" alt="${p.nome}" loading="lazy"${escala !== 1 ? ` style="--escala: ${escala}"` : ""}>`;
     }
     return Ilustracoes.paraProduto(p);
   }

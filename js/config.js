@@ -107,7 +107,7 @@ const CONFIG = {
   entrega: {
     /* Valor mínimo, em euros, para entrega em mão. Abaixo disto, o
        cliente só pode escolher a recolha na loja. */
-    minimo: 40,
+    minimo: 80,
 
     /* Concelhos onde entregas pessoalmente */
     concelhos: ["Barcelos", "Famalicão", "Braga", "Póvoa de Varzim", "Vila do Conde"],

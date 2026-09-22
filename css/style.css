@@ -850,7 +850,7 @@ main { overflow-x: clip; }
   overflow: hidden;
 }
 .card-top img {
-  height: 205px;
+  height: calc(205px * var(--escala, 1));   /* --escala: garrafas pequenas mais baixas */
   width: auto;
   max-width: 76%;
   object-fit: contain;
@@ -1539,7 +1539,7 @@ a.card-top { color: inherit; text-decoration: none; }
   background: radial-gradient(ellipse 58% 70% at 50% 46%, #5E4346 0%, #3F2D30 46%, var(--superficie) 100%);
 }
 .ficha-foto img {
-  height: 420px;
+  height: calc(420px * var(--escala, 1));
   width: auto;
   max-width: 80%;
   object-fit: contain;
@@ -1592,7 +1592,7 @@ a.card-top { color: inherit; text-decoration: none; }
 @media (max-width: 760px) {
   .ficha { grid-template-columns: 1fr; }
   .ficha-foto { min-height: 340px; padding: 1.8rem; }
-  .ficha-foto img { height: 300px; }
+  .ficha-foto img { height: calc(300px * var(--escala, 1)); }
   .ficha-foto .ilustracao { height: 290px; }
   .ficha-compra .btn-comprar { flex: 1 1 100%; }
 }
@@ -1687,7 +1687,7 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 .grid-sugestoes .card-desc,
 .grid-sugestoes .card-produtor { display: none; }
 .grid-sugestoes .card-top { height: 200px; }
-.grid-sugestoes .card-top img { height: 168px; }
+.grid-sugestoes .card-top img { height: calc(168px * var(--escala, 1)); }
 .grid-sugestoes .card-top .ilustracao { height: 170px; }
 .grid-sugestoes .card-nome { margin-bottom: .9rem; }
 /* Cartão estreito: o preço por cima, o botão a toda a largura */
@@ -2328,7 +2328,7 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .grid { grid-template-columns: 1fr; }
   .card-top { height: 270px; }
   .card-top .ilustracao { height: 230px; }
-  .card-top img { height: 225px; }
+  .card-top img { height: calc(225px * var(--escala, 1)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
