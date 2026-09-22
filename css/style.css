@@ -838,7 +838,7 @@ main { overflow-x: clip; }
 
 .card-top {
   position: relative;
-  height: 215px;
+  height: 245px;
   display: grid;
   place-items: center;
   /* Vitrine: um foco de luz quente por trás da garrafa, como numa
@@ -850,7 +850,7 @@ main { overflow-x: clip; }
   overflow: hidden;
 }
 .card-top img {
-  height: 172px;
+  height: 205px;
   width: auto;
   max-width: 76%;
   object-fit: contain;
@@ -870,7 +870,7 @@ main { overflow-x: clip; }
   transition: transform .42s cubic-bezier(.22, .68, .3, 1), filter .42s ease;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.46));
 }
-.card-top .ilustracao { height: 176px; }
+.card-top .ilustracao { height: 208px; }
 .card:hover .ilustracao {
   transform: translateY(-9px) rotate(-2.5deg) scale(1.05);
   filter: drop-shadow(0 18px 26px rgba(0, 0, 0, 0.6));
@@ -909,9 +909,22 @@ main { overflow-x: clip; }
 
 .card-nome { font-size: 1.08rem; margin-bottom: .15rem; }
 .card-produtor { font-size: .82rem; color: var(--texto-suave); margin-bottom: .6rem; }
-.card-desc { font-size: .89rem; color: var(--texto-suave); flex: 1; margin-bottom: 1rem; }
+/* No máximo três linhas, a acabar em "…": o texto todo está na página
+   do produto. Sem "flex: 1", senão as linhas escondidas voltavam a
+   aparecer no espaço que sobra; quem desce o preço é a margem do rodapé. */
+.card-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  font-size: .89rem;
+  color: var(--texto-suave);
+  margin-bottom: 1rem;
+}
 
 .card-foot {
+  margin-top: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -2128,9 +2141,9 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 @media (max-width: 420px) {
   .stats { grid-auto-flow: row; }
   .grid { grid-template-columns: 1fr; }
-  .card-top { height: 235px; }
-  .card-top .ilustracao { height: 195px; }
-  .card-top img { height: 190px; }
+  .card-top { height: 270px; }
+  .card-top .ilustracao { height: 230px; }
+  .card-top img { height: 225px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
