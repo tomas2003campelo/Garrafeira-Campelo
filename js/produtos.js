@@ -616,7 +616,8 @@ const PRODUTOS = [
     volume: "75 cl",
     preco: 5.50,
     descricao: "Loura de guarda do norte de França, com 8,5% de álcool. Aromas de fruta, madeira e caramelo suave, com um amargor leve e persistente.",
-    cor: "#C08A2E"
+    cor: "#C08A2E",
+    imagem: "img/produtos/la-divine.webp"
   }
 ];
 
