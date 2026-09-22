@@ -49,5 +49,8 @@ as margens e passaram a WebP com 600 px de altura.
 | `terras-do-demo-bruto.webp`, `fraga-da-pena-bruto.webp` | [Caves Terras do Demo](https://www.cavesterrasdodemo.pt/) |
 | `murganheira-reserva-bruto.webp` | [Murganheira](https://murganheira.com/) |
 | `3-monts-*.webp` | [Brasserie 3 Monts](https://www.3monts.fr/) |
+| `bafarela-*.webp` | [Brites Aguiar](https://www.britesaguiar.com/) |
+| `castello-de-numao-reserva-tinto.webp` | Loja [Garrafeira Diálogo](https://www.garrafeiradialogo.com/) (o produtor não tem site) |
+| `castello-de-numao-reserva-branco.webp` | Loja [Garrafeira Scorpio](https://www.garrafeirascorpio.pt/) (o produtor não tem site) |
 | `castello-de-numao-branco.webp` | Origem por confirmar: já estava no site desde a primeira versão |
 | `castello-de-numao-tinto.webp`, `mata-fidalga-tinto-bruto.webp`, `mata-fidalga-branco-bruto.webp` | Enviadas pelo Tomás |

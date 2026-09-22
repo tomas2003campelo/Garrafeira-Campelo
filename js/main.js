@@ -456,6 +456,7 @@
           <span class="preco-bloco">
             <span class="preco">${euros(p.preco)}</span>
             <span class="volume">${p.volume}</span>
+            <span class="volume">IVA incluído</span>
           </span>
           <button class="btn-add" data-add="${p.id}" ${p.esgotado ? "disabled" : ""}>
             ${p.esgotado ? "Esgotado" : "Adicionar"}
