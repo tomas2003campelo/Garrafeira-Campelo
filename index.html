@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=5a16c45f">
+  <link rel="stylesheet" href="css/style.css?v=39a51543">
 </head>
 <body>
 
@@ -78,14 +78,14 @@
         <a data-rede="facebook" href="#" aria-label="Facebook" title="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 3h-3a4 4 0 0 0-4 4v3H5v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
       </div>
 
-      <button class="btn-carrinho" data-abrir-carrinho aria-label="Abrir carrinho">
+      <a class="btn-carrinho" href="carrinho.html" aria-label="Ver o carrinho">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
           <path d="M6 2 4 6v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6l-2-4z"/>
           <path d="M4 6h16M16 10a4 4 0 0 1-8 0"/>
         </svg>
         <span class="etiqueta-carrinho">Carrinho</span>
         <span class="contador" data-contador hidden>0</span>
-      </button>
+      </a>
 
       <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -352,17 +352,6 @@
 </footer>
 
 
-<!-- ============ CARRINHO ============ -->
-<div class="veu" id="veu"></div>
-
-<aside class="carrinho" id="painel-carrinho" aria-label="Carrinho de compras">
-  <div class="carrinho-topo">
-    <h2>O teu carrinho</h2>
-    <button class="btn-fechar" aria-label="Fechar carrinho">&times;</button>
-  </div>
-  <div class="carrinho-lista" id="carrinho-lista"></div>
-  <div class="carrinho-fundo" id="carrinho-fundo" hidden></div>
-</aside>
 
 
 <!-- ============ VERIFICAÇÃO DE IDADE ============ -->
@@ -383,6 +372,6 @@
 <script src="js/produtos.js?v=6ba3df65"></script>
 <script src="js/ilustracoes.js?v=6c830521"></script>
 <script src="js/carrinho.js?v=d056be8c"></script>
-<script src="js/main.js?v=95fb6d9d"></script>
+<script src="js/main.js?v=5404c1dd"></script>
 </body>
 </html>

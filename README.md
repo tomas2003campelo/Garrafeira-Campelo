@@ -21,6 +21,8 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 ├── vinhos.html       Catálogo de vinhos (Verdes e Maduros)
 ├── espumantes.html   Catálogo de espumantes
 ├── cervejas.html     Catálogo de cervejas
+├── produto.html      Página de cada produto (produto.html?id=...)
+├── carrinho.html     Carrinho e dados para a encomenda
 ├── sobre.html        Sobre a casa
 ├── contacto.html     Morada, horário, formulário e entregas
 ├── privacidade.html  Política de privacidade (RGPD)

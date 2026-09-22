@@ -1405,6 +1405,89 @@ a.card-top { color: inherit; text-decoration: none; }
   .ficha-compra .btn-comprar { flex: 1 1 100%; }
 }
 
+/* =========================================================
+   PÁGINA DO CARRINHO (carrinho.html)
+   O mesmo carrinho que era um painel lateral, agora em página:
+   a lista à esquerda, o resumo à direita; no passo dos dados, o
+   formulário ao centro.
+   ========================================================= */
+
+a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
+
+.carrinho.carrinho-pagina {
+  position: static;
+  z-index: auto;
+  width: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 1.6rem 2rem;
+  align-items: start;
+  overflow: visible;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  transition: none;
+}
+.carrinho-pagina .carrinho-topo {
+  position: static;
+  grid-column: 1 / -1;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: center;
+}
+.carrinho-pagina .carrinho-topo .titulo-pagina { margin: 0; }
+.carrinho-pagina .carrinho-lista {
+  padding: .4rem 1.4rem;
+  border: 1px solid var(--ouro-contorno);
+  border-radius: var(--raio);
+  background: var(--superficie);
+}
+.carrinho-pagina .carrinho-fundo {
+  position: sticky;
+  top: calc(var(--altura-faixa, 0px) + var(--topo) + 1rem);
+  padding: 1.4rem 1.4rem 0;
+  border: 1px solid var(--ouro-contorno);
+  border-radius: var(--raio);
+  overflow: hidden;
+}
+.carrinho-pagina .carrinho-acao { position: static; box-shadow: none; }
+
+/* Carrinho vazio: a mensagem ocupa a largura toda */
+.carrinho-pagina[data-passo="vazio"] .carrinho-lista { grid-column: 1 / -1; }
+.carrinho-vazio-acoes { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: 1.4rem; }
+
+/* Passo dos dados: o formulário ao centro, sem a lista, e o título
+   alinhado com ele */
+.carrinho-pagina[data-passo="2"] .carrinho-topo {
+  justify-self: center;
+  width: 100%;
+  max-width: 760px;
+}
+.carrinho-pagina[data-passo="2"] .carrinho-fundo {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 100%;
+  max-width: 760px;
+  position: static;
+}
+
+@media (max-width: 900px) {
+  .carrinho.carrinho-pagina { grid-template-columns: 1fr; }
+  .carrinho-pagina .carrinho-fundo { position: static; }
+}
+
+/* Aviso de "adicionado", com atalho para o carrinho */
+.toast-link {
+  margin-left: .3rem;
+  padding-left: .7rem;
+  border-left: 1px solid rgba(26, 18, 20, .2);
+  color: var(--marca);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.toast-link:hover { color: var(--marca-hover); }
+
 /* Contacto */
 .contacto-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(2rem, 5vw, 3.5rem); align-items: start; }
 

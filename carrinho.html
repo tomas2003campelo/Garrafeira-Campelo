@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#1A1214">
-  <title>Cervejas | Garrafeira Campelo</title>
-  <meta name="description" content="Cervejas especiais, escolhidas uma a uma, para beber devagar e à mesa.">
+  <title>Carrinho | Garrafeira Campelo</title>
+  <meta name="description" content="O teu carrinho na Garrafeira Campelo: revê a encomenda, escolhe como a recebes e envia-nos por mensagem.">
 
   <!-- PRÉ-VISUALIZAÇÃO: impede o Google de indexar o site enquanto os
        produtos forem de exemplo. Apaga esta linha em todas as páginas
@@ -15,13 +15,13 @@
   <link rel="icon" href="img/favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="img/favicon.png">
 
-  <meta property="og:title" content="Cervejas | Garrafeira Campelo">
-  <meta property="og:description" content="Cervejas especiais, escolhidas uma a uma, para beber devagar e à mesa.">
+  <meta property="og:title" content="Garrafeira Campelo">
+  <meta property="og:description" content="Vinhos Verdes e maduros, espumantes e cervejas, comprados diretamente a quem os faz.">
   <meta property="og:image" content="https://tomas2003campelo.github.io/Garrafeira-Campelo/img/partilha.jpg">
   <meta property="og:image:width" content="2400">
   <meta property="og:image:height" content="1260">
   <meta property="og:image:alt" content="Garrafeira Campelo, retalhista de vinhos direto das quintas">
-  <meta property="og:url" content="https://tomas2003campelo.github.io/Garrafeira-Campelo/cervejas.html">
+  <meta property="og:url" content="https://tomas2003campelo.github.io/Garrafeira-Campelo/carrinho.html">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="pt_PT">
   <meta name="twitter:card" content="summary_large_image">
@@ -97,15 +97,13 @@
 <main id="conteudo">
   <section class="section">
     <div class="container">
-      <div class="section-head revelar">
-        <p class="eyebrow" style="justify-content:center">Catálogo</p>
-        <h1 class="titulo-pagina">Cervejas</h1>
-        <p>Cervejas especiais, escolhidas uma a uma, para beber devagar e à mesa.</p>
+      <div class="carrinho carrinho-pagina" id="painel-carrinho" data-pagina aria-label="Carrinho de compras">
+        <div class="carrinho-topo">
+          <h1 class="titulo-pagina">O teu carrinho</h1>
+        </div>
+        <div class="carrinho-lista" id="carrinho-lista"></div>
+        <div class="carrinho-fundo" id="carrinho-fundo" hidden></div>
       </div>
-
-      <div class="filtros" role="group" aria-label="Filtrar cervejas"></div>
-
-      <div class="grid" id="lista-produtos" data-categorias="cervejas"></div>
     </div>
   </section>
 </main>

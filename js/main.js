@@ -714,16 +714,23 @@
     const veu = document.getElementById("veu");
     const lista = document.getElementById("carrinho-lista");
     const fundo = document.getElementById("carrinho-fundo");
-    const tituloPainel = painel?.querySelector(".carrinho-topo h2");
+    const tituloPainel = painel?.querySelector(".carrinho-topo h1, .carrinho-topo h2");
     if (!painel || !lista) return;
 
-    /* O painel tem dois passos: 1 é o carrinho, 2 são os dados do
-       cliente. Fechar o painel volta sempre ao carrinho. */
+    /* O carrinho vive na sua própria página (carrinho.html). O código
+       ainda sabe funcionar como painel lateral, se algum dia voltar. */
+    const naPagina = painel.hasAttribute("data-pagina");
+
+    /* Dois passos: 1 é o carrinho, 2 são os dados do cliente. */
     let passo = 1;
     function irPara(n) {
       passo = n;
       desenhar();
-      painel.scrollTop = 0;
+      if (naPagina) {
+        window.scrollTo({ top: painel.getBoundingClientRect().top + window.scrollY - 120, behavior: menosMovimento ? "auto" : "smooth" });
+      } else {
+        painel.scrollTop = 0;
+      }
       const foco = n === 2 ? painel.querySelector("#d-nome") : painel.querySelector(".btn-fechar");
       foco?.focus({ preventScroll: true });
     }
@@ -783,6 +790,7 @@
       passo = 1;
       lista.hidden = false;
       if (tituloPainel) tituloPainel.textContent = "O teu carrinho";
+      painel.dataset.passo = linhas.length ? "1" : "vazio";
 
       if (!linhas.length) {
         lista.innerHTML = `
@@ -792,6 +800,12 @@
               <path d="M4 6h16M16 10a4 4 0 0 1-8 0"/>
             </svg>
             <p>O teu carrinho está vazio.</p>
+            ${naPagina ? `
+            <div class="carrinho-vazio-acoes">
+              <a class="btn btn-primary" href="vinhos.html">Ver os vinhos</a>
+              <a class="btn btn-ghost" href="espumantes.html">Espumantes</a>
+              <a class="btn btn-ghost" href="cervejas.html">Cervejas</a>
+            </div>` : ""}
           </div>`;
         fundo.hidden = true;
         return;
@@ -897,6 +911,7 @@
       const textoBotao = CONFIG.metodoEncomenda === "email" ? "Encomendar por email" : "Encomendar por WhatsApp";
 
       lista.hidden = true;
+      painel.dataset.passo = "2";
       if (tituloPainel) tituloPainel.textContent = "Os teus dados";
 
       // Campo de texto com etiqueta, espaço para o erro e ligação acessível entre os dois
@@ -1119,13 +1134,13 @@
       const caixa = Carrinho.unidadesPorCaixa(produto);
       mostrarToast(caixa > 1
         ? `${produto.nome}: caixa de ${caixa} no carrinho`
-        : `${produto.nome} adicionado ao carrinho`);
+        : `${produto.nome} adicionado ao carrinho`, true);
     });
   }
 
   /* Notificação que aparece em baixo */
   let temporizadorToast;
-  function mostrarToast(texto) {
+  function mostrarToast(texto, comAtalho) {
     let toast = document.getElementById("toast");
     if (!toast) {
       toast = document.createElement("div");
@@ -1138,11 +1153,12 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <path d="M20 6 9 17l-5-5"/>
       </svg>
-      <span>${texto}</span>`;
+      <span>${texto}</span>
+      ${comAtalho ? '<a class="toast-link" href="carrinho.html">Ver carrinho</a>' : ""}`;
 
     requestAnimationFrame(() => toast.classList.add("visivel"));
     clearTimeout(temporizadorToast);
-    temporizadorToast = setTimeout(() => toast.classList.remove("visivel"), 2600);
+    temporizadorToast = setTimeout(() => toast.classList.remove("visivel"), comAtalho ? 4200 : 2600);
   }
 
   /* =======================================================
