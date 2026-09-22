@@ -37,7 +37,7 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 │   ├── produtos.js    Gerado a partir do Excel — não editar à mão
 │   ├── ilustracoes.js Garrafas e latas desenhadas em SVG
 │   ├── carrinho.js    Lógica do carrinho
-│   └── main.js        Navegação, filtros, animações, formulário
+│   └── main.js        Navegação, filtros, pesquisa, animações, formulário
 └── img/              Logótipo, favicon, capa social e fotos de produtos
 ```
 
@@ -85,6 +85,10 @@ essencial:
   site desenha uma garrafa na cor do tipo. O site é escuro: fotos com fundo
   transparente ou escuro ficam integradas na montra; com fundo branco, aparecem
   como um cartão fotográfico dentro dela.
+
+A ordem das linhas conta: é a **Sugestão da casa**, a ordem em que as páginas
+mostram os produtos. Os clientes podem depois pesquisar e ordenar pelo preço
+ou pelo nome.
 
 ### A folha fica só no teu computador
 

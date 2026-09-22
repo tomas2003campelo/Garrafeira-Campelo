@@ -399,8 +399,9 @@
 
       // Para a mesma página só muda a âncora (vinhos.html#maduro, já
       // estando nos vinhos): o browser não recarrega, e a página ficava
-      // esbatida. Deixa o link seguir sozinho.
-      const atual = location.pathname.split("/").pop() || "index.html";
+      // esbatida. Deixa o link seguir sozinho. Com uma pesquisa no
+      // endereço (vinhos.html?q=piano) já é outra página, e recarrega.
+      const atual = (location.pathname.split("/").pop() || "index.html") + location.search;
       if (destino.split("#")[0] === atual) return;
 
       e.preventDefault();
@@ -490,11 +491,15 @@
      5. PÁGINAS DE CATÁLOGO (vinhos.html, cervejas.html)
      ======================================================= */
 
+  function semAcentos(texto) {
+    return String(texto ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
   /* Nos maduros, a região decide o filtro. Vem da coluna Região do
      Excel, escrita à mão ("Douro DOC", "Vinho Regional Duriense",
      "Alentejo"), por isso procura só a palavra que importa. */
   function zonaDoMaduro(p) {
-    const r = (p.regiao || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+    const r = semAcentos(p.regiao);
     if (/douro|durien/.test(r)) return "douro";
     if (/alentej/.test(r)) return "alentejo";
     return "outros";
@@ -535,6 +540,147 @@
       .concat(docuras.length > 1 ? docuras : []);
   }
 
+  /* --- Pesquisa ---
+     Ignora acentos e maiúsculas ("numao" encontra "Numão") e procura
+     pelo início das palavras ("murg" encontra "Murganheira"). Todas
+     as palavras escritas têm de aparecer: "piano branco" só mostra os
+     brancos da Piano. Quem escreve com um erro ("castelo", "vilar")
+     também encontra o que procura.                                  */
+
+  // Palavras que não ajudam a encontrar nada: "quinta da mata" = "quinta mata"
+  const PALAVRAS_VAZIAS = new Set(["a", "o", "as", "os", "e", "de", "da", "do", "das", "dos",
+    "em", "no", "na", "nos", "nas", "com", "para", "um", "uma"]);
+
+  // "vinho" encontra os verdes e os maduros, "espumante" os espumantes
+  const PALAVRAS_DA_CATEGORIA = {
+    verde: "vinho verde", maduro: "vinho maduro", espumantes: "espumante", cervejas: "cerveja"
+  };
+
+  // Só letras sem acento, números e vírgulas ("37,5 cl"), entre espaços
+  function textoDePesquisa(texto) {
+    return " " + semAcentos(texto).replace(/[^a-z0-9,]+/g, " ").trim() + " ";
+  }
+
+  const textosDosProdutos = new Map();
+  function textosDe(p) {
+    if (!textosDosProdutos.has(p.id)) {
+      // "Quinta da Mata Fidalga" também se encontra por "QMF"
+      const iniciais = (p.produtor || "").split(/[\s-]+/).filter(w => /^\p{Lu}/u.test(w)).map(w => w[0]).join("");
+      const zona = p.categoria === "maduro" ? zonaDoMaduro(p) : "";
+      const principal = textoDePesquisa([
+        p.nome, p.produtor, p.regiao, p.tipo, p.docura, p.ano, p.volume,
+        String(p.volume || "").replace(/\s+/g, ""),   // "33cl", tudo junto
+        PALAVRAS_DA_CATEGORIA[p.categoria],
+        zona === "outros" ? "" : zona,                // "Regional Alentejano" também é "alentejo"
+        iniciais.length > 2 ? iniciais : ""
+      ].filter(Boolean).join(" "));
+      textosDosProdutos.set(p.id, {
+        principal,
+        palavras: principal.trim().split(" "),
+        descricao: textoDePesquisa(p.descricao)
+      });
+    }
+    return textosDosProdutos.get(p.id);
+  }
+
+  // Quantas letras é preciso trocar, pôr, tirar ou inverter para
+  // passar de uma palavra à outra
+  function distancia(a, b) {
+    const d = [];
+    for (let i = 0; i <= a.length; i++) d.push([i]);
+    for (let j = 1; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) {
+      for (let j = 1; j <= b.length; j++) {
+        d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) {
+          d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+        }
+      }
+    }
+    return d[a.length][b.length];
+  }
+
+  // "castelo" parece-se com o início de "castello"
+  function parecida(termo, palavra, erros) {
+    for (let n = termo.length - erros; n <= termo.length + erros; n++) {
+      if (n > 0 && n <= palavra.length && distancia(termo, palavra.slice(0, n)) <= erros) return true;
+    }
+    return false;
+  }
+
+  // As palavras escritas, e quantos erros se aceitam em cada uma. Só se
+  // aceitam erros numa palavra que não exista tal e qual no catálogo:
+  // assim "reserva" não encontra a "Réserve" das cervejas.
+  function prepararPesquisa(texto) {
+    let termos = semAcentos(texto).split(/[^a-z0-9,]+/)
+      .map(t => t.replace(/^,+|,+$/g, ""))
+      .filter(Boolean);
+    const uteis = termos.filter(t => !PALAVRAS_VAZIAS.has(t));
+    if (uteis.length) termos = uteis;
+
+    return termos
+      // "tintos" encontra "tinto", "reservas" encontra "reserva"
+      .map(t => (t.length > 3 && t.endsWith("s") ? t.slice(0, -1) : t))
+      .map(termo => {
+        const existe = PRODUTOS.some(p => {
+          const t = textosDe(p);
+          return t.principal.includes(" " + termo) || t.descricao.includes(" " + termo);
+        });
+        return { termo, erros: existe ? 0 : termo.length >= 8 ? 2 : termo.length >= 5 ? 1 : 0 };
+      });
+  }
+
+  // Quão bem um produto responde: 3 pelo nome, produtor, região...;
+  // 2 com um erro de escrita; 1 só pela descrição; 0 não responde.
+  // Conta a palavra que responde pior.
+  function nivelNaPesquisa(p, termos) {
+    const t = textosDe(p);
+    let nivel = 3;
+    for (const { termo, erros } of termos) {
+      if (t.principal.includes(" " + termo)) continue;
+      if (erros && t.palavras.some(w => parecida(termo, w, erros))) nivel = Math.min(nivel, 2);
+      else if (t.descricao.includes(" " + termo)) nivel = 1;
+      else return 0;
+    }
+    return nivel;
+  }
+
+  // O que a pesquisa encontra em todo o catálogo, e quão bem. Se alguma
+  // coisa responde pelo nome, produtor ou região, as que só respondem
+  // pela descrição ficam de fora: "verde" mostra os Vinhos Verdes, e não
+  // um espumante com "fruta verde" ou a casta Verdelho.
+  function pesquisar(termos) {
+    const niveis = new Map(PRODUTOS.map(p => [p, nivelNaPesquisa(p, termos)]));
+    if (Math.max(0, ...niveis.values()) >= 2) {
+      niveis.forEach((nivel, p) => { if (nivel < 2) niveis.set(p, 0); });
+    }
+    return niveis;
+  }
+
+  /* --- Ordenação ---
+     "Sugestão da casa" é a ordem da folha de Excel. Nas outras, os
+     esgotados ficam no fim.                                    */
+  const ORDENS = {
+    "casa":        null,
+    "preco-baixo": (a, b) => a.preco - b.preco,
+    "preco-alto":  (a, b) => b.preco - a.preco,
+    "nome":        (a, b) => a.nome.localeCompare(b.nome, "pt", { numeric: true, sensitivity: "base" })
+  };
+
+  /* Em que página vive cada família, e como se chamam os produtos dela */
+  function paginaDaCategoria(categoria) {
+    return { espumantes: "espumantes.html", cervejas: "cervejas.html" }[categoria] || "vinhos.html";
+  }
+  const NOMES_DAS_PAGINAS = {
+    "vinhos.html":     { um: "vinho",     varios: "vinhos",     todos: "todos os vinhos" },
+    "espumantes.html": { um: "espumante", varios: "espumantes", todos: "todos os espumantes" },
+    "cervejas.html":   { um: "cerveja",   varios: "cervejas",   todos: "todas as cervejas" }
+  };
+
+  function escapar(texto) {
+    return String(texto).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
   function ligarCatalogo() {
     const lista = document.getElementById("lista-produtos");
     if (!lista) return;
@@ -544,6 +690,9 @@
     const doCatalogo = permitidas.length
       ? PRODUTOS.filter(p => permitidas.includes(p.categoria))
       : PRODUTOS;
+    const nomes = permitidas.length
+      ? NOMES_DAS_PAGINAS[paginaDaCategoria(permitidas[0])]
+      : { um: "produto", varios: "produtos", todos: "todos os produtos" };
 
     // Nos vinhos e nos espumantes, os filtros de cima. Nas outras
     // páginas, um botão por categoria, se houver mais do que uma.
@@ -555,16 +704,123 @@
             .concat(permitidas.map(c => ({ chave: c, nome: CATEGORIAS[c].nome, aceita: p => p.categoria === c })));
 
     const filtros = document.querySelector(".filtros");
-    let ativo = "todos";
+    const formPesquisa = document.getElementById("pesquisa");
+    const campo = formPesquisa?.querySelector("input");
+    const botaoLimpar = formPesquisa?.querySelector(".pesquisa-limpar");
+    const seletor = document.querySelector(".ordenar select");
+    const contagem = document.querySelector(".catalogo-contagem");
+    const outros = document.querySelector(".catalogo-outros");
 
-    function aplicar() {
+    // O que se está a ver fica no endereço, para voltar de um produto
+    // e encontrar tudo igual: vinhos.html?q=piano&ordem=preco-baixo#douro
+    const endereco = new URLSearchParams(location.search);
+    let ativo = "todos";
+    let pesquisa = endereco.get("q") || "";
+    let ordem = Object.keys(ORDENS).includes(endereco.get("ordem")) ? endereco.get("ordem") : "casa";
+
+    function guardarNoEndereco() {
+      const params = new URLSearchParams(location.search);
+      const q = pesquisa.trim();
+      if (q) params.set("q", q); else params.delete("q");
+      if (ordem !== "casa") params.set("ordem", ordem); else params.delete("ordem");
+      const texto = params.toString();
+      try {
+        history.replaceState(history.state, "",
+          location.pathname + (texto ? "?" + texto : "") + (ativo !== "todos" ? "#" + ativo : ""));
+      } catch (e) { /* o Safari limita as mudanças seguidas; não faz mal */ }
+    }
+
+    // Os cartões fazem-se uma vez: ao escrever, só mudam de sítio, sem piscar
+    const cartoes = new Map();
+    function cartaoDe(p) {
+      if (!cartoes.has(p.id)) cartoes.set(p.id, criarCartao(p));
+      return cartoes.get(p.id);
+    }
+
+    // O que a pesquisa encontra nas outras páginas: "1 espumante", com ligação
+    function noutrasPaginas(niveis, q) {
+      if (!permitidas.length) return [];
+      const contas = new Map();
+      PRODUTOS.forEach(p => {
+        if (permitidas.includes(p.categoria) || !niveis.get(p)) return;
+        const pagina = paginaDaCategoria(p.categoria);
+        contas.set(pagina, (contas.get(pagina) || 0) + 1);
+      });
+      return [...contas].map(([pagina, n]) => {
+        const nome = NOMES_DAS_PAGINAS[pagina];
+        return `<a href="${pagina}?q=${encodeURIComponent(q)}">${n} ${n === 1 ? nome.um : nome.varios}</a>`;
+      });
+    }
+
+    function caixaVazia(q, ligacoes) {
+      const caixa = document.createElement("div");
+      caixa.className = "catalogo-vazio";
+      if (!q) {
+        caixa.innerHTML = "<p>Nenhum produto corresponde a este filtro.</p>";
+        return caixa;
+      }
+      const noFiltro = ativo !== "todos";
+      caixa.innerHTML = `
+        <p class="catalogo-vazio-titulo">Não há ${nomes.varios} com “${escapar(q)}”${noFiltro ? " neste filtro" : ""}.</p>
+        <p>${ligacoes.length
+          ? `Mas há ${ligacoes.join(" e ")} com o que procuras.`
+          : "Experimenta outra palavra, ou procura pelo produtor ou pela região."}</p>
+        <div class="catalogo-vazio-acoes">
+          ${noFiltro ? `<button type="button" class="btn btn-ghost" data-ver-todos>Procurar em ${nomes.todos}</button>` : ""}
+          <button type="button" class="btn btn-ghost" data-limpar-pesquisa>Limpar a pesquisa</button>
+        </div>`;
+      return caixa;
+    }
+
+    // animar: ao mudar de filtro ou de ordem, os cartões entram em
+    // cascata; enquanto se escreve, aparecem logo
+    function aplicar(animar) {
       const filtro = opcoes.find(o => o.chave === ativo) || opcoes[0];
-      desenharProdutos(lista, doCatalogo.filter(filtro.aceita));
+      const q = pesquisa.trim();
+      const niveis = pesquisar(prepararPesquisa(q));
+      const comparar = ORDENS[ordem];
+
+      const mostrados = doCatalogo
+        .filter(p => niveis.get(p) && filtro.aceita(p))
+        // Sem ordem escolhida, primeiro o que responde melhor à pesquisa
+        .sort((a, b) => comparar
+          ? (!!a.esgotado - !!b.esgotado) || comparar(a, b)
+          : niveis.get(b) - niveis.get(a));
+
       filtros?.querySelectorAll(".chip").forEach(c => {
         const chave = c.dataset.filtro;
         const aceso = chave === ativo || (ativo === "maduro" && ZONAS_MADURO.includes(chave));
         c.setAttribute("aria-pressed", String(aceso));
       });
+
+      const n = mostrados.length;
+      if (contagem) {
+        contagem.innerHTML = !n ? "Nenhum resultado"
+          : q ? `<strong>${n}</strong> ${n === 1 ? "resultado" : "resultados"} para “${escapar(q)}”`
+          : `<strong>${n}</strong> ${n === 1 ? nomes.um : nomes.varios}`;
+      }
+
+      const ligacoes = q ? noutrasPaginas(niveis, q) : [];
+      if (outros) {
+        outros.hidden = !(n && ligacoes.length);
+        outros.innerHTML = outros.hidden ? "" : `Também há ${ligacoes.join(" e ")} com “${escapar(q)}”.`;
+      }
+
+      if (!n) {
+        lista.replaceChildren(caixaVazia(q, ligacoes));
+        return;
+      }
+      const nos = mostrados.map(cartaoDe);
+      nos.forEach(no => {
+        if (animar) {
+          no.classList.remove("visivel");
+          no.style.removeProperty("--atraso");
+        } else {
+          no.classList.add("visivel");
+        }
+      });
+      lista.replaceChildren(...nos);
+      if (animar) ligarAnimacoes();
     }
 
     if (filtros && opcoes.length > 2) {
@@ -579,25 +835,82 @@
           btn.className = "chip";
           btn.dataset.filtro = o.chave;
           btn.textContent = o.nome;
-          btn.addEventListener("click", () => { ativo = o.chave; aplicar(); });
+          btn.addEventListener("click", () => { ativo = o.chave; aplicar(true); guardarNoEndereco(); });
           filtros.appendChild(btn);
         });
     }
 
     // Permite chegar à página já com um filtro (vinhos.html#maduro) e
-    // mudar de filtro pelos links do rodapé sem sair da página
+    // mudar de filtro pelos links do rodapé sem sair da página. Outras
+    // âncoras, como a do "saltar para o conteúdo", não mexem nos filtros.
     function lerAncora() {
       const ancora = location.hash.replace("#", "");
-      if (opcoes.some(o => o.chave === ancora)) ativo = ancora;
+      if (!ancora) ativo = "todos";
+      else if (opcoes.some(o => o.chave === ancora)) ativo = ancora;
+      else return false;
+      return true;
     }
     lerAncora();
     window.addEventListener("hashchange", () => {
-      lerAncora();
-      aplicar();
+      if (!lerAncora()) return;
+      aplicar(true);
       (filtros || lista).scrollIntoView({ behavior: menosMovimento ? "auto" : "smooth", block: "center" });
     });
 
-    aplicar();
+    let esperaEndereco;
+    function mudarPesquisa(valor) {
+      pesquisa = valor;
+      if (campo && campo.value !== valor) campo.value = valor;
+      if (botaoLimpar) botaoLimpar.hidden = !valor;
+      aplicar(false);
+      // O endereço só muda quando se para de escrever
+      clearTimeout(esperaEndereco);
+      esperaEndereco = setTimeout(guardarNoEndereco, 400);
+    }
+
+    if (campo) {
+      campo.value = pesquisa;
+      if (botaoLimpar) botaoLimpar.hidden = !pesquisa;
+      campo.addEventListener("input", () => mudarPesquisa(campo.value));
+      campo.addEventListener("change", guardarNoEndereco);
+      campo.addEventListener("keydown", e => {
+        if (e.key === "Escape" && campo.value) {
+          e.preventDefault();
+          mudarPesquisa("");
+        }
+      });
+      formPesquisa.addEventListener("submit", e => {
+        e.preventDefault();
+        // No telemóvel, o "Pesquisar" do teclado fecha o teclado, para se verem os resultados
+        if (window.matchMedia("(hover: none)").matches) campo.blur();
+      });
+      botaoLimpar?.addEventListener("click", () => {
+        mudarPesquisa("");
+        campo.focus();
+      });
+    }
+
+    if (seletor) {
+      seletor.value = ordem;
+      seletor.addEventListener("change", () => {
+        ordem = seletor.value;
+        aplicar(true);
+        guardarNoEndereco();
+      });
+    }
+
+    // Os botões de quando não se encontra nada
+    lista.addEventListener("click", e => {
+      if (e.target.closest("[data-ver-todos]")) {
+        ativo = "todos";
+        aplicar(true);
+        guardarNoEndereco();
+      } else if (e.target.closest("[data-limpar-pesquisa]")) {
+        mudarPesquisa("");
+      }
+    });
+
+    aplicar(true);
   }
 
   /* =======================================================
@@ -623,7 +936,7 @@
       return;
     }
 
-    const pagina = { espumantes: "espumantes.html", cervejas: "cervejas.html" }[p.categoria] || "vinhos.html";
+    const pagina = paginaDaCategoria(p.categoria);
     const familia = { verde: "Verdes", maduro: "Maduros", espumantes: "Espumantes", cervejas: "Cervejas" }[p.categoria];
     const ancora = { verde: "#verde", maduro: "#maduro" }[p.categoria] || "";
     document.querySelectorAll(".nav > a").forEach(a => {
@@ -1114,6 +1427,7 @@
   }
 
   /* Botões "Adicionar" espalhados pela página */
+  const esperasDosBotoes = new WeakMap();
   function ligarBotoesAdicionar() {
     document.addEventListener("click", e => {
       const btn = e.target.closest("[data-add]");
@@ -1122,13 +1436,16 @@
       const id = btn.dataset.add;
       if (!Carrinho.adicionar(id)) return;
 
-      const original = btn.textContent;
+      // O texto original guarda-se uma vez só: com dois cliques seguidos,
+      // o botão ficava para sempre em "Adicionado ✓"
+      if (!btn.dataset.texto) btn.dataset.texto = btn.textContent.trim();
       btn.textContent = "Adicionado ✓";
       btn.classList.add("feito");
-      setTimeout(() => {
-        btn.textContent = original;
+      clearTimeout(esperasDosBotoes.get(btn));
+      esperasDosBotoes.set(btn, setTimeout(() => {
+        btn.textContent = btn.dataset.texto;
         btn.classList.remove("feito");
-      }, 1300);
+      }, 1300));
 
       const produto = PRODUTOS.find(p => p.id === id);
       const caixa = Carrinho.unidadesPorCaixa(produto);

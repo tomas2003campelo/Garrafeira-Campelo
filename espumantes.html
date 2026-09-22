@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=39a51543">
+  <link rel="stylesheet" href="css/style.css?v=ee32169f">
 </head>
 <body>
 
@@ -103,7 +103,29 @@
         <p>Método clássico e bolha fina, para celebrar ou acompanhar a refeição.</p>
       </div>
 
+      <form class="pesquisa" id="pesquisa" role="search">
+        <svg class="pesquisa-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+        <input type="search" name="q" placeholder="Nome, produtor, região ou casta" aria-label="Pesquisar espumantes" aria-controls="lista-produtos" autocomplete="off" spellcheck="false" enterkeyhint="search">
+        <button type="button" class="pesquisa-limpar" aria-label="Limpar a pesquisa" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </form>
+
       <div class="filtros" role="group" aria-label="Filtrar espumantes"></div>
+
+      <div class="catalogo-barra">
+        <p class="catalogo-contagem" aria-live="polite"></p>
+        <label class="ordenar">
+          <span class="ordenar-rotulo">Ordenar por</span>
+          <select name="ordem">
+            <option value="casa">Sugestão da casa</option>
+            <option value="preco-baixo">Preço mais baixo</option>
+            <option value="preco-alto">Preço mais alto</option>
+            <option value="nome">Nome, de A a Z</option>
+          </select>
+        </label>
+      </div>
+      <p class="catalogo-outros" hidden></p>
 
       <div class="grid" id="lista-produtos" data-categorias="espumantes"></div>
     </div>
@@ -219,6 +241,6 @@
 <script src="js/produtos.js?v=6ba3df65"></script>
 <script src="js/ilustracoes.js?v=6c830521"></script>
 <script src="js/carrinho.js?v=d056be8c"></script>
-<script src="js/main.js?v=5404c1dd"></script>
+<script src="js/main.js?v=52ae96e8"></script>
 </body>
 </html>
