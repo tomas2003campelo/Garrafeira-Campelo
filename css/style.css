@@ -394,8 +394,10 @@ main { overflow-x: clip; }
   color: var(--texto-suave);
 }
 .hero-tags span { display: inline-flex; align-items: center; gap: .45rem; }
-.hero-tags span::before,
-.hero-tags a::before {
+/* Só os filhos diretos levam ponto: o span dentro da ligação ficava
+   com um ponto a mais */
+.hero-tags > span::before,
+.hero-tags > a::before {
   content: "";
   width: 5px; height: 5px;
   border-radius: 50%;

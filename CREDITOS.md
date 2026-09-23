@@ -1,14 +1,14 @@
 # Créditos das imagens
 
-As fotografias de ambiente deste site são de banco de imagens e mostram
-adegas genéricas: **não são da Garrafeira Campelo**. Estão cá para o site
+As fotografias de ambiente deste site são de banco de imagens: **não são da
+Garrafeira Campelo** nem das pessoas que lá trabalham. Estão cá para o site
 ter ambiente enquanto não há fotografias próprias, e devem ser substituídas
 assim que houver. As fotografias das garrafas vêm dos produtores (ver o
 fim deste ficheiro).
 
 | Ficheiro | Fotógrafo | Origem | Licença |
 |---|---|---|---|
-| `img/corredor.webp` (e versão pequena) | — | [Unsplash](https://unsplash.com/photos/a-long-narrow-room-filled-with-lots-of-bottles) | Unsplash License |
+| `img/mesa.webp` (e versão pequena) | Fantesca Estate & Winery (@fantesca) | [Unsplash](https://unsplash.com/photos/OMXWJp28_Fk) | Unsplash License |
 | `img/partilha.jpg` | — | Desenhada de raiz para o site | Própria |
 | `img/adega.webp` (e versão pequena) | Liv Kao (@spacecupcake) | [Unsplash](https://unsplash.com/photos/a-wine-cellar-filled-with-lots-of-bottles-of-wine-ymeKNdGU3R0) | Unsplash License |
 | `img/cave.webp` (e versão pequena) | — | [Unsplash](https://unsplash.com/s/photos/wine-cellar) | Unsplash License |
