@@ -26,9 +26,12 @@ const Carrinho = (function () {
   /* Dados do cliente para a encomenda. Vivem em memória; só ficam
      guardados no browser se o próprio cliente o pedir (caixa
      "Lembrar os meus dados"). As observações e o dia da recolha
-     nunca se guardam: são de cada encomenda. */
+     nunca se guardam: são de cada encomenda.
+     "tipo" é "particular" ou "empresa" (restaurante, café ou outro
+     negócio). Uma empresa leva sempre fatura com NIF. */
   const CHAVE_DADOS = "garrafeira-campelo-cliente";
   const DADOS_VAZIOS = {
+    tipo: "particular", empresa: "",
     nome: "", telefone: "", email: "",
     fatura: false, nif: "", nomeFatura: "",
     mesmaMorada: true, moradaFatura: "", codigoPostalFatura: "", localidadeFatura: "",
@@ -186,9 +189,14 @@ const Carrinho = (function () {
     } catch (e) {}
   }
 
+  function eEmpresa() { return dados.tipo === "empresa"; }
+
+  /* Fatura com NIF: quando o particular a pede, e sempre numa empresa */
+  function comFatura() { return dados.fatura || eEmpresa(); }
+
   /* A morada fiscal tem de ser escrita à parte? */
   function precisaMoradaFatura() {
-    return dados.fatura && (modo === "recolha" || !dados.mesmaMorada);
+    return comFatura() && (modo === "recolha" || !dados.mesmaMorada);
   }
 
   /* ---------- Dia da recolha na loja ----------
@@ -267,6 +275,7 @@ const Carrinho = (function () {
     const d = dados;
     const emPortugal = !d.pais || /^portugal$/i.test(d.pais.trim());
 
+    if (eEmpresa() && d.empresa.trim().length < 2) e.empresa = "Escreve o nome da empresa.";
     if (d.nome.trim().length < 3) e.nome = "Escreve o teu nome completo.";
 
     const digitos = d.telefone.replace(/\D/g, "");
@@ -282,8 +291,8 @@ const Carrinho = (function () {
       if (erroDia) e.diaRecolha = erroDia;
     }
 
-    if (d.fatura) {
-      if (!d.nif.trim()) e.nif = "Escreve o NIF para a fatura.";
+    if (comFatura()) {
+      if (!d.nif.trim()) e.nif = eEmpresa() ? "Escreve o NIF da empresa." : "Escreve o NIF para a fatura.";
       else if (emPortugal && !nifValido(d.nif)) e.nif = "Este NIF não é válido. Confirma os algarismos.";
 
       // A fatura com NIF leva morada fiscal. Na entrega pode ser a mesma;
@@ -347,7 +356,8 @@ const Carrinho = (function () {
     });
     p.push("", titulo(`Total: ${euros(totalEuros())}`), "");
 
-    p.push(titulo("Cliente"));
+    p.push(titulo(eEmpresa() ? "Cliente (empresa)" : "Cliente"));
+    if (eEmpresa()) p.push(`Empresa: ${d.empresa.trim()}`);
     p.push(`Nome: ${d.nome.trim()}`);
     p.push(`Telefone: ${d.telefone.trim()}`);
     if (d.email.trim()) p.push(`Email: ${d.email.trim()}`);
@@ -368,9 +378,10 @@ const Carrinho = (function () {
     p.push("");
 
     p.push(titulo("Faturação"));
-    if (d.fatura) {
+    if (comFatura()) {
       p.push(`Fatura com NIF: ${d.nif.replace(/\s/g, "")}`);
-      if (d.nomeFatura.trim()) p.push(`Em nome de: ${d.nomeFatura.trim()}`);
+      const emNomeDe = d.nomeFatura.trim() || (eEmpresa() ? d.empresa.trim() : "");
+      if (emNomeDe) p.push(`Em nome de: ${emNomeDe}`);
       // Repete a morada mesmo quando é a da entrega: nome, NIF e morada
       // juntos são o que se copia para passar a fatura.
       const outra = precisaMoradaFatura();
@@ -407,7 +418,7 @@ const Carrinho = (function () {
     linhas, totalItens, totalEuros,
     adicionar, definirQuantidade, remover, esvaziar,
     modoAtual, definirModo, entregaDisponivel, faltaParaEntrega, podeEncomendar,
-    dadosCliente, definirDados, validarDados, nifValido,
+    dadosCliente, definirDados, validarDados, nifValido, eEmpresa,
     horasDoDia, dataLocal, textoDoDia, erroNoDiaDeRecolha,
     aoMudar, textoEncomenda, linkEncomenda, euros, unidadesPorCaixa
   };

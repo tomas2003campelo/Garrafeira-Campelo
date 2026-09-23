@@ -531,16 +531,20 @@
     // num ponto solto.
     const origem = [p.produtor, p.regiao, p.ano].filter(Boolean).join(" · ");
 
+    // O cartão inteiro abre a página do produto: o link do nome estica-se
+    // por cima do cartão (ver .card-nome a::after no CSS), e só o botão
+    // Adicionar fica acima dele. O "Ver detalhes" mostra que há mais.
     card.innerHTML = `
-      <a class="card-top" href="${url}" aria-label="Ver ${p.nome}">
+      <div class="card-top">
         ${etiqueta}
         ${arteDoProduto(p)}
-      </a>
+      </div>
       <div class="card-body">
         <p class="card-meta">${linhaMeta}</p>
         <h3 class="card-nome"><a href="${url}">${p.nome}</a></h3>
         ${origem ? `<p class="card-produtor">${origem}</p>` : ""}
         <p class="card-desc">${p.descricao}</p>
+        <span class="card-mais" aria-hidden="true">Ver detalhes <span class="card-seta">→</span></span>
         <div class="card-foot">
           <span class="preco-bloco">
             <span class="preco">${euros(p.preco)}</span>

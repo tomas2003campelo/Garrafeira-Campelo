@@ -923,6 +923,32 @@ main { overflow-x: clip; }
   margin-bottom: 1rem;
 }
 
+/* O cartão inteiro é clicável: o link do nome estica-se por cima de
+   tudo, e só o botão Adicionar fica acima dele. O "Ver detalhes" diz
+   que há mais para ver, também no telemóvel, onde não há o efeito de
+   passar o rato. */
+.card-nome a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.card .badge { pointer-events: none; }
+.card .btn-add { position: relative; z-index: 2; }
+.card-nome a:focus-visible { outline: none; }
+.card:has(.card-nome a:focus-visible) { outline: 2.5px solid var(--acento); outline-offset: 3px; }
+
+.card-mais {
+  align-self: flex-start;
+  margin: -.45rem 0 1rem;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--acento);
+}
+.card-seta { display: inline-block; transition: transform .22s; }
+.card:hover .card-mais { text-decoration: underline; text-underline-offset: 3px; }
+.card:hover .card-seta { transform: translateX(5px); }
+
 .card-foot {
   margin-top: auto;
   display: flex;
@@ -1504,8 +1530,7 @@ main { overflow-x: clip; }
    PÁGINA DE PRODUTO (produto.html)
    ========================================================= */
 
-/* Nos cartões, a fotografia e o nome levam à página do produto */
-a.card-top { color: inherit; text-decoration: none; }
+/* Nos cartões, o nome é o link para a página do produto */
 .card-nome a { color: inherit; text-decoration: none; }
 .card-nome a:hover { color: var(--acento); text-decoration: none; }
 
