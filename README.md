@@ -189,12 +189,44 @@ campo `imagem` e a fotografia passa à frente do desenho.
 *reduzir movimento*: quem a tiver ligada não vê animação nenhuma — nem as
 de scroll, nem os contadores, nem o parallax.
 
+## O domínio
+
+O site vive em **https://garrafeiracampelo.pt**, registado no site.pt em nome da
+empresa a 23 de setembro de 2026. O endereço antigo,
+`tomas2003campelo.github.io/Garrafeira-Campelo`, continua a funcionar: o GitHub
+reencaminha-o para cá.
+
+**Renovação: 23 de setembro de 2027**, automática, por cerca de 15 € mais IVA.
+Para cancelar é preciso avisar o site.pt com 30 dias de antecedência, ou seja até
+23 de agosto. Deixar expirar é o pior cenário: além de o site ir abaixo, a
+reativação custa dezenas de vezes o preço da renovação, e o nome pode ser
+apanhado por outra pessoa.
+
+O ficheiro `CNAME`, na raiz, é o que diz ao GitHub qual é o domínio. **Não se
+apaga.** Se desaparecer, o site volta ao endereço antigo.
+
+No painel de DNS do site.pt estão cinco registos, e é assim que tem de ficar:
+
+| Tipo | Nome | Valor |
+|---|---|---|
+| A | @ | 185.199.108.153 |
+| A | @ | 185.199.109.153 |
+| A | @ | 185.199.110.153 |
+| A | @ | 185.199.111.153 |
+| CNAME | www | tomas2003campelo.github.io. |
+
+Os quatro endereços são os servidores do GitHub Pages. Não há registos MX, porque
+ainda não há email neste domínio; quando houver, acrescentam-se os do fornecedor
+de email, sem tocar nos outros.
+
 ## No Google
 
 Desde 23 de setembro de 2026 o site está aberto às pesquisas: saiu a marca
 `noindex` que o escondia. O site está registado no Google Search Console, com a
 propriedade confirmada pelo ficheiro `googlec6f4caebb9f1cde0.html`, que está na
-raiz e **não se apaga nem se edita**.
+raiz e **não se apaga nem se edita**. Com o domínio próprio, há que criar no
+Search Console uma propriedade nova do tipo **Domínio** para `garrafeiracampelo.pt`,
+verificada por um registo TXT no painel de DNS, e submeter lá o sitemap outra vez.
 
 O `sitemap.xml` lista as páginas e submete-se no Search Console, em Sitemaps.
 Se um dia acrescentares uma página nova, junta-a lá.
