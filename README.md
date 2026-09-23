@@ -23,6 +23,7 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 ├── cervejas.html     Catálogo de cervejas
 ├── produto.html      Página de cada produto (produto.html?id=...)
 ├── carrinho.html     Carrinho e dados para a encomenda
+├── profissionais.html Restaurantes, cafés e outros negócios
 ├── sobre.html        Sobre a casa
 ├── contacto.html     Morada, horário, formulário e entregas
 ├── privacidade.html  Política de privacidade (RGPD)
@@ -119,6 +120,16 @@ pela conversa.
 
 Para trocar entre WhatsApp e email, muda `metodoEncomenda` no `config.js`.
 
+### Particulares e empresas
+
+No passo dos dados, o cliente escolhe **Particular** ou **Empresa** (restaurante,
+café ou outro negócio). Numa encomenda de empresa pede-se o nome e o NIF, e a
+fatura com NIF passa a ser obrigatória, porque é em nome da empresa que sai. A
+mensagem da encomenda leva uma linha `Empresa:` e a faturação já preenchida.
+
+As quantidades escrevem-se à mão no carrinho, em garrafas ou em caixas, para
+quem leva 24 garrafas não ter de carregar 24 vezes no "+".
+
 ## Obrigações legais
 
 O site já tem as três peças que a lei portuguesa exige:
@@ -147,6 +158,8 @@ declarar idade para ler a política de privacidade.
       Forms ou um backend próprio) — hoje só valida no browser
 - [ ] Escrever a política de privacidade e os termos, se passar a vender online
 - [ ] Deixar o Google encontrar o site: apagar a linha `FORA DO GOOGLE` de todas as páginas
+- [ ] Decidir se há condições diferentes para restaurantes e cafés (preço, mínimo,
+      pagamento a 30 dias) e escrevê-las na `profissionais.html`
 
 ## Notas
 

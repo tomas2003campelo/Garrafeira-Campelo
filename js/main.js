@@ -1380,7 +1380,11 @@
             <p class="linha-meta">${p.volume} · ${euros(p.preco)}${caixa > 1 ? ` · caixa de ${caixa}` : ""}</p>
             <span class="qtd">
               <button type="button" data-menos="${p.id}" aria-label="${caixa > 1 ? "Menos uma caixa de" : "Menos um"} ${p.nome}">−</button>
-              <span>${caixa > 1 ? `${l.qtd / caixa} cx.` : l.qtd}</span>
+              <input class="qtd-num" type="number" inputmode="numeric" step="1" min="1"
+                     max="${caixa > 1 ? 99 : 999}" value="${caixa > 1 ? l.qtd / caixa : l.qtd}"
+                     data-qtd="${p.id}"
+                     aria-label="${caixa > 1 ? `Caixas de ${p.nome}` : `Quantidade de ${p.nome}`}">
+              ${caixa > 1 ? '<span class="qtd-cx">cx.</span>' : ""}
               <button type="button" data-mais="${p.id}" aria-label="${caixa > 1 ? "Mais uma caixa de" : "Mais um"} ${p.nome}">+</button>
             </span>
           </div>
@@ -1584,6 +1588,9 @@
       const precisaMorada = modo === "entrega" || modo === "pais";
       const esc = v => String(v ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
       const nomeModo = { recolha: "Recolha na loja", entrega: "Entrega em mão", pais: "Envio com orçamento" }[modo];
+      // Quem compra para um restaurante ou um café escreve o nome da
+      // empresa, e leva sempre fatura com NIF em nome dela.
+      const empresa = d.tipo === "empresa";
       const textoBotao = CONFIG.metodoEncomenda === "email" ? "Encomendar por email" : "Encomendar por WhatsApp";
 
       lista.hidden = true;
@@ -1615,9 +1622,30 @@
           </p>
 
           <form id="form-dados" novalidate>
+            <fieldset class="modos modos-tipo">
+              <legend>Compras como</legend>
+              <label class="modo${empresa ? "" : " escolhido"}">
+                <input type="radio" name="tipo" value="particular"${empresa ? "" : " checked"}>
+                <span class="modo-texto">
+                  <strong>Particular</strong>
+                  <span>Para casa ou para oferecer</span>
+                </span>
+              </label>
+              <label class="modo${empresa ? " escolhido" : ""}">
+                <input type="radio" name="tipo" value="empresa"${empresa ? " checked" : ""}>
+                <span class="modo-texto">
+                  <strong>Empresa</strong>
+                  <span>Restaurante, café ou outro negócio</span>
+                </span>
+              </label>
+            </fieldset>
+
             <fieldset class="bloco-dados">
               <legend>Contacto</legend>
-              ${campo("nome", "nome", "Nome completo", 'autocomplete="name" required')}
+              <div id="bloco-empresa"${empresa ? "" : " hidden"}>
+                ${campo("empresa", "empresa", "Nome da empresa", 'autocomplete="organization" placeholder="Restaurante, café ou outro negócio" required')}
+              </div>
+              ${campo("nome", "nome", empresa ? "O teu nome" : "Nome completo", 'autocomplete="name" required')}
               ${campo("telefone", "telefone", "Telemóvel", 'type="tel" autocomplete="tel" inputmode="tel" required')}
               ${campo("email", "email", "Email", 'type="email" autocomplete="email" inputmode="email" required')}
               <p class="ajuda">Para te enviarmos a fatura.</p>
@@ -1663,13 +1691,16 @@
 
             <fieldset class="bloco-dados">
               <legend>Faturação</legend>
-              <label class="opcao-caixa">
+              <label class="opcao-caixa" id="opcao-fatura"${empresa ? " hidden" : ""}>
                 <input type="checkbox" id="d-fatura" name="fatura"${d.fatura ? " checked" : ""}>
                 <span>Quero fatura com NIF</span>
               </label>
-              <div id="bloco-nif"${d.fatura ? "" : " hidden"}>
-                ${campo("nif", "nif", "NIF", 'inputmode="numeric" autocomplete="off" maxlength="11"')}
-                ${campo("nomeFatura", "nomeFatura", "Em nome de", 'autocomplete="organization" placeholder="Só se for diferente do teu nome"', true)}
+              <p class="ajuda" id="nota-fatura-empresa"${empresa ? "" : " hidden"}>
+                A encomenda de uma empresa leva sempre fatura com o NIF dela.
+              </p>
+              <div id="bloco-nif"${d.fatura || empresa ? "" : " hidden"}>
+                ${campo("nif", "nif", empresa ? "NIF da empresa" : "NIF", 'inputmode="numeric" autocomplete="off" maxlength="11"')}
+                ${campo("nomeFatura", "nomeFatura", "Em nome de", `autocomplete="organization" placeholder="Só se for diferente do ${empresa ? "nome da empresa" : "teu nome"}"`, true)}
                 ${precisaMorada ? `
                 <label class="opcao-caixa">
                   <input type="checkbox" id="d-mesmaMorada" name="mesmaMorada"${d.mesmaMorada ? " checked" : ""}>
@@ -1715,7 +1746,8 @@
       function lerFormulario() {
         const v = {};
         form.querySelectorAll("input, select, textarea").forEach(el => {
-          v[el.name] = el.type === "checkbox" ? el.checked : el.value;
+          if (el.type === "radio") { if (el.checked) v[el.name] = el.value; }
+          else v[el.name] = el.type === "checkbox" ? el.checked : el.value;
         });
         Carrinho.definirDados(v);
         botao.href = Carrinho.linkEncomenda();
@@ -1750,6 +1782,23 @@
       campoDia?.addEventListener("change", () => atualizarDia(true));
       atualizarDia(false);
 
+      /* Particular ou empresa: muda o que se pede, sem redesenhar o
+         formulário (senão perdia-se o que já estava escrito). */
+      function aplicarTipoDeCliente() {
+        const eEmpresa = form.querySelector('input[name="tipo"]:checked')?.value === "empresa";
+        form.querySelectorAll('input[name="tipo"]').forEach(r => {
+          r.closest(".modo").classList.toggle("escolhido", r.checked);
+        });
+        form.querySelector("#bloco-empresa").hidden = !eEmpresa;
+        form.querySelector('label[for="d-nome"]').textContent = eEmpresa ? "O teu nome" : "Nome completo";
+        form.querySelector("#opcao-fatura").hidden = eEmpresa;
+        form.querySelector("#nota-fatura-empresa").hidden = !eEmpresa;
+        form.querySelector("#bloco-nif").hidden = !(eEmpresa || form.querySelector("#d-fatura").checked);
+        form.querySelector('label[for="d-nif"]').textContent = eEmpresa ? "NIF da empresa" : "NIF";
+        form.querySelector("#d-nomeFatura").placeholder =
+          `Só se for diferente do ${eEmpresa ? "nome da empresa" : "teu nome"}`;
+      }
+
       form.addEventListener("input", e => {
         // Quem corrige um campo deixa de ver o erro dele
         const alvo = e.target;
@@ -1758,7 +1807,7 @@
           const erro = fundo.querySelector(`#e-${alvo.id.slice(2)}`);
           if (erro) erro.textContent = "";
         }
-        if (alvo.id === "d-fatura") fundo.querySelector("#bloco-nif").hidden = !alvo.checked;
+        if (alvo.name === "tipo" || alvo.id === "d-fatura") aplicarTipoDeCliente();
         if (alvo.id === "d-mesmaMorada") fundo.querySelector("#bloco-morada-fatura").hidden = alvo.checked;
         lerFormulario();
       });
@@ -1808,6 +1857,21 @@
       if (mais)    Carrinho.definirQuantidade(mais, linha(mais).qtd + passo(mais));
       if (menos)   Carrinho.definirQuantidade(menos, linha(menos).qtd - passo(menos));
       if (remover) Carrinho.remover(remover);
+    });
+
+    /* Quem escreve o número no carrinho: em caixas, o número são
+       caixas. Fora dos limites, arruma-se para o valor mais próximo. */
+    lista.addEventListener("change", e => {
+      const campo = e.target.closest("[data-qtd]");
+      if (!campo) return;
+      const id = campo.dataset.qtd;
+      const linha = Carrinho.linhas().find(l => l.produto.id === id);
+      if (!linha) return;
+      const caixa = Carrinho.unidadesPorCaixa(linha.produto);
+      const escrito = Math.floor(Number(campo.value));
+      const limite = caixa > 1 ? 99 : 999;
+      const quantas = Math.min(limite, Math.max(1, escrito || 1));
+      Carrinho.definirQuantidade(id, quantas * caixa);
     });
 
     Carrinho.aoMudar(desenhar);

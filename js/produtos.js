@@ -47,6 +47,22 @@ const PRODUTOS = [
     destaque: "Primoris"
   },
   {
+    id: "vinho-verde-da-casa",
+    nome: "Vinho Verde da Casa",
+    categoria: "verde",
+    tipo: "branco",
+    produtor: "Quinta das Arcas",
+    regiao: "Verde",
+    ano: null,
+    volume: "75 cl",
+    alcool: 10.50,
+    caixa: 12,
+    preco: 2.10,
+    descricao: "Vinho verde da casa, o nosso vinho mais vendido.",
+    cor: "#C9B35F",
+    imagem: "img/produtos/vinho-verde-da-casa.webp"
+  },
+  {
     id: "piano-colheita-tinto-doc",
     nome: "Piano Colheita Tinto DOC",
     categoria: "maduro",

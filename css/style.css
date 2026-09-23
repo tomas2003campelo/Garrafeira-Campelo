@@ -394,12 +394,24 @@ main { overflow-x: clip; }
   color: var(--texto-suave);
 }
 .hero-tags span { display: inline-flex; align-items: center; gap: .45rem; }
-.hero-tags span::before {
+.hero-tags span::before,
+.hero-tags a::before {
   content: "";
   width: 5px; height: 5px;
   border-radius: 50%;
   background: var(--dourado);
 }
+/* A última "etiqueta" é uma ligação: quem compra para um café vê logo
+   que também é para ele. */
+.hero-tags a {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  color: var(--dourado);
+  font-weight: 600;
+}
+.hero-tags a:hover { color: var(--creme); text-decoration: none; }
+.hero-tags a:hover span { text-decoration: underline; text-underline-offset: 3px; }
 
 /* =========================================================
    HERO COM FOTOGRAFIA
@@ -1117,6 +1129,26 @@ main { overflow-x: clip; }
 .qtd button:hover { background: var(--marca); color: var(--creme); }
 .qtd span { min-width: 25px; text-align: center; font-size: .87rem; font-weight: 600; }
 
+/* A quantidade também se escreve: quem leva 24 garrafas não carrega
+   24 vezes no "+". Sem as setas do browser, que aqui não cabem. */
+.qtd-num {
+  width: 2.6rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--texto);
+  font: inherit;
+  font-size: .87rem;
+  font-weight: 600;
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.qtd-num::-webkit-outer-spin-button,
+.qtd-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.qtd-num:focus-visible { outline: 2px solid var(--acento); outline-offset: 1px; border-radius: 4px; }
+.qtd .qtd-cx { min-width: 0; margin-left: -.2rem; font-size: .76rem; color: var(--texto-suave); }
+
 .linha-direita { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: .4rem; }
 .linha-preco { font-weight: 700; font-size: .96rem; white-space: nowrap; }
 
@@ -1204,6 +1236,10 @@ main { overflow-x: clip; }
 .modo.bloqueado .modo-texto span { color: var(--erro); }
 
 .aviso-minimo { font-size: .84rem; color: var(--erro); margin: 0 0 .8rem; }
+
+/* Particular ou empresa, no passo dos dados: dentro do formulário o
+   espaçamento é do próprio formulário */
+.modos-tipo { margin-bottom: 0; }
 
 /* --- Passo 2 do carrinho: dados do cliente --- */
 
@@ -1431,6 +1467,60 @@ main { overflow-x: clip; }
 .info-icone svg { width: 22px; height: 22px; }
 .info h3 { font-size: 1.08rem; margin-bottom: .4rem; }
 .info p { font-size: .9rem; color: var(--texto-suave); margin: 0; }
+
+/* =========================================================
+   PARA CASA E PARA O NEGÓCIO
+   Os dois públicos da loja: quem leva uma garrafa para casa e
+   quem compra para o restaurante ou para o café.
+   ========================================================= */
+
+.publicos { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.5rem; }
+
+.publico {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 2rem;
+  background: var(--superficie);
+  border: 1px solid var(--ouro-contorno);
+  border-radius: var(--raio);
+  transition: transform .22s, box-shadow .22s, border-color .22s;
+}
+.publico:hover { transform: translateY(-3px); box-shadow: var(--sombra); border-color: var(--dourado); }
+.publico h3 { font-size: 1.28rem; margin-bottom: .5rem; }
+.publico p { color: var(--texto-suave); margin-bottom: 1.4rem; }
+.publico .btn { margin-top: auto; }
+
+/* Passos numerados (página dos profissionais) */
+.passos {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.4rem;
+  margin: 0;
+  padding: 0;
+}
+.passos li {
+  padding: 1.7rem;
+  background: var(--superficie);
+  border: 1px solid var(--ouro-contorno);
+  border-radius: var(--raio);
+}
+.passo-numero {
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--marca);
+  color: var(--creme);
+  font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.passos h3 { font-size: 1.05rem; margin-bottom: .4rem; }
+.passos p { font-size: .9rem; color: var(--texto-suave); margin: 0; }
+.passos-nota { margin: 1.6rem 0 0; text-align: center; color: var(--texto-suave); font-size: .92rem; }
 
 .categorias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; }
 
@@ -2275,8 +2365,9 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 }
 
 /* A navegação passa a hambúrguer mais cedo do que o resto do
-   layout: seis itens no menu precisam de mais largura do que cinco. */
-@media (max-width: 1020px) {
+   layout: com "Profissionais" são sete itens, e a partir daqui já não
+   cabem ao lado do logótipo e do carrinho. */
+@media (max-width: 1140px) {
   .nav {
     display: none;
     position: absolute;
