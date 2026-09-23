@@ -19,9 +19,15 @@ const CONFIG = {
   /* --- Contactos ---------------------------------------
      POR PREENCHER: troca pelos teus dados reais.          */
 
-  telefone: "+351 936 506 371",
-  telefoneLimpo: "351936506371",       // só dígitos, com indicativo do país, para o WhatsApp
-  telefone2: "+351 936 506 373",       // segundo número, mostrado a seguir ao primeiro
+  /* O primeiro número é o principal: é o que o botão "Ligar" marca e o
+     que aparece à frente. É o fixo da loja, que tem o WhatsApp Business
+     ligado a dois telemóveis, por isso é também para onde vão as
+     encomendas do carrinho. Os outros dois aparecem a seguir; deixa
+     vazio ("") qualquer um que não queiras mostrar. */
+  telefone: "+351 252 961 558",
+  telefoneLimpo: "351252961558",       // só dígitos, com indicativo do país, para o WhatsApp
+  telefone2: "+351 936 506 371",       // segundo número, mostrado a seguir ao primeiro
+  telefone3: "+351 936 506 373",       // terceiro, se houver
   email: "j.campelo.unipessoal@gmail.com",
 
   morada: {

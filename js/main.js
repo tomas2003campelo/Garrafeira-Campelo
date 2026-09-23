@@ -31,11 +31,37 @@
     // Links de telefone e email
     document.querySelectorAll("[data-tel]").forEach(el => { el.href = "tel:" + CONFIG.telefone.replace(/\s/g, ""); });
 
-    // Segundo número: só aparece se existir no config
-    document.querySelectorAll("[data-tel2]").forEach(el => {
-      if (!CONFIG.telefone2) return;
-      el.href = "tel:" + CONFIG.telefone2.replace(/\s/g, "");
-      el.textContent = CONFIG.telefone2;
+    // Números a seguir ao principal: só aparece o que estiver no config
+    [2, 3].forEach(n => {
+      const numero = CONFIG["telefone" + n];
+      document.querySelectorAll(`[data-tel${n}]`).forEach(el => {
+        if (!numero) return;
+        el.href = "tel:" + numero.replace(/\s/g, "");
+        el.textContent = numero;
+        el.hidden = false;
+      });
+    });
+
+    /* Ao lado de cada número tem de se dizer que tipo de chamada é, como
+       a lei da defesa do consumidor obriga. Os números portugueses que
+       começam por 9 são de rede móvel; os outros, de rede fixa. */
+    // No rodapé, uma linha só para todos os números
+    document.querySelectorAll("[data-custo-chamadas]").forEach(el => {
+      const tipos = new Set([CONFIG.telefone, CONFIG.telefone2, CONFIG.telefone3]
+        .filter(Boolean)
+        .map(n => String(n).replace(/\D/g, "").replace(/^351/, "").startsWith("9") ? "móvel" : "fixa"));
+      if (!tipos.size) return;
+      el.textContent = `Chamada para a rede ${[...tipos].join(" e ")} nacional.`;
+      el.hidden = false;
+    });
+
+    document.querySelectorAll("[data-custo-chamada]").forEach(el => {
+      const numero = valorDaConfig(el.dataset.custoChamada);
+      if (!numero) return;
+      const so = String(numero).replace(/\D/g, "").replace(/^351/, "");
+      el.textContent = so.startsWith("9")
+        ? "Chamada para a rede móvel nacional"
+        : "Chamada para a rede fixa nacional";
       el.hidden = false;
     });
     document.querySelectorAll("[data-email]").forEach(el => { el.href = "mailto:" + CONFIG.email; });

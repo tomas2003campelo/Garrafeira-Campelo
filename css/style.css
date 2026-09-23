@@ -1616,6 +1616,16 @@ main { overflow-x: clip; }
 
 .contacto-bloco .redes { margin-top: .8rem; }
 
+/* "Chamada para a rede fixa nacional": a lei obriga a dizer o tipo de
+   chamada ao lado do número. Fica pequeno, por baixo de cada um. */
+.custo-chamada {
+  display: block;
+  font-size: .72rem;
+  color: var(--texto-suave);
+  line-height: 1.4;
+}
+.footer .custo-chamada { margin-top: -.5rem; }
+
 /* =========================================================
    PÁGINA DE PRODUTO (produto.html)
    ========================================================= */

@@ -54,6 +54,14 @@ telefone, email, morada, horário, redes sociais e condições de entrega.
 
 Se deixares uma rede social vazia (`""`), o ícone desaparece do site sozinho.
 
+**Telefones.** O `telefone` é o principal: é o que aparece à frente e o que o
+botão "Ligar" marca. O `telefone2` e o `telefone3` aparecem a seguir, e somem
+sozinhos se ficarem vazios. O `telefoneLimpo` (só dígitos, com o 351) é o número
+do **WhatsApp**: é para lá que vão as encomendas do carrinho, por isso é o do
+WhatsApp Business. Ao lado de cada número, o site escreve sozinho "Chamada para a
+rede fixa nacional" ou "rede móvel nacional", conforme o número comece por 9 ou
+não, como a lei obriga.
+
 ## O catálogo — `catalogo/produtos.xlsx`
 
 Os produtos geres-los numa folha de Excel, uma linha por produto. Depois:
