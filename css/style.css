@@ -1879,8 +1879,8 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 
 .contacto-bloco { margin-bottom: 1.8rem; }
 .contacto-bloco h3 { font-size: 1.02rem; margin-bottom: .5rem; }
-.contacto-bloco p, .contacto-bloco a { font-size: .95rem; color: var(--texto-suave); margin: 0 0 .2rem; }
-.contacto-bloco a:hover { color: var(--acento); }
+.contacto-bloco p, .contacto-bloco a:not(.btn) { font-size: .95rem; color: var(--texto-suave); margin: 0 0 .2rem; }
+.contacto-bloco a:not(.btn):hover { color: var(--acento); }
 
 .horario { width: 100%; border-collapse: collapse; font-size: .93rem; }
 .horario th, .horario td { text-align: left; padding: .5rem 0; border-bottom: 1px solid var(--linha); font-weight: 400; }
@@ -2017,6 +2017,20 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 }
 .form input[aria-invalid="true"], .form textarea[aria-invalid="true"] { border-color: var(--erro); }
 .form .opcional { font-weight: 400; font-size: .78rem; color: var(--texto-suave); }
+
+/* Painel do pedido de condições: o formulário dentro de uma moldura,
+   para se perceber que é ali que se escreve. */
+.painel-pedido {
+  padding: 1.8rem;
+  background: var(--superficie);
+  border: 1px solid var(--ouro-contorno);
+  border-radius: var(--raio);
+}
+.painel-pedido h3 { font-size: 1.15rem; margin-bottom: .3rem; }
+.painel-pedido .painel-ajuda { font-size: .9rem; color: var(--texto-suave); margin-bottom: 1.4rem; }
+.painel-pedido .btn { width: 100%; }
+.painel-pedido .btn svg { width: 19px; height: 19px; }
+.painel-nota { margin: .7rem 0 0; font-size: .78rem; color: var(--texto-suave); line-height: 1.5; }
 /* Ligar ou mandar mensagem, ao lado do formulário dos profissionais */
 .acoes-pro { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1rem 0 .6rem; }
 .acoes-pro .btn { padding: .7rem 1.2rem; font-size: .9rem; }

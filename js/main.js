@@ -1669,7 +1669,7 @@
                 <input type="radio" name="tipo" value="empresa"${empresa ? " checked" : ""}>
                 <span class="modo-texto">
                   <strong>Empresa</strong>
-                  <span>Restaurante, café ou outro negócio</span>
+                  <span>Restaurante, café, bar ou outra empresa</span>
                 </span>
               </label>
             </fieldset>
