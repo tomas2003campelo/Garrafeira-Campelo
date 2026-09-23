@@ -165,7 +165,7 @@ declarar idade para ler a política de privacidade.
 - [ ] Ligar o formulário de contacto a um serviço a sério (Formspree, Netlify
       Forms ou um backend próprio) — hoje só valida no browser
 - [ ] Escrever a política de privacidade e os termos, se passar a vender online
-- [ ] Deixar o Google encontrar o site: apagar a linha `FORA DO GOOGLE` de todas as páginas
+- [x] Deixar o Google encontrar o site: feito a 23 de setembro de 2026
 - [ ] Decidir se há condições diferentes para restaurantes e cafés (preço, mínimo,
       pagamento a 30 dias) e escrevê-las na `profissionais.html`
 
@@ -189,13 +189,21 @@ campo `imagem` e a fotografia passa à frente do desenho.
 *reduzir movimento*: quem a tiver ligada não vê animação nenhuma — nem as
 de scroll, nem os contadores, nem o parallax.
 
-## Fora do Google
+## No Google
 
-O site está publicado, mas escondido das pesquisas: todas as páginas têm a
-marca `<meta name="robots" content="noindex, nofollow">`, assinalada com o
-comentário `FORA DO GOOGLE`. Quem tiver a ligação vê o site normalmente.
+Desde 23 de setembro de 2026 o site está aberto às pesquisas: saiu a marca
+`noindex` que o escondia. O site está registado no Google Search Console, com a
+propriedade confirmada pelo ficheiro `googlec6f4caebb9f1cde0.html`, que está na
+raiz e **não se apaga nem se edita**.
 
-Quando quiseres que o Google o encontre, apaga essa linha em todas as páginas.
+O `sitemap.xml` lista as páginas e submete-se no Search Console, em Sitemaps.
+Se um dia acrescentares uma página nova, junta-a lá.
+
+Não há `robots.txt`: num endereço `github.io/Garrafeira-Campelo/`, esse ficheiro
+só contaria se estivesse na raiz do domínio, que é do GitHub.
+
+Para voltar a esconder o site, basta pôr `<meta name="robots" content="noindex">`
+em todas as páginas. O Google leva alguns dias a deixar de o mostrar.
 
 ## Publicar
 
