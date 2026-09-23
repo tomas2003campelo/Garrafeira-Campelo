@@ -2016,6 +2016,11 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
   box-shadow: 0 0 0 3px rgba(214, 178, 123, .22);
 }
 .form input[aria-invalid="true"], .form textarea[aria-invalid="true"] { border-color: var(--erro); }
+.form .opcional { font-weight: 400; font-size: .78rem; color: var(--texto-suave); }
+/* Ligar ou mandar mensagem, ao lado do formulário dos profissionais */
+.acoes-pro { display: flex; flex-wrap: wrap; gap: .7rem; margin: 1rem 0 .6rem; }
+.acoes-pro .btn { padding: .7rem 1.2rem; font-size: .9rem; }
+
 .form-nota { margin: .8rem 0 0; font-size: .9rem; min-height: 1.4em; }
 .form-nota.ok { color: var(--verde-ok); }
 .form-nota.erro { color: var(--erro); }

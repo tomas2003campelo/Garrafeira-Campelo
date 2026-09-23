@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=0b4f13ad">
+  <link rel="stylesheet" href="css/style.css?v=477189c7">
 </head>
 <body>
 
@@ -101,6 +101,10 @@
           dias. Se tens um restaurante, um café ou outro negócio, encomendas no
           site da mesma maneira, com fatura em nome da empresa.
         </p>
+        <div class="hero-actions" style="justify-content:center;margin-top:1.6rem">
+          <a class="btn btn-dourado" href="#pedir-condicoes">Pedir condições</a>
+          <a class="btn btn-ghost" href="vinhos.html">Ver os vinhos</a>
+        </div>
       </div>
 
       <div class="cartoes-info">
@@ -136,8 +140,8 @@
           <span class="info-icone">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </span>
-          <h3>Preços claros</h3>
-          <p>Os preços do site já incluem IVA e são iguais para toda a gente. Para compras grandes ou que se repetem, fala connosco antes de encomendar.</p>
+          <h3>Desconto de 5%</h3>
+          <p>Os preços do site já incluem IVA. Conforme a zona do teu negócio e a forma de entrega, podemos fazer um desconto de 5% sobre eles. Fala connosco antes de encomendares.</p>
         </div>
         <div class="info revelar">
           <span class="info-icone">
@@ -179,14 +183,101 @@
     </div>
   </section>
 
-  <section class="section section-escura">
+  <section class="section" id="pedir-condicoes">
     <div class="container">
       <div class="section-head revelar">
-        <h2>Falamos?</h2>
-        <p>Para encomendas grandes, para escolher os vinhos da carta, ou para uma compra que se repete todas as semanas.</p>
-        <div class="hero-actions" style="justify-content:center;margin-top:1.8rem">
-          <a class="btn btn-dourado" href="#" data-whatsapp target="_blank" rel="noopener">Falar por WhatsApp</a>
-          <a class="btn btn-ghost-claro" href="#" data-tel>Ligar</a>
+        <h2>Pede as condições</h2>
+        <p>
+          Diz-nos quem és e onde ficas. Conforme a zona do negócio e a forma de
+          entrega, podemos fazer um desconto de 5% sobre os preços do site.
+        </p>
+      </div>
+
+      <div class="contacto-grid">
+        <div class="revelar revelar-esq">
+          <form class="form" id="form-profissional" novalidate>
+            <div class="field field-full">
+              <label for="pro-negocio">Nome do restaurante, café ou bar</label>
+              <input type="text" id="pro-negocio" name="negocio" required autocomplete="organization">
+            </div>
+            <div class="field field-full">
+              <label for="pro-nome">O teu nome</label>
+              <input type="text" id="pro-nome" name="nome" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="pro-distrito">Distrito</label>
+              <select id="pro-distrito" name="distrito" required>
+                <option value="">Escolhe</option>
+                <option>Aveiro</option>
+                <option>Beja</option>
+                <option>Braga</option>
+                <option>Bragança</option>
+                <option>Castelo Branco</option>
+                <option>Coimbra</option>
+                <option>Évora</option>
+                <option>Faro</option>
+                <option>Guarda</option>
+                <option>Leiria</option>
+                <option>Lisboa</option>
+                <option>Portalegre</option>
+                <option>Porto</option>
+                <option>Santarém</option>
+                <option>Setúbal</option>
+                <option>Viana do Castelo</option>
+                <option>Vila Real</option>
+                <option>Viseu</option>
+                <option>Açores</option>
+                <option>Madeira</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="pro-concelho">Concelho</label>
+              <input type="text" id="pro-concelho" name="concelho" required>
+            </div>
+            <div class="field field-full">
+              <label for="pro-localidade">Localidade</label>
+              <input type="text" id="pro-localidade" name="localidade" required autocomplete="address-level2">
+            </div>
+            <div class="field field-full">
+              <label for="pro-mensagem">O que precisas <span class="opcional">opcional</span></label>
+              <textarea id="pro-mensagem" name="mensagem" rows="3"
+                        placeholder="Que vinhos ou cervejas, que quantidades, e com que regularidade"></textarea>
+            </div>
+            <div class="field-full">
+              <button class="btn btn-primary" type="submit">Enviar por WhatsApp</button>
+              <p class="form-nota" id="pro-nota" role="status"></p>
+            </div>
+          </form>
+        </div>
+
+        <div class="revelar revelar-dir">
+          <div class="contacto-bloco">
+            <h3>Preferes falar?</h3>
+            <p>Liga ou manda mensagem, que respondemos no horário da loja.</p>
+            <p class="acoes-pro">
+              <a class="btn btn-dourado" href="#" data-tel-href="telefone2">Ligar <span data-config="telefone2">936 506 371</span></a>
+              <a class="btn btn-ghost" href="#" data-whatsapp target="_blank" rel="noopener">Mensagem por WhatsApp</a>
+            </p>
+            <p class="custo-chamada" data-custo-chamada="telefone2" hidden></p>
+          </div>
+
+          <div class="contacto-bloco">
+            <h3>O desconto de 5%</h3>
+            <p>
+              Depende de onde fica o negócio e de como levas a encomenda: quem
+              vem buscar à loja ou fica perto tem mais margem do que quem está
+              longe. Dizemos-te o preço final antes de fechares seja o que for.
+            </p>
+          </div>
+
+          <div class="contacto-bloco">
+            <h3>Já sabes o que queres?</h3>
+            <p>
+              Não precisas de esperar: escolhe no site, marca "Empresa" no
+              carrinho e nós confirmamos tudo contigo.
+            </p>
+            <p><a href="vinhos.html">Ver os vinhos →</a></p>
+          </div>
         </div>
       </div>
     </div>
@@ -205,7 +296,7 @@
             <span data-config="tagline">Retalhista de vinhos</span>
           </span>
         </div>
-        <p data-config="descricao">Vinhos Verdes e maduros do Douro, do Alentejo e de outras regiões, espumantes e cervejas, comprados diretamente a quem os faz.</p>
+        <p data-config="descricao">Comercialização de Vinhos Verdes e maduros do Douro, do Alentejo e de outras regiões, espumantes e cerveja.</p>
         <div class="redes-bloco" data-redes>
           <p class="redes-titulo">Segue-nos</p>
           <div class="redes">
@@ -301,10 +392,10 @@
   </div>
 </div>
 
-<script src="js/config.js?v=1bf0eebd"></script>
+<script src="js/config.js?v=6300be99"></script>
 <script src="js/produtos.js?v=7aae1c63"></script>
 <script src="js/ilustracoes.js?v=6c830521"></script>
 <script src="js/carrinho.js?v=56e9cdc7"></script>
-<script src="js/main.js?v=09b2668a"></script>
+<script src="js/main.js?v=340d2d2a"></script>
 </body>
 </html>

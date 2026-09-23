@@ -42,6 +42,14 @@
       });
     });
 
+    /* Botões que só precisam do link do telefone, sem trocar o texto
+       (o número visível vem de um data-config lá dentro) */
+    document.querySelectorAll("[data-tel-href]").forEach(el => {
+      const numero = valorDaConfig(el.dataset.telHref);
+      if (!numero) { el.hidden = true; return; }
+      el.href = "tel:" + String(numero).replace(/\s/g, "");
+    });
+
     /* Ao lado de cada número tem de se dizer que tipo de chamada é, como
        a lei da defesa do consumidor obriga. Os números portugueses que
        começam por 9 são de rede móvel; os outros, de rede fixa. */
@@ -2073,6 +2081,51 @@
     });
   }
 
+  /* --- Pedido de condições dos profissionais (profissionais.html) ---
+     Não há servidor: os campos servem para escrever a mensagem de
+     WhatsApp já preenchida, e quem a envia é o dono do negócio. Com o
+     nome, a localidade e o concelho podemos dizer-lhe logo se há
+     desconto e como fazemos a entrega.                                */
+  function ligarPedidoProfissional() {
+    const form = document.getElementById("form-profissional");
+    const nota = document.getElementById("pro-nota");
+    if (!form || !nota) return;
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const campos = [...form.querySelectorAll("input, select, textarea")];
+      let valido = true;
+      campos.forEach(campo => {
+        const ok = campo.checkValidity();
+        campo.setAttribute("aria-invalid", String(!ok));
+        if (!ok) valido = false;
+      });
+
+      if (!valido) {
+        nota.className = "form-nota erro";
+        nota.textContent = "Falta o nome do negócio, o teu nome ou onde ficas.";
+        form.querySelector('[aria-invalid="true"]')?.focus();
+        return;
+      }
+
+      const v = nome => form.elements[nome].value.trim();
+      const linhas = [
+        `Olá! Tenho um negócio e queria saber as condições da ${CONFIG.nome}.`,
+        "",
+        `Negócio: ${v("negocio")}`,
+        `Nome: ${v("nome")}`,
+        `Onde: ${v("localidade")}, concelho de ${v("concelho")}, distrito de ${v("distrito")}`
+      ];
+      if (v("mensagem")) linhas.push("", v("mensagem"));
+
+      window.open(`https://wa.me/${CONFIG.telefoneLimpo}?text=${encodeURIComponent(linhas.join("\n"))}`,
+                  "_blank", "noopener");
+      nota.className = "form-nota ok";
+      nota.textContent = "Abrimos o WhatsApp com a mensagem escrita. Falta só carregares em enviar.";
+      campos.forEach(c => c.removeAttribute("aria-invalid"));
+    });
+  }
+
   /* =======================================================
      ARRANQUE
      ======================================================= */
@@ -2100,6 +2153,7 @@
     ligarContador();
     ligarBotoesAdicionar();
     ligarVerificacaoIdade();
+    ligarPedidoProfissional();
     ligarFormulario();
     ligarAnimacoes();
     ligarProgresso();
