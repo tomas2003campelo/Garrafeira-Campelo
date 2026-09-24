@@ -717,16 +717,20 @@ def html_da_ficha(p, nome_site, url):
       </div>'''
 
 
-def html_dos_relacionados(parecidos):
-    """Ligações simples para os produtos da mesma família. O JavaScript
-    põe cartões por cima; ficam escritas para o Google seguir de uma
-    página de produto para as outras."""
-    if not parecidos:
+def html_da_lista(escolhidos, com_regiao=False):
+    """Ligações simples para produtos: nome, região e preço. O JavaScript
+    põe cartões por cima assim que corre, por isso quase ninguém vê isto.
+    Fica escrito para o Google poder ir de uma página para as outras, que
+    é como ele anda por um site, e para quem tem o JavaScript desligado."""
+    if not escolhidos:
         return ""
-    itens = "".join(
-        f'<li><a href="{x["pagina"]}">{esc(x["nome"])}<span>{euros(x["preco"])}</span></a></li>'
-        for x in parecidos)
-    return f'<ul class="links-produtos">{itens}</ul>'
+    itens = []
+    for x in escolhidos:
+        onde = (f'<span class="onde">{esc(x["regiao"])}</span>'
+                if com_regiao and x.get("regiao") else "")
+        itens.append(f'<li><a href="{x["pagina"]}">{esc(x["nome"])}{onde}'
+                     f'<span class="quanto">{euros(x["preco"])}</span></a></li>')
+    return '<ul class="links-produtos">' + "".join(itens) + "</ul>"
 
 
 def dados_estruturados(p, nome_site, site, url):
@@ -823,7 +827,7 @@ def pagina_do_produto(modelo, p, parecidos, nome_site, site):
     t = re.sub(r"<!-- ficha: início -->.*?<!-- ficha: fim -->",
                lambda _: html_da_ficha(p, nome_site, url), t, count=1, flags=re.S)
     t = re.sub(r"<!-- relacionados: início -->.*?<!-- relacionados: fim -->",
-               lambda _: html_dos_relacionados(parecidos), t, count=1, flags=re.S)
+               lambda _: html_da_lista(parecidos), t, count=1, flags=re.S)
     return t
 
 
@@ -868,6 +872,49 @@ def escrever_paginas(produtos):
 
     escrever_sitemap(produtos, site)
     return len(escritas), apagadas
+
+
+def escrever_catalogos(produtos):
+    """Escreve a lista dos produtos dentro das páginas de catálogo e do
+    início, entre as marcas <!-- lista: início --> e <!-- lista: fim -->.
+
+    Sem isto, a página Vinhos não tem uma única ligação para os vinhos:
+    os cartões nascem no browser, e o Google, que anda de ligação em
+    ligação, não tinha por onde chegar às páginas dos produtos. Também
+    lhe dá conteúdo, que são os nomes e os preços que antes não estavam
+    em lado nenhum dentro do ficheiro.
+
+    Devolve quantas páginas mudaram."""
+    mudadas = 0
+    for pagina in sorted(RAIZ.glob("*.html")):
+        texto = pagina.read_text(encoding="utf-8")
+        if "<!-- lista: início -->" not in texto or MARCA in texto:
+            continue
+
+        # A página diz o que quer: um catálogo por categorias, ou os
+        # destaques do início.
+        m = re.search(r'id="lista-produtos"[^>]*data-categorias="([^"]*)"', texto)
+        if m:
+            categorias = [c for c in m.group(1).split(",") if c]
+            escolhidos = [p for p in produtos if p["categoria"] in categorias]
+        else:
+            m = re.search(r'id="lista-destaques"[^>]*data-quantos="(\d+)"', texto)
+            if not m:
+                continue
+            quantos = int(m.group(1))
+            livres = [p for p in produtos if not p.get("esgotado")]
+            escolhidos = [p for p in livres if p.get("inicio")][:quantos]
+            faltam = quantos - len(escolhidos)
+            escolhidos += [p for p in livres if not p.get("inicio")][:faltam]
+
+        lista = html_da_lista(escolhidos, com_regiao=True)
+        novo = re.sub(r"<!-- lista: início -->.*?<!-- lista: fim -->",
+                      lambda _: f"<!-- lista: início -->{lista}<!-- lista: fim -->",
+                      texto, count=1, flags=re.S)
+        if novo != texto:
+            pagina.write_text(novo, encoding="utf-8")
+            mudadas += 1
+    return mudadas
 
 
 def escrever_sitemap(produtos, site):
@@ -975,11 +1022,15 @@ def main():
         return
 
     paginas, apagadas = escrever_paginas(produtos)
+    catalogos = escrever_catalogos(produtos)
     escrever(produtos)
     carimbar_versoes()
     print(f"Site atualizado: {plural(len(produtos), 'produto', 'produtos')} ({resumo}).")
     print(f"{plural(paginas, 'página de produto escrita', 'páginas de produto escritas')}"
           + (f", {plural(apagadas, 'apagada', 'apagadas')}." if apagadas else "."))
+    if catalogos:
+        print(f"Listas de produtos refeitas em "
+              f"{plural(catalogos, 'página de catálogo', 'páginas de catálogo')}.")
     if aumento is not None:
         pct = f"{round(aumento * 100, 2):g}".replace(".", ",")
         print(f"Preços no site: os da loja mais {pct}%.")

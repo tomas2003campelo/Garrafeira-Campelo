@@ -144,6 +144,22 @@ dizem ao comando onde escrever: não as tires.
 Quando um produto sai da folha, a página dele é apagada sozinha. O
 `sitemap.xml` também se atualiza, na parte entre as marcas `produtos`.
 
+### As listas nas páginas de catálogo
+
+O mesmo comando escreve ainda, dentro do `vinhos.html`, do `espumantes.html`,
+do `cervejas.html` e do `index.html`, a lista dos produtos dessa página: nome,
+região, preço e ligação para a página de cada um. Fica entre as marcas
+`<!-- lista: início -->` e `<!-- lista: fim -->`, que também não se tiram.
+
+Quem visita o site quase não a vê: o JavaScript põe os cartões por cima mal a
+página abre, com os filtros e a pesquisa como sempre. Serve para duas coisas:
+para o Google poder ir da página Vinhos para a de cada vinho (é assim que ele
+anda por um site, de ligação em ligação), e para essas páginas passarem a ter
+conteúdo próprio, que antes estava todo por dentro do JavaScript.
+
+Se abrires o `vinhos.html` num browser com o JavaScript desligado, é a lista
+que aparece. É de propósito.
+
 O endereço antigo, `produto.html?id=...`, continua a funcionar: reencaminha
 para a página nova, para as ligações que já andam por aí não se perderem.
 

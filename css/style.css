@@ -1739,7 +1739,8 @@ main { overflow-x: clip; }
   text-decoration: none;
 }
 .links-produtos a:hover { background: var(--superficie-2); }
-.links-produtos span { color: var(--acento); font-weight: 500; }
+.links-produtos .onde { color: var(--texto-suave); font-weight: 400; font-size: .88em; }
+.links-produtos .quanto { color: var(--acento); font-weight: 500; }
 
 .ficha-vazia { text-align: center; padding: 3rem 0; }
 .ficha-vazia p { margin-bottom: 1.6rem; color: var(--texto-suave); }
