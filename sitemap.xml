@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Lista das páginas do site, para o Google as encontrar de uma vez.
-     Submete-se no Search Console, em Sitemaps. As páginas de cada produto
-     (produto.html?id=...) não estão aqui porque são montadas pelo
-     JavaScript a partir do js/produtos.js. -->
+     Submete-se no Search Console, em Sitemaps.
+
+     A parte dos produtos, entre as marcas, é escrita por
+     catalogo/produtos.xlsx -> python3 catalogo/atualizar-site.py.
+     Não a escrevas à mão. As de cima, sim. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://garrafeiracampelo.pt/</loc>
@@ -15,4 +17,50 @@
   <url><loc>https://garrafeiracampelo.pt/sobre.html</loc><priority>0.6</priority></url>
   <url><loc>https://garrafeiracampelo.pt/contacto.html</loc><priority>0.7</priority></url>
   <url><loc>https://garrafeiracampelo.pt/privacidade.html</loc><priority>0.3</priority></url>
+  <!-- produtos: início -->
+  <url><loc>https://garrafeiracampelo.pt/conde-villar-branco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/arca-nova-vinhao-primoris.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/vinho-verde-da-casa.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/piano-colheita-tinto-doc.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/piano-branco-doc.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/piano-reserva-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/piano-reserva-branco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/piano-17-reserva.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/piano-vinhas-velhas-premium.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/quintela-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/quintela-branco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/quintela-tinto-37-5-cl.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/quintela-branco-37-5-cl.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/castello-de-numao-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/castello-de-numao-branco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/castello-de-numao-reserva-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/castello-de-numao-reserva-branco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/bafarela-reserva-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/bafarela-grande-reserva-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/dom-xisto-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/dom-xisto-branco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/tapada-de-villar-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/tapada-de-villar-branco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/tapada-de-villar-doc-tinto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/tapada-de-villar-doc-branco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/quinta-da-mata-fidalga-branco-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/quinta-da-mata-fidalga-tinto-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/quinta-da-mata-fidalga-rose-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/fraga-da-pena-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/murganheira-reserva-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/murganheira-super-reserva-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/terras-do-demo-branco-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/terras-do-demo-rose-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/terras-do-demo-tinto-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/conde-villar-bruto-reserva.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/piano-espumante-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/raposeira-reserva-bruto.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/raposeira-reserva-meio-seco.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/raposeira-reserva-doce.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/3-monts-75-cl.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/3-monts-33-cl.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/3-monts-heritage-cereales.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/3-monts-triple-grande-reserve.html</loc><priority>0.7</priority></url>
+  <url><loc>https://garrafeiracampelo.pt/la-divine.html</loc><priority>0.7</priority></url>
+  <!-- produtos: fim -->
 </urlset>

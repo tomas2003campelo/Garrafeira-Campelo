@@ -21,7 +21,10 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 ├── vinhos.html       Catálogo de vinhos (Verdes e Maduros)
 ├── espumantes.html   Catálogo de espumantes
 ├── cervejas.html     Catálogo de cervejas
-├── produto.html      Página de cada produto (produto.html?id=...)
+├── produto.html      Modelo das páginas de produto (e porta das ligações antigas)
+├── conde-villar-branco.html   ┐
+├── quintela-tinto.html        ├ uma por produto, geradas pelo atualizar-site.py
+├── ...                        ┘
 ├── carrinho.html     Carrinho e dados para a encomenda
 ├── profissionais.html Restaurantes, cafés e outros negócios
 ├── sobre.html        Sobre a casa
@@ -118,6 +121,31 @@ Se a perderes, cria uma nova e vazia com `python3 catalogo/criar-modelo.py`.
 ### Não edites o `js/produtos.js` à mão
 
 É gerado. O que lá escreveres é substituído da próxima vez que o comando correr.
+
+### Uma página por produto
+
+O mesmo comando escreve também, na raiz do site, uma página por produto:
+`conde-villar-branco.html`, `quintela-tinto.html`, e assim por diante. São
+páginas geradas, levam um aviso no topo, e **não se editam à mão**: o que lá
+mudares desaparece na próxima passagem do comando.
+
+Porquê tê-las? O `produto.html` monta a ficha no browser de quem visita, a
+partir do `js/produtos.js`. As pessoas veem tudo, mas o Google recebe uma
+página vazia: o nome do vinho e o preço não estão dentro do ficheiro. Nestas
+páginas estão: título próprio, descrição, foto, preço e a ficha também em
+dados estruturados, o formato que o Google lê para mostrar o preço nos
+resultados.
+
+Para mudar o que é igual em todas elas (o menu, o rodapé, o que quer que
+seja), muda o **`produto.html`**, que é o modelo, e corre o comando. As marcas
+`<!-- ficha: início -->` e `<!-- relacionados: início -->` e o `data-produto`
+dizem ao comando onde escrever: não as tires.
+
+Quando um produto sai da folha, a página dele é apagada sozinha. O
+`sitemap.xml` também se atualiza, na parte entre as marcas `produtos`.
+
+O endereço antigo, `produto.html?id=...`, continua a funcionar: reencaminha
+para a página nova, para as ligações que já andam por aí não se perderem.
 
 ## Como funciona o carrinho
 
@@ -229,7 +257,14 @@ Search Console uma propriedade nova do tipo **Domínio** para `garrafeiracampelo
 verificada por um registo TXT no painel de DNS, e submeter lá o sitemap outra vez.
 
 O `sitemap.xml` lista as páginas e submete-se no Search Console, em Sitemaps.
-Se um dia acrescentares uma página nova, junta-a lá.
+Se um dia acrescentares uma página nova escrita à mão, junta-a lá; as dos
+produtos entram sozinhas, entre as marcas `produtos`.
+
+Cada produto tem a sua página, com o nome no título e o preço em dados
+estruturados. É isso que dá hipótese de aparecer quando alguém pesquisa o
+nome de um vinho. O carrossel de "Produtos patrocinados" que se vê em cima
+de algumas pesquisas é outra coisa: são anúncios pagos, pelo Google Merchant
+Center, e esse exige pagamento online no site, que aqui não há.
 
 Não há `robots.txt`: num endereço `github.io/Garrafeira-Campelo/`, esse ficheiro
 só contaria se estivesse na raiz do domínio, que é do GitHub.

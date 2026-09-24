@@ -15,6 +15,7 @@
 const PRODUTOS = [
   {
     id: "conde-villar-branco",
+    pagina: "conde-villar-branco.html",
     nome: "Conde Villar Branco",
     categoria: "verde",
     tipo: "branco",
@@ -31,6 +32,7 @@ const PRODUTOS = [
   },
   {
     id: "arca-nova-vinhao-primoris",
+    pagina: "arca-nova-vinhao-primoris.html",
     nome: "Arca Nova Vinhão Primoris",
     categoria: "verde",
     tipo: "tinto",
@@ -48,6 +50,7 @@ const PRODUTOS = [
   },
   {
     id: "vinho-verde-da-casa",
+    pagina: "vinho-verde-da-casa.html",
     nome: "Vinho Verde da Casa",
     categoria: "verde",
     tipo: "branco",
@@ -64,6 +67,7 @@ const PRODUTOS = [
   },
   {
     id: "piano-colheita-tinto-doc",
+    pagina: "piano-colheita-tinto-doc.html",
     nome: "Piano Colheita Tinto DOC",
     categoria: "maduro",
     tipo: "tinto",
@@ -81,6 +85,7 @@ const PRODUTOS = [
   },
   {
     id: "piano-branco-doc",
+    pagina: "piano-branco-doc.html",
     nome: "Piano Branco DOC",
     categoria: "maduro",
     tipo: "branco",
@@ -97,6 +102,7 @@ const PRODUTOS = [
   },
   {
     id: "piano-reserva-tinto",
+    pagina: "piano-reserva-tinto.html",
     nome: "Piano Reserva Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -114,6 +120,7 @@ const PRODUTOS = [
   },
   {
     id: "piano-reserva-branco",
+    pagina: "piano-reserva-branco.html",
     nome: "Piano Reserva Branco",
     categoria: "maduro",
     tipo: "branco",
@@ -130,6 +137,7 @@ const PRODUTOS = [
   },
   {
     id: "piano-17-reserva",
+    pagina: "piano-17-reserva.html",
     nome: "Piano 17 Reserva",
     categoria: "maduro",
     tipo: "tinto",
@@ -147,6 +155,7 @@ const PRODUTOS = [
   },
   {
     id: "piano-vinhas-velhas-premium",
+    pagina: "piano-vinhas-velhas-premium.html",
     nome: "Piano Vinhas Velhas Premium",
     categoria: "maduro",
     tipo: "tinto",
@@ -163,6 +172,7 @@ const PRODUTOS = [
   },
   {
     id: "quintela-tinto",
+    pagina: "quintela-tinto.html",
     nome: "Quintela Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -179,6 +189,7 @@ const PRODUTOS = [
   },
   {
     id: "quintela-branco",
+    pagina: "quintela-branco.html",
     nome: "Quintela Branco",
     categoria: "maduro",
     tipo: "branco",
@@ -194,6 +205,7 @@ const PRODUTOS = [
   },
   {
     id: "quintela-tinto-37-5-cl",
+    pagina: "quintela-tinto-37-5-cl.html",
     nome: "Quintela Tinto 37,5 cl",
     categoria: "maduro",
     tipo: "tinto",
@@ -210,6 +222,7 @@ const PRODUTOS = [
   },
   {
     id: "quintela-branco-37-5-cl",
+    pagina: "quintela-branco-37-5-cl.html",
     nome: "Quintela Branco 37,5 cl",
     categoria: "maduro",
     tipo: "branco",
@@ -225,6 +238,7 @@ const PRODUTOS = [
   },
   {
     id: "castello-de-numao-tinto",
+    pagina: "castello-de-numao-tinto.html",
     nome: "Castello de Numão Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -241,6 +255,7 @@ const PRODUTOS = [
   },
   {
     id: "castello-de-numao-branco",
+    pagina: "castello-de-numao-branco.html",
     nome: "Castello de Numão Branco",
     categoria: "maduro",
     tipo: "branco",
@@ -256,6 +271,7 @@ const PRODUTOS = [
   },
   {
     id: "castello-de-numao-reserva-tinto",
+    pagina: "castello-de-numao-reserva-tinto.html",
     nome: "Castello de Numão Reserva Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -273,6 +289,7 @@ const PRODUTOS = [
   },
   {
     id: "castello-de-numao-reserva-branco",
+    pagina: "castello-de-numao-reserva-branco.html",
     nome: "Castello de Numão Reserva Branco",
     categoria: "maduro",
     tipo: "branco",
@@ -290,6 +307,7 @@ const PRODUTOS = [
   },
   {
     id: "bafarela-reserva-tinto",
+    pagina: "bafarela-reserva-tinto.html",
     nome: "Bafarela Reserva Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -308,6 +326,7 @@ const PRODUTOS = [
   },
   {
     id: "bafarela-grande-reserva-tinto",
+    pagina: "bafarela-grande-reserva-tinto.html",
     nome: "Bafarela Grande Reserva Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -326,6 +345,7 @@ const PRODUTOS = [
   },
   {
     id: "dom-xisto-tinto",
+    pagina: "dom-xisto-tinto.html",
     nome: "Dom Xisto Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -342,6 +362,7 @@ const PRODUTOS = [
   },
   {
     id: "dom-xisto-branco",
+    pagina: "dom-xisto-branco.html",
     nome: "Dom Xisto Branco",
     categoria: "maduro",
     tipo: "branco",
@@ -357,6 +378,7 @@ const PRODUTOS = [
   },
   {
     id: "tapada-de-villar-tinto",
+    pagina: "tapada-de-villar-tinto.html",
     nome: "Tapada de Villar Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -373,6 +395,7 @@ const PRODUTOS = [
   },
   {
     id: "tapada-de-villar-branco",
+    pagina: "tapada-de-villar-branco.html",
     nome: "Tapada de Villar Branco",
     categoria: "maduro",
     tipo: "branco",
@@ -389,6 +412,7 @@ const PRODUTOS = [
   },
   {
     id: "tapada-de-villar-doc-tinto",
+    pagina: "tapada-de-villar-doc-tinto.html",
     nome: "Tapada de Villar DOC Tinto",
     categoria: "maduro",
     tipo: "tinto",
@@ -406,6 +430,7 @@ const PRODUTOS = [
   },
   {
     id: "tapada-de-villar-doc-branco",
+    pagina: "tapada-de-villar-doc-branco.html",
     nome: "Tapada de Villar DOC Branco",
     categoria: "maduro",
     tipo: "branco",
@@ -423,6 +448,7 @@ const PRODUTOS = [
   },
   {
     id: "quinta-da-mata-fidalga-branco-bruto",
+    pagina: "quinta-da-mata-fidalga-branco-bruto.html",
     nome: "Quinta da Mata Fidalga Branco Bruto",
     categoria: "espumantes",
     tipo: "branco",
@@ -439,6 +465,7 @@ const PRODUTOS = [
   },
   {
     id: "quinta-da-mata-fidalga-tinto-bruto",
+    pagina: "quinta-da-mata-fidalga-tinto-bruto.html",
     nome: "Quinta da Mata Fidalga Tinto Bruto",
     categoria: "espumantes",
     tipo: "tinto",
@@ -456,6 +483,7 @@ const PRODUTOS = [
   },
   {
     id: "quinta-da-mata-fidalga-rose-bruto",
+    pagina: "quinta-da-mata-fidalga-rose-bruto.html",
     nome: "Quinta da Mata Fidalga Rosé Bruto",
     categoria: "espumantes",
     tipo: "rosé",
@@ -472,6 +500,7 @@ const PRODUTOS = [
   },
   {
     id: "fraga-da-pena-bruto",
+    pagina: "fraga-da-pena-bruto.html",
     nome: "Fraga da Pena Bruto",
     categoria: "espumantes",
     tipo: "branco",
@@ -489,6 +518,7 @@ const PRODUTOS = [
   },
   {
     id: "murganheira-reserva-bruto",
+    pagina: "murganheira-reserva-bruto.html",
     nome: "Murganheira Reserva Bruto",
     categoria: "espumantes",
     tipo: "branco",
@@ -507,6 +537,7 @@ const PRODUTOS = [
   },
   {
     id: "murganheira-super-reserva-bruto",
+    pagina: "murganheira-super-reserva-bruto.html",
     nome: "Murganheira Super Reserva Bruto",
     categoria: "espumantes",
     tipo: "branco",
@@ -525,6 +556,7 @@ const PRODUTOS = [
   },
   {
     id: "terras-do-demo-branco-bruto",
+    pagina: "terras-do-demo-branco-bruto.html",
     nome: "Terras do Demo Branco Bruto",
     categoria: "espumantes",
     tipo: "branco",
@@ -542,6 +574,7 @@ const PRODUTOS = [
   },
   {
     id: "terras-do-demo-rose-bruto",
+    pagina: "terras-do-demo-rose-bruto.html",
     nome: "Terras do Demo Rosé Bruto",
     categoria: "espumantes",
     tipo: "rosé",
@@ -559,6 +592,7 @@ const PRODUTOS = [
   },
   {
     id: "terras-do-demo-tinto-bruto",
+    pagina: "terras-do-demo-tinto-bruto.html",
     nome: "Terras do Demo Tinto Bruto",
     categoria: "espumantes",
     tipo: "tinto",
@@ -576,6 +610,7 @@ const PRODUTOS = [
   },
   {
     id: "conde-villar-bruto-reserva",
+    pagina: "conde-villar-bruto-reserva.html",
     nome: "Conde Villar Bruto Reserva",
     categoria: "espumantes",
     tipo: "branco",
@@ -594,6 +629,7 @@ const PRODUTOS = [
   },
   {
     id: "piano-espumante-bruto",
+    pagina: "piano-espumante-bruto.html",
     nome: "Piano Espumante Bruto",
     categoria: "espumantes",
     tipo: "branco",
@@ -611,6 +647,7 @@ const PRODUTOS = [
   },
   {
     id: "raposeira-reserva-bruto",
+    pagina: "raposeira-reserva-bruto.html",
     nome: "Raposeira Reserva Bruto",
     categoria: "espumantes",
     tipo: "branco",
@@ -628,6 +665,7 @@ const PRODUTOS = [
   },
   {
     id: "raposeira-reserva-meio-seco",
+    pagina: "raposeira-reserva-meio-seco.html",
     nome: "Raposeira Reserva Meio Seco",
     categoria: "espumantes",
     tipo: "branco",
@@ -645,6 +683,7 @@ const PRODUTOS = [
   },
   {
     id: "raposeira-reserva-doce",
+    pagina: "raposeira-reserva-doce.html",
     nome: "Raposeira Reserva Doce",
     categoria: "espumantes",
     tipo: "branco",
@@ -662,6 +701,7 @@ const PRODUTOS = [
   },
   {
     id: "3-monts-75-cl",
+    pagina: "3-monts-75-cl.html",
     nome: "3 Monts 75 cl",
     categoria: "cervejas",
     tipo: "cerveja",
@@ -678,6 +718,7 @@ const PRODUTOS = [
   },
   {
     id: "3-monts-33-cl",
+    pagina: "3-monts-33-cl.html",
     nome: "3 Monts 33 cl",
     categoria: "cervejas",
     tipo: "cerveja",
@@ -694,6 +735,7 @@ const PRODUTOS = [
   },
   {
     id: "3-monts-heritage-cereales",
+    pagina: "3-monts-heritage-cereales.html",
     nome: "3 Monts Héritage Céréales",
     categoria: "cervejas",
     tipo: "cerveja",
@@ -710,6 +752,7 @@ const PRODUTOS = [
   },
   {
     id: "3-monts-triple-grande-reserve",
+    pagina: "3-monts-triple-grande-reserve.html",
     nome: "3 Monts Triple Grande Réserve",
     categoria: "cervejas",
     tipo: "cerveja",
@@ -727,6 +770,7 @@ const PRODUTOS = [
   },
   {
     id: "la-divine",
+    pagina: "la-divine.html",
     nome: "La Divine",
     categoria: "cervejas",
     tipo: "cerveja",

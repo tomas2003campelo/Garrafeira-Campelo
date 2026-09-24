@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#1A1214">
   <title>Produto | Garrafeira Campelo</title>
   <meta name="description" content="Ficha do produto na Garrafeira Campelo: descrição, região, teor alcoólico, volume e preço.">
+  <meta name="robots" content="noindex">
 
   <!-- O favicon.ico na raiz é o primeiro sítio onde o Google e os browsers
        procuram o ícone. Leva 32, 48 e 96 px lá dentro. -->
@@ -28,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=9092005e">
+  <link rel="stylesheet" href="css/style.css?v=d4d54653">
 </head>
 <body>
 
@@ -90,8 +91,10 @@
 
 <main id="conteudo">
   <section class="section">
-    <div class="container" id="ficha-produto">
+    <div class="container" id="ficha-produto" data-produto>
+      <!-- ficha: início -->
       <noscript><p>Para ver este produto, o browser precisa de ter o JavaScript ligado.</p></noscript>
+      <!-- ficha: fim -->
     </div>
   </section>
 
@@ -102,7 +105,7 @@
           <h2>Também pode gostar</h2>
         </div>
       </div>
-      <div class="grid" id="lista-relacionados"></div>
+      <div class="grid" id="lista-relacionados"><!-- relacionados: início --><!-- relacionados: fim --></div>
     </div>
   </section>
 </main>
@@ -216,9 +219,9 @@
 </div>
 
 <script src="js/config.js?v=665f53d4"></script>
-<script src="js/produtos.js?v=7aae1c63"></script>
+<script src="js/produtos.js?v=e0f38737"></script>
 <script src="js/ilustracoes.js?v=6c830521"></script>
 <script src="js/carrinho.js?v=56e9cdc7"></script>
-<script src="js/main.js?v=f0e20b8f"></script>
+<script src="js/main.js?v=29978ce0"></script>
 </body>
 </html>

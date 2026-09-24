@@ -545,8 +545,11 @@
     return copia;
   }
 
+  /* Cada produto tem a sua página, escrita pelo atualizar-site.py:
+     conde-villar-branco.html. O endereço antigo, produto.html?id=...,
+     continua a funcionar e reencaminha para ela. */
   function urlDoProduto(p) {
-    return `produto.html?id=${encodeURIComponent(p.id)}`;
+    return p.pagina || `produto.html?id=${encodeURIComponent(p.id)}`;
   }
 
   function criarCartao(p) {
@@ -1166,17 +1169,29 @@
   }
 
   /* =======================================================
-     PÁGINA DE PRODUTO (produto.html?id=...)
-     Uma só página serve todos os produtos: lê o id do endereço e
-     desenha a ficha. O endereço de cada produto pode partilhar-se.
+     PÁGINA DE PRODUTO
+     Cada produto tem a sua página já escrita (conde-villar-branco.html),
+     com o nome do produto no data-produto. A ficha vem lá dentro, para
+     o Google e para quem visita a ver de imediato; aqui desenha-se por
+     cima, para o botão de comprar e o carrinho funcionarem.
+
+     O produto.html não tem data-produto: lê o id do endereço
+     (produto.html?id=...) e reencaminha, para as ligações antigas que
+     andam por aí não se perderem.
      ======================================================= */
 
   function ligarFichaProduto() {
     const alvo = document.getElementById("ficha-produto");
     if (!alvo) return;
 
-    const id = new URLSearchParams(location.search).get("id");
+    const daPagina = alvo.dataset.produto;
+    const id = daPagina || new URLSearchParams(location.search).get("id");
     const p = PRODUTOS.find(x => x.id === id);
+
+    if (!daPagina && p && p.pagina) {
+      location.replace(p.pagina + location.hash);
+      return;
+    }
     if (!p) {
       alvo.innerHTML = `
         <div class="ficha-vazia">

@@ -1713,6 +1713,34 @@ main { overflow-x: clip; }
 }
 .ficha-dados dd { margin: 0; font-weight: 500; color: var(--texto); }
 .ficha-partilhar a { font-weight: 600; }
+/* Ligações para outros produtos da mesma família, escritas dentro da
+   página. O JavaScript põe cartões por cima assim que corre: isto é o
+   que fica para quem não tem JavaScript, e para o Google seguir de uma
+   página de produto para as outras. */
+.links-produtos {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.links-produtos a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: .6rem;
+  padding: .6rem 1rem;
+  border: 1px solid var(--ouro-contorno);
+  border-radius: 999px;
+  background: var(--superficie);
+  color: var(--texto);
+  font-weight: 600;
+  text-decoration: none;
+}
+.links-produtos a:hover { background: var(--superficie-2); }
+.links-produtos span { color: var(--acento); font-weight: 500; }
+
 .ficha-vazia { text-align: center; padding: 3rem 0; }
 .ficha-vazia p { margin-bottom: 1.6rem; color: var(--texto-suave); }
 

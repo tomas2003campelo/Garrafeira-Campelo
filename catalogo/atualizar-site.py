@@ -11,6 +11,7 @@ linha, não altera nada no site e diz-te o que corrigir.
 Não precisa de instalar nada: lê o .xlsx com o que o Python já traz.
 """
 
+import json
 import re
 import sys
 import unicodedata
@@ -18,6 +19,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
+from urllib.parse import quote
 
 RAIZ = Path(__file__).resolve().parent.parent
 EXCEL = RAIZ / "catalogo" / "produtos.xlsx"
@@ -495,7 +497,7 @@ def js_valor(v):
 
 
 def bloco_produto(p):
-    ordem = ["id", "nome", "categoria", "tipo", "docura", "produtor", "regiao", "ano",
+    ordem = ["id", "pagina", "nome", "categoria", "tipo", "docura", "produtor", "regiao", "ano",
              "volume", "alcool", "caixa", "preco", "descricao", "cor", "imagem", "destaque",
              "inicio", "esgotado"]
     linhas = [f"    {k}: {js_valor(p[k])}" for k in ordem if k in p]
@@ -527,6 +529,363 @@ def escrever(produtos):
 '''
     corpo = "const PRODUTOS = [\n" + ",\n".join(bloco_produto(p) for p in produtos) + "\n];\n"
     DESTINO.write_text(cabecalho + "\n" + corpo + "\n" + categorias + "\n", encoding="utf-8")
+
+
+# ---------------------------------------------------------------
+# Escrever uma página por produto
+#
+# O produto.html monta a ficha já no browser de quem visita, a partir
+# do js/produtos.js. Serve as pessoas, mas o Google recebe a página
+# em branco: o nome do vinho, o preço e a descrição não estão dentro
+# do ficheiro que o servidor entrega.
+#
+# Por isso escreve-se aqui, para cada produto, uma página já feita:
+# conde-villar-branco.html, com o nome no título, a descrição, a foto,
+# o preço e a ficha também em dados estruturados, que é o formato que
+# o Google lê para mostrar o preço nos resultados. O produto.html
+# continua a existir e reencaminha, para as ligações antigas que já
+# andam por aí não se perderem.
+# ---------------------------------------------------------------
+
+MODELO = RAIZ / "produto.html"
+
+# Por esta marca se conhecem as páginas geradas: as que a levam são
+# apagadas e escritas de novo em cada passagem.
+MARCA = "<!-- PÁGINA GERADA por catalogo/atualizar-site.py. Não a edites à mão. -->"
+
+PAGINA_DA_CATEGORIA = {"espumantes": "espumantes.html", "cervejas": "cervejas.html"}
+FAMILIA = {"verde": "Verdes", "maduro": "Maduros",
+           "espumantes": "Espumantes", "cervejas": "Cervejas"}
+ANCORA = {"verde": "#verde", "maduro": "#maduro"}
+NOME_CATEGORIA = {"verde": "Verde", "maduro": "Maduro",
+                  "espumantes": "Espumantes", "cervejas": "Cervejas"}
+
+
+def dados_do_site():
+    """O nome e o endereço do site, lidos onde já estão escritos: o nome
+    no js/config.js, o domínio no ficheiro CNAME."""
+    texto = (RAIZ / "js" / "config.js").read_text(encoding="utf-8")
+    m = re.search(r'\bnome\s*:\s*"([^"]*)"', texto)
+    nome = m.group(1) if m else "Garrafeira Campelo"
+    cname = RAIZ / "CNAME"
+    dominio = cname.read_text(encoding="utf-8").strip() if cname.exists() else ""
+    return nome, f"https://{dominio}" if dominio else ""
+
+
+def esc(texto):
+    return (str(texto).replace("&", "&amp;").replace("<", "&lt;")
+            .replace(">", "&gt;").replace('"', "&quot;"))
+
+
+def numero(n):
+    """10.0 -> '10', 13.5 -> '13,5'"""
+    return f"{float(n):.1f}".rstrip("0").rstrip(".").replace(".", ",")
+
+
+def escala_da_garrafa(p):
+    """As garrafas pequenas (menos de 50 cl) desenham-se um pouco menores."""
+    m = re.search(r"([\d.,]+)\s*(cl|ml|l)\b", p.get("volume") or "", re.I)
+    if not m:
+        return 1
+    n = float(m.group(1).replace(",", "."))
+    unidade = m.group(2).lower()
+    cl = n * 100 if unidade == "l" else n / 10 if unidade == "ml" else n
+    return 0.8 if cl < 50 else 1
+
+
+def nomes_ocupados():
+    """As páginas escritas à mão que vivem na raiz do site. Um produto
+    com um id igual a um destes nomes leva 'vinho-' à frente, para não
+    tapar a página do site."""
+    ocupados = set()
+    for pagina in RAIZ.glob("*.html"):
+        if MARCA not in pagina.read_text(encoding="utf-8"):
+            ocupados.add(pagina.stem)
+    return ocupados
+
+
+def ficheiro_do_produto(p, ocupados):
+    nome = p["id"]
+    if nome in ocupados:
+        nome = f"vinho-{nome}"
+    return f"{nome}.html"
+
+
+def meta_do_produto(p):
+    """'Verde · branco'; nos espumantes, a cor e a doçura."""
+    if p["categoria"] == "espumantes":
+        partes = ["Espumante",
+                  "" if p.get("tipo") == "espumante" else p.get("tipo"),
+                  p.get("docura")]
+    else:
+        partes = [NOME_CATEGORIA[p["categoria"]], p.get("tipo")]
+    return " · ".join(x for x in partes if x)
+
+
+def titulo_do_produto(p, nome_site):
+    partes = [p["nome"]]
+    if p.get("regiao") and p["regiao"].lower() not in p["nome"].lower():
+        partes.append(p["regiao"])
+    return f"{', '.join(partes)} | {nome_site}"
+
+
+def descricao_do_produto(p, nome_site, limite=170):
+    """A descrição que o Google mostra debaixo do título. Leva sempre o
+    preço no fim; se não couber tudo, corta-se a descrição, não o preço."""
+    caixa = p.get("caixa") or 1
+    preco_txt = f"{euros(p['preco'])} por garrafa" if caixa > 1 else euros(p["preco"])
+    fim = f" {preco_txt}, na {nome_site}."
+    texto = p.get("descricao") or ""
+    sobra = limite - len(fim)
+    if len(texto) > sobra:
+        # Corta-se onde acaba uma frase, se houver uma que caiba bem;
+        # se não, corta-se numa palavra inteira, com reticências.
+        frase = texto[:sobra].rsplit(". ", 1)[0]
+        if len(frase) >= sobra * 0.55:
+            texto = frase + "."
+        else:
+            texto = texto[:sobra].rsplit(" ", 1)[0].rstrip(" ,.;:") + "…"
+    return texto + fim
+
+
+def linhas_da_ficha(p):
+    caixa = p.get("caixa") or 1
+    pares = [
+        ("Produtor", p.get("produtor")),
+        ("Região", p.get("regiao")),
+        ("Ano", p.get("ano")),
+        ("Teor alcoólico", f"{numero(p['alcool'])}% vol." if p.get("alcool") else ""),
+        ("Volume", p.get("volume")),
+        ("Doçura", p.get("docura")),
+        ("Venda", f"Caixa de {caixa} garrafas" if caixa > 1 else "À unidade"),
+    ]
+    return [(k, v) for k, v in pares if v]
+
+
+def html_da_ficha(p, nome_site, url):
+    """O mesmo que o js/main.js desenha no browser, escrito já no
+    ficheiro. Quem visita o site vê isto de imediato; o JavaScript
+    volta a desenhar por cima, para o botão de comprar funcionar."""
+    cat = p["categoria"]
+    pagina_cat = PAGINA_DA_CATEGORIA.get(cat, "vinhos.html")
+    caixa = p.get("caixa") or 1
+    escala = escala_da_garrafa(p)
+    estilo = f' style="--escala: {escala}"' if escala != 1 else ""
+
+    if p.get("esgotado"):
+        etiqueta = '<span class="badge badge-esgotado">Esgotado</span>'
+        botao = "Esgotado"
+    else:
+        etiqueta = f'<span class="badge">{esc(p["destaque"])}</span>' if p.get("destaque") else ""
+        botao = f"Adicionar caixa de {caixa}" if caixa > 1 else "Adicionar ao carrinho"
+
+    if caixa > 1:
+        preco_extra = (f'<span class="ficha-caixa">Caixa de {caixa}: '
+                       f'<strong>{euros(p["preco"] * caixa)}</strong></span>')
+    else:
+        preco_extra = ""
+
+    dados = "".join(f"<div><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>"
+                    for k, v in linhas_da_ficha(p))
+    partilha = ("https://wa.me/?text="
+                + quote(f"{p['nome']}, na {nome_site}: {url}", safe=""))
+
+    return f'''<nav class="migalhas" aria-label="Estás em">
+        <a href="index.html">Início</a><span aria-hidden="true">/</span>
+        <a href="{pagina_cat}{ANCORA.get(cat, "")}">{FAMILIA[cat]}</a><span aria-hidden="true">/</span>
+        <span aria-current="page">{esc(p["nome"])}</span>
+      </nav>
+      <div class="ficha">
+        <div class="ficha-foto">{etiqueta}<img src="{esc(p["imagem"])}" alt="{esc(p["nome"])}"{estilo}></div>
+        <div class="ficha-texto">
+          <p class="card-meta">{esc(meta_do_produto(p))}</p>
+          <h1 class="ficha-nome">{esc(p["nome"])}</h1>
+          <p class="ficha-desc">{esc(p.get("descricao") or "")}</p>
+          <div class="ficha-compra">
+            <div class="ficha-preco">
+              <span class="preco">{euros(p["preco"])}</span>
+              <span class="volume">{"por garrafa · " if caixa > 1 else ""}IVA incluído</span>
+              {preco_extra}
+            </div>
+            <button class="btn btn-primary btn-comprar" data-add="{esc(p["id"])}"{" disabled" if p.get("esgotado") else ""}>{esc(botao)}</button>
+          </div>
+          <dl class="ficha-dados">
+            {dados}
+          </dl>
+          <p class="ficha-partilhar"><a href="{esc(partilha)}" target="_blank" rel="noopener">Partilhar no WhatsApp</a></p>
+        </div>
+      </div>'''
+
+
+def html_dos_relacionados(parecidos):
+    """Ligações simples para os produtos da mesma família. O JavaScript
+    põe cartões por cima; ficam escritas para o Google seguir de uma
+    página de produto para as outras."""
+    if not parecidos:
+        return ""
+    itens = "".join(
+        f'<li><a href="{x["pagina"]}">{esc(x["nome"])}<span>{euros(x["preco"])}</span></a></li>'
+        for x in parecidos)
+    return f'<ul class="links-produtos">{itens}</ul>'
+
+
+def dados_estruturados(p, nome_site, site, url):
+    """A ficha outra vez, no formato que o Google lê para mostrar o
+    preço e a disponibilidade nos resultados de pesquisa."""
+    propriedades = [
+        {"@type": "PropertyValue", "name": k, "value": str(v)}
+        for k, v in linhas_da_ficha(p) if k != "Produtor"
+    ]
+    produto = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": p["nome"],
+        "sku": p["id"],
+        "description": p.get("descricao") or "",
+        "image": f"{site}/{p['imagem']}",
+        "category": FAMILIA[p["categoria"]],
+        "additionalProperty": propriedades,
+        "offers": {
+            "@type": "Offer",
+            "url": url,
+            "priceCurrency": "EUR",
+            "price": f"{p['preco']:.2f}",
+            "availability": ("https://schema.org/OutOfStock" if p.get("esgotado")
+                             else "https://schema.org/InStock"),
+            "itemCondition": "https://schema.org/NewCondition",
+            "seller": {"@type": "Organization", "name": nome_site},
+        },
+    }
+    if p.get("produtor"):
+        produto["brand"] = {"@type": "Brand", "name": p["produtor"]}
+
+    cat = p["categoria"]
+    caminho = [
+        ("Início", f"{site}/"),
+        (FAMILIA[cat], f"{site}/{PAGINA_DA_CATEGORIA.get(cat, 'vinhos.html')}"),
+        (p["nome"], url),
+    ]
+    migalhas = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": i, "name": nome, "item": endereco}
+            for i, (nome, endereco) in enumerate(caminho, start=1)
+        ],
+    }
+
+    def bloco(obj):
+        texto = json.dumps(obj, ensure_ascii=False, indent=2)
+        # Dentro de um <script>, um "</" fecharia a etiqueta cedo demais.
+        texto = texto.replace("</", "<\\/")
+        return f'  <script type="application/ld+json">\n{texto}\n  </script>'
+
+    return bloco(produto) + "\n" + bloco(migalhas)
+
+
+def pagina_do_produto(modelo, p, parecidos, nome_site, site):
+    url = f"{site}/{p['pagina']}"
+    titulo = titulo_do_produto(p, nome_site)
+    descricao = descricao_do_produto(p, nome_site)
+    t = modelo
+
+    t = t.replace('<html lang="pt-PT">', f'<html lang="pt-PT">\n{MARCA}', 1)
+    t = re.sub(r"<title>.*?</title>", f"<title>{esc(titulo)}</title>", t, count=1, flags=re.S)
+    t = re.sub(r'<meta name="description" content=".*?">',
+               f'<meta name="description" content="{esc(descricao)}">\n'
+               f'  <link rel="canonical" href="{url}">',
+               t, count=1, flags=re.S)
+    # O noindex é do produto.html, que só reencaminha. Estas páginas querem ser vistas.
+    t = re.sub(r'\n\s*<meta name="robots"[^>]*>', "", t, count=1)
+
+    # Como fica ao partilhar no WhatsApp, no Facebook ou no Instagram
+    t = re.sub(r'<meta property="og:title" content=".*?">',
+               f'<meta property="og:title" content="{esc(p["nome"])}">', t, count=1, flags=re.S)
+    t = re.sub(r'<meta property="og:description" content=".*?">',
+               f'<meta property="og:description" content="{esc(descricao)}">', t, count=1, flags=re.S)
+    t = re.sub(r'<meta property="og:image" content=".*?">',
+               f'<meta property="og:image" content="{site}/{esc(p["imagem"])}">', t, count=1, flags=re.S)
+    # A foto da garrafa é alta, não larga: fora as medidas da imagem de partilha.
+    t = re.sub(r'\n\s*<meta property="og:image:(?:width|height)" content=".*?">', "", t)
+    t = re.sub(r'<meta property="og:image:alt" content=".*?">',
+               f'<meta property="og:image:alt" content="{esc(p["nome"])}, garrafa">', t, count=1, flags=re.S)
+    t = re.sub(r'<meta property="og:url" content=".*?">',
+               f'<meta property="og:url" content="{url}">', t, count=1, flags=re.S)
+    t = re.sub(r'<meta property="og:type" content=".*?">',
+               '<meta property="og:type" content="product">', t, count=1, flags=re.S)
+    t = re.sub(r'<meta name="twitter:card" content=".*?">',
+               '<meta name="twitter:card" content="summary">', t, count=1, flags=re.S)
+
+    t = t.replace("</head>", dados_estruturados(p, nome_site, site, url) + "\n</head>", 1)
+
+    t = t.replace('id="ficha-produto" data-produto>',
+                  f'id="ficha-produto" data-produto="{esc(p["id"])}">', 1)
+    t = re.sub(r"<!-- ficha: início -->.*?<!-- ficha: fim -->",
+               lambda _: html_da_ficha(p, nome_site, url), t, count=1, flags=re.S)
+    t = re.sub(r"<!-- relacionados: início -->.*?<!-- relacionados: fim -->",
+               lambda _: html_dos_relacionados(parecidos), t, count=1, flags=re.S)
+    return t
+
+
+def parecidos_com(p, produtos):
+    """Da mesma família, primeiro os do mesmo tipo: um tinto sugere tintos."""
+    mesma = [x for x in produtos
+             if x["id"] != p["id"] and x["categoria"] == p["categoria"] and not x.get("esgotado")]
+    mesma.sort(key=lambda x: x.get("tipo") != p.get("tipo"))
+    return mesma[:4]
+
+
+def escrever_paginas(produtos):
+    """Escreve a página de cada produto e apaga as que já não têm produto.
+    Devolve (escritas, apagadas)."""
+    modelo = MODELO.read_text(encoding="utf-8")
+    nome_site, site = dados_do_site()
+    for marcador in ("<!-- ficha: início -->", "<!-- relacionados: início -->",
+                     'id="ficha-produto" data-produto>'):
+        if marcador not in modelo:
+            raise SystemExit(f"Falta a marca {marcador} no produto.html. "
+                             "Sem ela não sei onde escrever a ficha.")
+
+    ocupados = nomes_ocupados()
+    for p in produtos:
+        p["pagina"] = ficheiro_do_produto(p, ocupados)
+
+    escritas = set()
+    for p in produtos:
+        caminho = RAIZ / p["pagina"]
+        texto = pagina_do_produto(modelo, p, parecidos_com(p, produtos), nome_site, site)
+        if not caminho.exists() or caminho.read_text(encoding="utf-8") != texto:
+            caminho.write_text(texto, encoding="utf-8")
+        escritas.add(p["pagina"])
+
+    apagadas = 0
+    for pagina in sorted(RAIZ.glob("*.html")):
+        if pagina.name in escritas:
+            continue
+        if MARCA in pagina.read_text(encoding="utf-8"):
+            pagina.unlink()
+            apagadas += 1
+
+    escrever_sitemap(produtos, site)
+    return len(escritas), apagadas
+
+
+def escrever_sitemap(produtos, site):
+    """Põe as páginas dos produtos na lista que se entrega ao Google."""
+    caminho = RAIZ / "sitemap.xml"
+    if not caminho.exists() or not site:
+        return
+    texto = caminho.read_text(encoding="utf-8")
+    inicio, fim = "<!-- produtos: início -->", "<!-- produtos: fim -->"
+    if inicio not in texto:
+        return
+    linhas = [f"  <url><loc>{site}/{p['pagina']}</loc><priority>0.7</priority></url>"
+              for p in produtos]
+    novo = re.sub(re.escape(inicio) + r".*?" + re.escape(fim),
+                  inicio + "\n" + "\n".join(linhas) + "\n  " + fim,
+                  texto, count=1, flags=re.S)
+    if novo != texto:
+        caminho.write_text(novo, encoding="utf-8")
 
 
 # ---------------------------------------------------------------
@@ -615,9 +974,12 @@ def main():
         print("Nada foi alterado. Corre sem --verificar para atualizar o site.")
         return
 
+    paginas, apagadas = escrever_paginas(produtos)
     escrever(produtos)
     carimbar_versoes()
     print(f"Site atualizado: {plural(len(produtos), 'produto', 'produtos')} ({resumo}).")
+    print(f"{plural(paginas, 'página de produto escrita', 'páginas de produto escritas')}"
+          + (f", {plural(apagadas, 'apagada', 'apagadas')}." if apagadas else "."))
     if aumento is not None:
         pct = f"{round(aumento * 100, 2):g}".replace(".", ",")
         print(f"Preços no site: os da loja mais {pct}%.")
