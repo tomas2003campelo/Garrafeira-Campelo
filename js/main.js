@@ -883,7 +883,7 @@
         <p class="catalogo-vazio-titulo">Não há ${nomes.varios} com “${escapar(q)}”${noFiltro ? " neste filtro" : ""}.</p>
         <p>${ligacoes.length
           ? `Mas há ${ligacoes.join(" e ")} com o que procuras.`
-          : "Experimenta outra palavra, ou procura pelo produtor ou pela região."}</p>
+          : "Experimente outra palavra, ou procure pelo produtor ou pela região."}</p>
         <div class="catalogo-vazio-acoes">
           ${noFiltro ? `<button type="button" class="btn btn-ghost" data-ver-todos>Procurar em ${nomes.todos}</button>` : ""}
           <button type="button" class="btn btn-ghost" data-limpar-pesquisa>Limpar a pesquisa</button>
@@ -1105,7 +1105,7 @@
             const nome = NOMES_DAS_PAGINAS[pagina];
             return `<a href="${pagina}?q=${encodeURIComponent(q)}">Ver ${n} ${n === 1 ? nome.um : nome.varios}</a>`;
           }).join("")
-        : `Não encontrámos nada com “${escapar(q)}”. Experimenta o nome do produtor ou da região.`;
+        : `Não encontrámos nada com “${escapar(q)}”. Experimente o nome do produtor ou da região.`;
 
       const n = encontrados.length;
       aviso.textContent = n ? `${n} ${n === 1 ? "produto encontrado" : "produtos encontrados"}` : "Nenhum produto encontrado";
@@ -1456,7 +1456,7 @@
       if (passo === 2 && linhas.length) return desenharDados();
       passo = 1;
       lista.hidden = false;
-      if (tituloPainel) tituloPainel.textContent = "O teu carrinho";
+      if (tituloPainel) tituloPainel.textContent = "O seu carrinho";
       painel.dataset.passo = linhas.length ? "1" : "vazio";
 
       if (!linhas.length) {
@@ -1466,7 +1466,7 @@
               <path d="M6 2 4 6v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6l-2-4z"/>
               <path d="M4 6h16M16 10a4 4 0 0 1-8 0"/>
             </svg>
-            <p>O teu carrinho está vazio.</p>
+            <p>O seu carrinho está vazio.</p>
             ${naPagina ? `
             <div class="carrinho-vazio-acoes">
               <a class="btn btn-primary" href="vinhos.html">Ver os vinhos</a>
@@ -1529,13 +1529,13 @@
       if (modo === "entrega" && falta > 0) {
         aviso = `<p class="aviso-minimo">
           A entrega em mão é a partir de ${minimoTexto}. Faltam ${euros(falta)},
-          ou escolhe a recolha na loja.
+          ou escolha a recolha na loja.
         </p>`;
       }
 
       fundo.innerHTML = `
         <fieldset class="modos">
-          <legend>Como queres receber?</legend>
+          <legend>Como pretende receber?</legend>
           ${opcoesHTML}
         </fieldset>
 
@@ -1644,7 +1644,7 @@
 
       lista.hidden = true;
       painel.dataset.passo = "2";
-      if (tituloPainel) tituloPainel.textContent = "Os teus dados";
+      if (tituloPainel) tituloPainel.textContent = "Os seus dados";
 
       // Campo de texto com etiqueta, espaço para o erro e ligação acessível entre os dois
       const campo = (id, nome, etiqueta, extra = "", opcional = false) => `
@@ -1672,7 +1672,7 @@
 
           <form id="form-dados" novalidate>
             <fieldset class="modos modos-tipo">
-              <legend>Compras como</legend>
+              <legend>Tipo de cliente</legend>
               <label class="modo${empresa ? "" : " escolhido"}">
                 <input type="radio" name="tipo" value="particular"${empresa ? "" : " checked"}>
                 <span class="modo-texto">
@@ -1694,17 +1694,17 @@
               <div id="bloco-empresa"${empresa ? "" : " hidden"}>
                 ${campo("empresa", "empresa", "Nome da empresa", 'autocomplete="organization" placeholder="Restaurante, café ou outro negócio" required')}
               </div>
-              ${campo("nome", "nome", empresa ? "O teu nome" : "Nome completo", 'autocomplete="name" required')}
+              ${campo("nome", "nome", empresa ? "Nome da pessoa de contacto" : "Nome completo", 'autocomplete="name" required')}
               ${campo("telefone", "telefone", "Telemóvel", 'type="tel" autocomplete="tel" inputmode="tel" required')}
               ${campo("email", "email", "Email", 'type="email" autocomplete="email" inputmode="email" required')}
-              <p class="ajuda">Para te enviarmos a fatura.</p>
+              <p class="ajuda">Para lhe enviarmos a fatura.</p>
             </fieldset>
 
             ${modo === "recolha" ? `
             <fieldset class="bloco-dados">
               <legend>Recolha na loja</legend>
               <div class="campo">
-                <label for="d-diaRecolha">Dia em que vens buscar</label>
+                <label for="d-diaRecolha">Dia em que vem buscar</label>
                 <input id="d-diaRecolha" name="diaRecolha" type="date" value="${esc(d.diaRecolha)}"
                        min="${dataISO(new Date())}" max="${dataISO(new Date(Date.now() + 90 * 864e5))}"
                        aria-describedby="e-diaRecolha a-diaRecolha" required>
@@ -1725,7 +1725,7 @@
               <div class="campo">
                 <label for="d-concelho">Concelho</label>
                 <select id="d-concelho" name="concelho" aria-describedby="e-concelho" required>
-                  <option value="">Escolhe</option>
+                  <option value="">Escolha</option>
                   ${concelhos}
                 </select>
                 <p class="campo-erro" id="e-concelho"></p>
@@ -1749,7 +1749,7 @@
               </p>
               <div id="bloco-nif"${d.fatura || empresa ? "" : " hidden"}>
                 ${campo("nif", "nif", empresa ? "NIF da empresa" : "NIF", 'inputmode="numeric" autocomplete="off" maxlength="11"')}
-                ${campo("nomeFatura", "nomeFatura", "Em nome de", `autocomplete="organization" placeholder="Só se for diferente do ${empresa ? "nome da empresa" : "teu nome"}"`, true)}
+                ${campo("nomeFatura", "nomeFatura", "Em nome de", `autocomplete="organization" placeholder="Só se for diferente do ${empresa ? "nome da empresa" : "seu nome"}"`, true)}
                 ${precisaMorada ? `
                 <label class="opcao-caixa">
                   <input type="checkbox" id="d-mesmaMorada" name="mesmaMorada"${d.mesmaMorada ? " checked" : ""}>
@@ -1777,7 +1777,7 @@
             </label>
 
             <p class="aviso-dados">
-              Os teus dados seguem na mensagem para a ${CONFIG.nome}, só para tratar desta encomenda.
+              Os seus dados seguem na mensagem para a ${CONFIG.nome}, só para tratar desta encomenda.
               <a href="privacidade.html" target="_blank" rel="noopener">Como tratamos os dados</a>
             </p>
           </form>
@@ -1839,13 +1839,13 @@
           r.closest(".modo").classList.toggle("escolhido", r.checked);
         });
         form.querySelector("#bloco-empresa").hidden = !eEmpresa;
-        form.querySelector('label[for="d-nome"]').textContent = eEmpresa ? "O teu nome" : "Nome completo";
+        form.querySelector('label[for="d-nome"]').textContent = eEmpresa ? "Nome da pessoa de contacto" : "Nome completo";
         form.querySelector("#opcao-fatura").hidden = eEmpresa;
         form.querySelector("#nota-fatura-empresa").hidden = !eEmpresa;
         form.querySelector("#bloco-nif").hidden = !(eEmpresa || form.querySelector("#d-fatura").checked);
         form.querySelector('label[for="d-nif"]').textContent = eEmpresa ? "NIF da empresa" : "NIF";
         form.querySelector("#d-nomeFatura").placeholder =
-          `Só se for diferente do ${eEmpresa ? "nome da empresa" : "teu nome"}`;
+          `Só se for diferente do ${eEmpresa ? "nome da empresa" : "seu nome"}`;
       }
 
       form.addEventListener("input", e => {
@@ -2047,7 +2047,7 @@
           <button class="btn btn-ghost" data-idade-voltar>Enganei-me, tenho 18 ou mais</button>
         </div>
         <p class="modal-legal">
-          Se precisares de falar connosco por outro motivo, escreve para
+          Se precisar de falar connosco por outro motivo, escreva para
           <a href="mailto:${CONFIG.email}">${CONFIG.email}</a>.
         </p>`;
 
@@ -2085,7 +2085,7 @@
 
       if (!valido) {
         nota.className = "form-nota erro";
-        nota.textContent = "Preenche todos os campos com dados válidos.";
+        nota.textContent = "Preencha todos os campos com dados válidos.";
         return;
       }
 
@@ -2118,7 +2118,7 @@
 
       if (!valido) {
         nota.className = "form-nota erro";
-        nota.textContent = "Falta o nome do negócio, o teu nome ou onde ficas.";
+        nota.textContent = "Falta o nome do negócio, o seu nome ou onde fica.";
         form.querySelector('[aria-invalid="true"]')?.focus();
         return;
       }
@@ -2136,7 +2136,7 @@
       window.open(`https://wa.me/${CONFIG.telefoneLimpo}?text=${encodeURIComponent(linhas.join("\n"))}`,
                   "_blank", "noopener");
       nota.className = "form-nota ok";
-      nota.textContent = "Abrimos o WhatsApp com a mensagem escrita. Falta só carregares em enviar.";
+      nota.textContent = "Abrimos o WhatsApp com a mensagem escrita. Falta só carregar em enviar.";
       campos.forEach(c => c.removeAttribute("aria-invalid"));
     });
   }

@@ -239,22 +239,22 @@ const Carrinho = (function () {
   /* Mensagem de erro para o dia escolhido, ou "" se servir */
   function erroNoDiaDeRecolha(texto) {
     const dia = dataLocal(texto);
-    if (!dia) return "Escolhe o dia em que vens buscar a encomenda.";
+    if (!dia) return "Escolha o dia em que vem buscar a encomenda.";
     const hoje = new Date();
     hoje.setHours(0, 0, 0, 0);
-    if (dia < hoje) return "Esse dia já passou. Escolhe outro.";
-    if (dia - hoje > 90 * 864e5) return "Escolhe um dia nos próximos três meses.";
+    if (dia < hoje) return "Esse dia já passou. Escolha outro.";
+    if (dia - hoje > 90 * 864e5) return "Escolha um dia nos próximos três meses.";
     const horas = horasDoDia(dia.getDay());
     if (!horas) {
       const nome = dia.toLocaleDateString("pt-PT", { weekday: "long" });
-      return `${nome.endsWith("feira") ? "À" : "Ao"} ${nome} estamos fechados. Escolhe outro dia.`;
+      return `${nome.endsWith("feira") ? "À" : "Ao"} ${nome} estamos fechados. Escolha outro dia.`;
     }
     if (dia.getTime() === hoje.getTime()) {
       // No próprio dia, só até uma hora antes de fechar
       const agora = new Date();
       const [h, m] = horas.fecha.split(":").map(Number);
       if (agora.getHours() * 60 + agora.getMinutes() > h * 60 + m - 60)
-        return "Hoje já não dá tempo de prepararmos a encomenda. Escolhe outro dia.";
+        return "Hoje já não dá tempo de prepararmos a encomenda. Escolha outro dia.";
     }
     return "";
   }
@@ -275,14 +275,14 @@ const Carrinho = (function () {
     const d = dados;
     const emPortugal = !d.pais || /^portugal$/i.test(d.pais.trim());
 
-    if (eEmpresa() && d.empresa.trim().length < 2) e.empresa = "Escreve o nome da empresa.";
-    if (d.nome.trim().length < 3) e.nome = "Escreve o teu nome completo.";
+    if (eEmpresa() && d.empresa.trim().length < 2) e.empresa = "Indique o nome da empresa.";
+    if (d.nome.trim().length < 3) e.nome = "Indique o seu nome completo.";
 
     const digitos = d.telefone.replace(/\D/g, "");
     if (!digitos) e.telefone = "Precisamos de um número para confirmar a encomenda.";
-    else if (digitos.length < 9) e.telefone = "O número parece curto. Confirma se falta algum algarismo.";
+    else if (digitos.length < 9) e.telefone = "O número parece curto. Confirme se falta algum algarismo.";
 
-    if (!d.email.trim()) e.email = "Escreve o teu email: é para lá que enviamos a fatura.";
+    if (!d.email.trim()) e.email = "Indique o seu email: é para lá que enviamos a fatura.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(d.email.trim()))
       e.email = "Este email não parece completo.";
 
@@ -292,8 +292,8 @@ const Carrinho = (function () {
     }
 
     if (comFatura()) {
-      if (!d.nif.trim()) e.nif = eEmpresa() ? "Escreve o NIF da empresa." : "Escreve o NIF para a fatura.";
-      else if (emPortugal && !nifValido(d.nif)) e.nif = "Este NIF não é válido. Confirma os algarismos.";
+      if (!d.nif.trim()) e.nif = eEmpresa() ? "Indique o NIF da empresa." : "Indique o NIF para a fatura.";
+      else if (emPortugal && !nifValido(d.nif)) e.nif = "Este NIF não é válido. Confirme os algarismos.";
 
       // A fatura com NIF leva morada fiscal. Na entrega pode ser a mesma;
       // na recolha não há outra, por isso tem de ser escrita.
@@ -315,7 +315,7 @@ const Carrinho = (function () {
     }
 
     if (modo === "entrega" && !(CONFIG.entrega.concelhos || []).includes(d.concelho))
-      e.concelho = "Escolhe o concelho da entrega.";
+      e.concelho = "Escolha o concelho da entrega.";
 
     return e;
   }
