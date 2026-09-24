@@ -320,6 +320,13 @@ main { overflow-x: clip; }
 .btn-ghost-claro:hover { background: rgba(252, 246, 238, .1); border-color: var(--creme); color: var(--creme); }
 
 .btn-bloco { width: 100%; }
+.btn-pequeno { padding: .62rem 1.15rem; font-size: .88rem; }
+
+/* O "Falar connosco" deixou de ser botão: eram quatro botões seguidos e
+   nenhum se destacava. Fica como ligação, por baixo. */
+.hero-falar { margin: .9rem 0 0; font-size: .95rem; }
+.hero-falar a { color: var(--creme); text-decoration: underline; text-underline-offset: 4px; }
+.hero-falar a:hover { color: var(--dourado); }
 .btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
 
 /* =========================================================
@@ -2596,7 +2603,8 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   /* Um botão a mandar, não dois do mesmo tamanho */
   .hero .hero-actions { gap: .6rem; }
   .hero .hero-actions .btn-dourado { flex: 1 1 100%; }
-  .hero .hero-actions .btn-ghost-claro { flex: 0 0 auto; padding-inline: 1.4rem; }
+  /* Os dois mais pequenos têm de caber lado a lado num ecrã de 375 px */
+  .hero .hero-actions .btn-pequeno { flex: 0 0 auto; padding-inline: 1rem; font-size: .84rem; }
 
   .modal-acoes { flex-direction: column-reverse; }
   .carrinho { width: 100%; }
