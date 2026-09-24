@@ -61,6 +61,18 @@ const CONFIG = {
     tripadvisor: ""  // deixa vazio enquanto não tiveres — o ícone não aparece
   },
 
+  /* --- Avaliações no Google ---
+     A ligação que abre a caixa de avaliação da tua ficha, já com as
+     estrelas à espera. Vai-se buscar assim:
+
+       Perfil de Empresa do Google  ->  "Pedir avaliações"
+       (ou "Obter mais avaliações")  ->  copiar a ligação
+
+     Fica com este aspeto: https://g.page/r/XXXXXXXX/review
+     Enquanto estiver vazia, o bloco das avaliações não aparece no
+     site, para não haver um botão que não leva a lado nenhum.      */
+  avaliacao: "",
+
   /* --- Encomendas ---
      Como preferes receber os pedidos do carrinho:
        "whatsapp" → abre o WhatsApp com a encomenda escrita

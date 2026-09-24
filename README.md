@@ -182,6 +182,17 @@ mensagem da encomenda leva uma linha `Empresa:` e a faturação já preenchida.
 As quantidades escrevem-se à mão no carrinho, em garrafas ou em caixas, para
 quem leva 24 garrafas não ter de carregar 24 vezes no "+".
 
+### Avaliações no Google
+
+O site tem um bloco "Já comprou aqui?" com um botão para avaliar a loja,
+na página inicial e na de Contacto. Enquanto o campo `avaliacao` do
+`js/config.js` estiver vazio, esse bloco **não aparece**, de propósito:
+mais vale não existir do que existir um botão que não leva a lado nenhum.
+
+Para o ligar: no Perfil de Empresa do Google, em **Pedir avaliações** (ou
+"Obter mais avaliações"), copia a ligação, que tem este aspeto
+`https://g.page/r/XXXXXXXX/review`, e escreve-a no `js/config.js`.
+
 ## Obrigações legais
 
 O site já tem as três peças que a lei portuguesa exige:

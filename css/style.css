@@ -320,6 +320,9 @@ main { overflow-x: clip; }
 .btn-ghost-claro:hover { background: rgba(252, 246, 238, .1); border-color: var(--creme); color: var(--creme); }
 
 .btn-bloco { width: 100%; }
+/* Botões com ícone, como o de avaliar no Google */
+.btn svg { width: 18px; height: 18px; flex: none; }
+.btn:has(svg) { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; }
 .btn-pequeno { padding: .62rem 1.15rem; font-size: .88rem; }
 
 /* O "Falar connosco" deixou de ser botão: eram quatro botões seguidos e

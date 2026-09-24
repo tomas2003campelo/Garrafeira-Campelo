@@ -134,6 +134,13 @@
       if (!bloco.querySelector("[data-rede]")) bloco.remove();
     });
 
+    // Avaliações: sem a ligação no config.js, o bloco desaparece, para
+    // não ficar um botão que não leva a lado nenhum.
+    document.querySelectorAll("[data-avaliar]").forEach(el => {
+      if (CONFIG.avaliacao) el.href = CONFIG.avaliacao;
+      else el.closest("[data-bloco-avaliar]")?.remove();
+    });
+
     // Ano corrente no rodapé
     document.querySelectorAll("[data-ano]").forEach(el => { el.textContent = new Date().getFullYear(); });
   }
