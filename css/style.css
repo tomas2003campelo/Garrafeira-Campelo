@@ -326,11 +326,14 @@ main { overflow-x: clip; }
    HERO E SECÇÕES
    ========================================================= */
 
+/* A abertura é curta de propósito: quem entra tem de ver o princípio
+   das garrafas sem precisar de scroll. Tudo o que aqui está foi medido
+   para caber num ecrã de portátil e num telemóvel. */
 .hero {
   position: relative;
   overflow: hidden;
   background: linear-gradient(165deg, var(--fundo) 0%, var(--areia) 62%, var(--terracota) 100%);
-  padding: clamp(3.5rem, 9vw, 7rem) 0 0;
+  padding: clamp(2rem, 3.6vw, 3rem) 0 0;
 }
 
 /* Círculo grande, como na capa da marca */
@@ -351,10 +354,13 @@ main { overflow-x: clip; }
   max-width: var(--largura);
   margin-inline: auto;
   padding-inline: clamp(1rem, 4vw, 3rem);
-  padding-bottom: clamp(3.5rem, 9vw, 7rem);
+  padding-bottom: clamp(2rem, 3.6vw, 3rem);
   display: grid;
   grid-template-columns: 1.15fr .85fr;
-  gap: 3rem;
+  /* Espaço entre as colunas, sim; entre o texto e a linha das marcas,
+     o menos possível, para a abertura não crescer. */
+  column-gap: 3rem;
+  row-gap: 1.2rem;
   align-items: center;
 }
 
@@ -367,7 +373,7 @@ main { overflow-x: clip; }
   font-size: .72rem;
   font-weight: 700;
   color: var(--acento);
-  margin-bottom: 1.3rem;
+  margin-bottom: .9rem;
 }
 .eyebrow::before {
   content: "";
@@ -376,19 +382,21 @@ main { overflow-x: clip; }
   background: var(--dourado);
 }
 
-.hero h1 { margin-bottom: 1.1rem; }
+.hero h1 { font-size: clamp(2.05rem, 4.2vw, 3.15rem); margin-bottom: .8rem; }
 .hero h1 em { font-style: italic; color: var(--acento); }
 
 .lead { font-size: 1.12rem; color: var(--texto-suave); max-width: 52ch; margin-bottom: 2rem; }
+.hero .lead { margin-bottom: 1.1rem; }
 
 .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
 
 .hero-tags {
+  grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
   gap: .5rem 1.4rem;
-  margin-top: 2.4rem;
-  padding-top: 1.6rem;
+  margin-top: 1.3rem;
+  padding-top: 1rem;
   border-top: 1px solid rgba(83, 0, 15, .14);
   font-size: .86rem;
   color: var(--texto-suave);
@@ -487,11 +495,15 @@ main { overflow-x: clip; }
 
 /* Onda que separa o hero do resto, como na capa */
 .onda path { fill: var(--fundo); }
-.onda { position: relative; z-index: 2; display: block; width: 100%; height: auto; margin-bottom: -1px; }
+.onda { position: relative; z-index: 2; display: block; width: 100%; height: clamp(34px, 3.6vw, 58px); margin-bottom: -1px; }
 
 /* --- Secções genéricas --- */
 
 .section { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+
+/* A primeira secção a seguir à abertura encosta-se mais acima, para as
+   garrafas começarem a aparecer sem ser preciso descer muito. */
+.hero + .section { padding-top: clamp(2rem, 4vw, 3rem); }
 .section-alt { background: var(--creme-fundo); border-block: 1px solid var(--linha); }
 .section-escura { background: var(--borgonha); color: var(--texto-suave); }
 .section-escura h2, .section-escura h3 { color: var(--creme); }
@@ -681,6 +693,7 @@ main { overflow-x: clip; }
 .pesquisa-limpar svg { width: 18px; height: 18px; }
 
 /* Na página inicial, sobre a fotografia */
+.hero .pesquisa-inicio { margin-bottom: 1.1rem; }
 .pesquisa-inicio {
   z-index: 5;
   max-width: 540px;
@@ -1943,7 +1956,7 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
   flex-wrap: wrap;
   align-items: center;
   gap: .3rem .55rem;
-  margin-top: 1.4rem;
+  margin-top: 1rem;
   font-size: .95rem;
   color: rgba(252, 246, 238, .87);
   text-decoration: none;
@@ -2350,7 +2363,7 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 .indicador-scroll {
   position: absolute;
   left: 50%;
-  bottom: 5.5rem;
+  bottom: 2.2rem;
   z-index: 3;
   transform: translateX(-50%);
   display: grid;
@@ -2493,6 +2506,36 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .stats { grid-auto-flow: column; grid-auto-columns: 1fr; }
   .form, .footer-grid { grid-template-columns: 1fr; }
   .hero-actions .btn { flex: 1 1 auto; }
+
+  /* --- A abertura no telemóvel ---
+     Estava tudo centrado, incluindo um parágrafo de seis linhas: texto
+     corrido centrado obriga os olhos a procurar onde cada linha começa.
+     Passa a alinhado à esquerda, e sai o que se repete mais abaixo na
+     página, para a abertura caber num ecrã. */
+  .hero-inner { text-align: left; }
+  .hero-inner .eyebrow, .hero-inner .lead { margin-inline: 0; }
+  .hero-actions, .hero-tags { justify-content: flex-start; }
+
+  /* A linha "Retalhista de vinhos · Direto das quintas" partia-se em
+     duas; o título diz o mesmo e diz melhor. */
+  .hero .eyebrow { display: none; }
+
+  /* A pesquisa fica nas páginas de catálogo, que é onde se procura */
+  .hero .pesquisa-inicio { display: none; }
+
+  /* Das quatro marcas, fica a que leva a algum lado */
+  .hero-tags > span { display: none; }
+  .hero-tags { margin-top: 1.2rem; padding-top: 1rem; gap: .4rem 1rem; }
+
+  .hero-local { text-align: left; font-size: .92rem; }
+  /* Colado ao fim da morada lia-se "...Barcelos Como chegar" */
+  .hero-local strong { display: block; margin-top: .2rem; }
+
+  /* Um botão a mandar, não dois do mesmo tamanho */
+  .hero .hero-actions { gap: .6rem; }
+  .hero .hero-actions .btn-dourado { flex: 1 1 100%; }
+  .hero .hero-actions .btn-ghost-claro { flex: 0 0 auto; padding-inline: 1.4rem; }
+
   .modal-acoes { flex-direction: column-reverse; }
   .carrinho { width: 100%; }
   .modo { padding: .6rem .8rem; }

@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=95f95bdb">
+  <link rel="stylesheet" href="css/style.css?v=4da61d52">
 </head>
 <body>
 
@@ -104,9 +104,8 @@
         <p class="eyebrow" data-config="tagline">Retalhista de vinhos · Direto das quintas</p>
         <h1>O vinho português<br>direto de <em>quem o faz</em>.</h1>
         <p class="lead">
-          Compramos às quintas sem intermediários e escolhemos garrafa a garrafa.
-          Verdes, maduros do Douro e do Alentejo, espumantes e cervejas
-          artesanais, com quem te explica o que estás a levar.
+          Compramos às quintas sem intermediários: verdes, maduros,
+          espumantes e cervejas.
         </p>
         <form class="pesquisa pesquisa-inicio" id="pesquisa-inicio" role="search" action="vinhos.html">
           <svg class="pesquisa-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
@@ -129,16 +128,19 @@
           <span data-morada-linha>Rua Principal, 1201, 4775-237 Silveiros, Barcelos</span>
           <strong>Como chegar</strong>
         </a>
-        <div class="hero-tags">
-          <span>Direto das quintas</span>
-          <span data-config="entrega.resumo">Entrega em mão no Minho</span>
-          <span>Aconselhamento sem compromisso</span>
-          <a href="profissionais.html"><span>Também para restaurantes, cafés e bares</span> →</a>
-        </div>
+      </div>
+
+      <!-- Fora da coluna do texto, a ocupar a largura toda: assim fica
+           numa linha em vez de três, e a abertura acaba mais acima. -->
+      <div class="hero-tags">
+        <span>Direto das quintas</span>
+        <span data-config="entrega.resumo">Entrega em mão no Minho</span>
+        <span>Aconselhamento sem compromisso</span>
+        <a href="profissionais.html"><span>Também para restaurantes, cafés e bares</span> →</a>
       </div>
     </div>
 
-    <a class="indicador-scroll" href="#o-que-temos">
+    <a class="indicador-scroll" href="#em-destaque">
       <span>Ver mais</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
         <path d="M12 5v14M19 12l-7 7-7-7"/>
@@ -150,7 +152,20 @@
     </svg>
   </section>
 
-  <section class="section" id="o-que-temos">
+  <section class="section" id="em-destaque">
+    <div class="container">
+      <div class="section-head-linha revelar">
+        <div>
+          <h2>Em destaque</h2>
+          <p>O que estamos a recomendar esta semana.</p>
+        </div>
+        <a class="btn btn-ghost" href="vinhos.html">Ver tudo</a>
+      </div>
+      <div class="grid destaques" id="lista-destaques" data-quantos="4"><!-- lista: início --><ul class="links-produtos"><li><a href="bafarela-reserva-tinto.html">Bafarela Reserva Tinto<span class="onde">Douro DOC</span><span class="quanto">8,58 €</span></a></li><li><a href="bafarela-grande-reserva-tinto.html">Bafarela Grande Reserva Tinto<span class="onde">Douro DOC</span><span class="quanto">13,83 €</span></a></li><li><a href="conde-villar-branco.html">Conde Villar Branco<span class="onde">Vinho Verde DOC</span><span class="quanto">2,28 €</span></a></li><li><a href="arca-nova-vinhao-primoris.html">Arca Nova Vinhão Primoris<span class="onde">Vinho Verde DOC</span><span class="quanto">4,73 €</span></a></li></ul><!-- lista: fim --></div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="o-que-temos">
     <div class="container">
       <div class="section-head revelar">
         <h2>O que temos</h2>
@@ -183,19 +198,6 @@
           <span class="seta">Ver cervejas →</span>
         </a>
       </div>
-    </div>
-  </section>
-
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-head-linha revelar">
-        <div>
-          <h2>Em destaque</h2>
-          <p>As garrafas que estamos a recomendar esta semana.</p>
-        </div>
-        <a class="btn btn-ghost" href="vinhos.html">Ver tudo</a>
-      </div>
-      <div class="grid destaques" id="lista-destaques" data-quantos="4"><!-- lista: início --><ul class="links-produtos"><li><a href="bafarela-reserva-tinto.html">Bafarela Reserva Tinto<span class="onde">Douro DOC</span><span class="quanto">8,58 €</span></a></li><li><a href="bafarela-grande-reserva-tinto.html">Bafarela Grande Reserva Tinto<span class="onde">Douro DOC</span><span class="quanto">13,83 €</span></a></li><li><a href="conde-villar-branco.html">Conde Villar Branco<span class="onde">Vinho Verde DOC</span><span class="quanto">2,28 €</span></a></li><li><a href="arca-nova-vinhao-primoris.html">Arca Nova Vinhão Primoris<span class="onde">Vinho Verde DOC</span><span class="quanto">4,73 €</span></a></li></ul><!-- lista: fim --></div>
     </div>
   </section>
 
