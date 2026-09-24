@@ -534,28 +534,28 @@ main { overflow-x: clip; }
    texto suave) muda sozinho, porque já usa esses nomes. */
 .section-clara {
   --texto:         #2E2124;
-  --texto-suave:   #6E5B57;
-  --acento:        #8A6524;   /* o dourado, escurecido para se ler sobre creme */
+  --texto-suave:   #665450;
+  --acento:        #7A5A1E;   /* o dourado, escurecido para se ler sobre areia */
   --superficie:    #FFFFFF;
-  --superficie-2:  #F6EDE2;
+  --superficie-2:  #E6D8C2;
   --campo:         #FFFFFF;
-  --linha:         #E6D9CA;
-  --linha-forte:   #CBB79F;
-  --ouro-contorno: rgba(140, 104, 40, .40);
-  --ouro-fio:      rgba(140, 104, 40, .22);
-  --areia:         #F6EDE2;
-  --creme-fundo:   #F6EDE2;
+  --linha:         #DFCFB8;
+  --linha-forte:   #C4AE92;
+  --ouro-contorno: rgba(122, 90, 30, .38);
+  --ouro-fio:      rgba(122, 90, 30, .22);
+  --areia:         #E6D8C2;
+  --creme-fundo:   #EADCC9;
   --tinta:         var(--texto);
   --tinta-suave:   var(--texto-suave);
 
-  background: #FCF6EE;
+  background: #F2E6D6;
   color: var(--texto);
-  border-block: 1px solid #EBDDCC;
+  border-block: 1px solid #E0D0B9;
 }
 /* A segunda de duas claras seguidas, para não parecerem uma só */
 .section-clara-alt {
-  background: #F6EDE2;
-  --superficie-2: #EFE3D5;
+  background: #EADCC9;
+  --superficie-2: #DFD0B6;
 }
 .section-clara h1, .section-clara h2, .section-clara h3, .section-clara h4 { color: var(--texto); }
 .section-clara .section-head p { color: var(--texto-suave); }
