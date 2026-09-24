@@ -107,7 +107,7 @@ const CONFIG = {
 
   recolha: {
     texto: "Recolha na loja, sem mínimo de compra.",
-    prazo: "Pronta a levantar no próprio dia ou no seguinte. Avisamos quando estiver."
+    prazo: "Fica pronta a levantar no próprio dia ou no seguinte. Avisamos quando estiver."
   },
 
   entrega: {

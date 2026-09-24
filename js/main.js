@@ -1539,7 +1539,7 @@
         {
           valor: "pais",
           titulo: "Resto do país",
-          detalhe: "Pedimos orçamento de envio antes de fechar."
+          detalhe: "Pedimos orçamento de transporte antes de fechar."
         }
       ].filter(Boolean);
 
@@ -1556,8 +1556,8 @@
       let aviso = "";
       if (modo === "entrega" && falta > 0) {
         aviso = `<p class="aviso-minimo">
-          A entrega em mão é a partir de ${minimoTexto}. Faltam ${euros(falta)},
-          ou escolha a recolha na loja.
+          A entrega em mão é a partir de ${minimoTexto}. Faltam ${euros(falta)}
+          para lá chegar, ou pode escolher a recolha na loja.
         </p>`;
       }
 
@@ -1567,12 +1567,12 @@
           ${opcoesHTML}
         </fieldset>
 
-        <div class="total-linha"><span>${Carrinho.totalItens()} artigo(s)</span><span>${euros(total)}</span></div>
+        <div class="total-linha"><span>${Carrinho.totalItens()} ${Carrinho.totalItens() === 1 ? "artigo" : "artigos"}</span><span>${euros(total)}</span></div>
         <div class="total-linha grande"><span>Total</span><strong>${euros(total)}</strong></div>
         ${aviso}
         <p class="nota-carrinho">
-          A encomenda é enviada como mensagem. Confirmamos disponibilidade
-          e combinamos o pagamento antes de seguir.
+          A encomenda segue como mensagem. Confirmamos a disponibilidade e
+          combinamos o pagamento antes de avançar.
         </p>
         <button type="button" class="btn-remover" id="btn-esvaziar">Esvaziar carrinho</button>
 
@@ -1773,7 +1773,7 @@
                 <span>Quero fatura com NIF</span>
               </label>
               <p class="ajuda" id="nota-fatura-empresa"${empresa ? "" : " hidden"}>
-                A encomenda de uma empresa leva sempre fatura com o NIF dela.
+                Nas encomendas de empresa é sempre emitida fatura com o NIF.
               </p>
               <div id="bloco-nif"${d.fatura || empresa ? "" : " hidden"}>
                 ${campo("nif", "nif", empresa ? "NIF da empresa" : "NIF", 'inputmode="numeric" autocomplete="off" maxlength="11"')}
@@ -1805,7 +1805,7 @@
             </label>
 
             <p class="aviso-dados">
-              Os seus dados seguem na mensagem para a ${CONFIG.nome}, só para tratar desta encomenda.
+              Os seus dados seguem na mensagem para a ${CONFIG.nome} e servem apenas para tratar desta encomenda.
               <a href="privacidade.html" target="_blank" rel="noopener">Como tratamos os dados</a>
             </p>
           </form>
