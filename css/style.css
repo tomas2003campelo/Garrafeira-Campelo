@@ -494,8 +494,20 @@ main { overflow-x: clip; }
 .colina-2 { fill: rgba(189, 145, 133, .5); }
 
 /* Onda que separa o hero do resto, como na capa */
-.onda path { fill: var(--fundo); }
-.onda { position: relative; z-index: 2; display: block; width: 100%; height: clamp(34px, 3.6vw, 58px); margin-bottom: -1px; }
+/* O fim da abertura: em vez de uma forma recortada, a fotografia
+   escurece até se fundir com a página, passando pelo bordô. */
+.hero-desvanece {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: clamp(120px, 20vh, 210px);
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(to bottom,
+      rgba(58, 0, 10, 0) 0%,
+      rgba(58, 0, 10, .5) 42%,
+      rgba(40, 8, 16, .85) 72%,
+      var(--fundo) 100%);
+}
 
 /* --- Secções genéricas --- */
 
@@ -508,6 +520,45 @@ main { overflow-x: clip; }
 .section-escura { background: var(--borgonha); color: var(--texto-suave); }
 .section-escura h2, .section-escura h3 { color: var(--creme); }
 .section-escura a:not(.btn) { color: var(--dourado); }
+
+/* --- Secções claras ---------------------------------------------
+   O site é escuro para as garrafas se destacarem. Mas uma página
+   inteira à mesma cor escura cansa, e o escuro debaixo de um texto
+   sobre horários não faz destacar coisa nenhuma. Por isso as secções
+   de informação passam a creme, e as das garrafas ficam escuras: a
+   página ganha respiração e as garrafas ganham contraste com o que
+   têm à volta.
+
+   Isto não redefine cada regra uma a uma. Redefine os nomes das cores
+   aqui dentro, e tudo o que está lá dentro (cartões, linhas, campos,
+   texto suave) muda sozinho, porque já usa esses nomes. */
+.section-clara {
+  --texto:         #2E2124;
+  --texto-suave:   #6E5B57;
+  --acento:        #8A6524;   /* o dourado, escurecido para se ler sobre creme */
+  --superficie:    #FFFFFF;
+  --superficie-2:  #F6EDE2;
+  --campo:         #FFFFFF;
+  --linha:         #E6D9CA;
+  --linha-forte:   #CBB79F;
+  --ouro-contorno: rgba(140, 104, 40, .40);
+  --ouro-fio:      rgba(140, 104, 40, .22);
+  --areia:         #F6EDE2;
+  --creme-fundo:   #F6EDE2;
+  --tinta:         var(--texto);
+  --tinta-suave:   var(--texto-suave);
+
+  background: #FCF6EE;
+  color: var(--texto);
+  border-block: 1px solid #EBDDCC;
+}
+/* A segunda de duas claras seguidas, para não parecerem uma só */
+.section-clara-alt {
+  background: #F6EDE2;
+  --superficie-2: #EFE3D5;
+}
+.section-clara h1, .section-clara h2, .section-clara h3, .section-clara h4 { color: var(--texto); }
+.section-clara .section-head p { color: var(--texto-suave); }
 
 .section-head { text-align: center; max-width: 60ch; margin: 0 auto 2.8rem; }
 .section-head p { color: var(--texto-suave); margin: 0; }
