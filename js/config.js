@@ -37,12 +37,12 @@ const CONFIG = {
     pais: "Portugal"
   },
 
-  /* Ligação dos botões "Ver no mapa" e "Como chegar". Procura só a
-     morada, sem o nome da loja: com o nome, o Google mandava as pessoas
-     para outra empresa, o produtor "Campelo" de Moure. Quando a loja
-     tiver ficha no Google (Perfil da Empresa), podes pôr aqui a ligação
-     dessa ficha. */
-  mapa: "https://www.google.com/maps/search/?api=1&query=Rua%20Principal%201201%2C%204775-237%20Silveiros%2C%20Barcelos",
+  /* Ligação dos botões "Ver no mapa": a ficha da loja no Google, criada
+     a 23/09/2026. Abre com as fotos, o horário e as avaliações, e é por
+     aí que as pessoas deixam avaliações novas. Copiada do Google Maps,
+     em Partilhar. Os botões "Como chegar" são outra coisa: esses levam
+     a morada, para abrir logo o caminho no GPS. */
+  mapa: "https://maps.app.goo.gl/MydQPoUBo17FGfeD8",
 
   /* Horário de funcionamento. Deixa a string vazia ("") num dia
      em que estejas fechado — o site mostra "Encerrado".        */
