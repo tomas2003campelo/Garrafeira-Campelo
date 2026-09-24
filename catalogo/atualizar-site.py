@@ -690,7 +690,11 @@ def html_da_ficha(p, nome_site, url):
     partilha = ("https://wa.me/?text="
                 + quote(f"{p['nome']}, na {nome_site}: {url}", safe=""))
 
-    return f'''<nav class="migalhas" aria-label="Estás em">
+    return f'''<a class="btn-voltar voltar-ficha" data-voltar href="{pagina_cat}{ANCORA.get(cat, "")}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        Voltar
+      </a>
+      <nav class="migalhas" aria-label="Estás em">
         <a href="index.html">Início</a><span aria-hidden="true">/</span>
         <a href="{pagina_cat}{ANCORA.get(cat, "")}">{FAMILIA[cat]}</a><span aria-hidden="true">/</span>
         <span aria-current="page">{esc(p["nome"])}</span>

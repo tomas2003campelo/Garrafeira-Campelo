@@ -548,6 +548,30 @@
   /* Cada produto tem a sua página, escrita pelo atualizar-site.py:
      conde-villar-branco.html. O endereço antigo, produto.html?id=...,
      continua a funcionar e reencaminha para ela. */
+  /* =======================================================
+     VOLTAR À PÁGINA ANTERIOR
+     Quem chega a um produto vindo do catálogo quer voltar ao sítio
+     onde estava, com os filtros e a posição como os deixou. É o que
+     o history.back() faz, e a seta do browser não chega a toda a
+     gente, sobretudo no telemóvel em ecrã inteiro.
+
+     Quem chega de fora (do Google, de uma partilha) não tem para
+     onde recuar dentro do site: nesse caso vale o endereço do href,
+     que leva à página da família. Sem JavaScript, é sempre o href.
+     ======================================================= */
+
+  function ligarVoltar() {
+    document.querySelectorAll("[data-voltar]").forEach(botao => {
+      botao.addEventListener("click", e => {
+        const deCa = document.referrer.startsWith(location.origin);
+        if (deCa && history.length > 1) {
+          e.preventDefault();
+          history.back();
+        }
+      });
+    });
+  }
+
   function urlDoProduto(p) {
     return p.pagina || `produto.html?id=${encodeURIComponent(p.id)}`;
   }
@@ -1231,6 +1255,10 @@
     const partilha = "https://wa.me/?text=" + encodeURIComponent(`${p.nome}, na ${CONFIG.nome}: ${location.href}`);
 
     alvo.innerHTML = `
+      <a class="btn-voltar voltar-ficha" data-voltar href="${pagina}${ancora}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        Voltar
+      </a>
       <nav class="migalhas" aria-label="Estás em">
         <a href="index.html">Início</a><span aria-hidden="true">/</span>
         <a href="${pagina}${ancora}">${familia}</a><span aria-hidden="true">/</span>
@@ -2163,6 +2191,7 @@
     ligarCatalogo();
     ligarPesquisaInicio();
     ligarFichaProduto();
+    ligarVoltar();          // depois da ficha, que é quem desenha o botão dela
     preencherContagens();
     ligarCarrinho();
     ligarContador();

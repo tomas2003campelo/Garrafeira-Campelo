@@ -1328,6 +1328,17 @@ main { overflow-x: clip; }
 .btn-voltar:hover { color: var(--acento); }
 .btn-voltar svg { width: 16px; height: 16px; }
 
+/* O mesmo botão, usado como ligação: na ficha do produto e no topo do
+   carrinho. Leva à página anterior; a quem chegou de fora, à família
+   do produto ou aos vinhos. */
+a.btn-voltar { text-decoration: none; }
+.voltar-ficha { margin-bottom: .7rem; }
+.carrinho-topo { flex-wrap: wrap; }
+.voltar-topo { flex: 0 0 100%; }
+/* No passo dos dados já existe o "Voltar ao carrinho", que é o que ali
+   faz sentido: dois "voltar" seguidos só baralhavam. */
+.carrinho-pagina[data-passo="2"] .voltar-topo { display: none; }
+
 .resumo-encomenda {
   display: flex;
   flex-wrap: wrap;

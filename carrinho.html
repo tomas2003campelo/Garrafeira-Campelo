@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=9f14d638">
+  <link rel="stylesheet" href="css/style.css?v=50d155b2">
 </head>
 <body>
 
@@ -93,6 +93,12 @@
     <div class="container">
       <div class="carrinho carrinho-pagina" id="painel-carrinho" data-pagina aria-label="Carrinho de compras">
         <div class="carrinho-topo">
+          <!-- Volta à página onde o cliente estava. Quem chegou de fora
+               não tem para onde recuar: vai para os vinhos. -->
+          <a class="btn-voltar voltar-topo" data-voltar href="vinhos.html">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+            Voltar
+          </a>
           <h1 class="titulo-pagina">O seu carrinho</h1>
         </div>
         <div class="carrinho-lista" id="carrinho-lista"></div>
@@ -221,6 +227,6 @@
 <script src="js/produtos.js?v=e0f38737"></script>
 <script src="js/ilustracoes.js?v=6c830521"></script>
 <script src="js/carrinho.js?v=89e50df7"></script>
-<script src="js/main.js?v=cb85ea16"></script>
+<script src="js/main.js?v=c29aa981"></script>
 </body>
 </html>
