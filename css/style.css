@@ -971,6 +971,12 @@ main { overflow-x: clip; }
   gap: 1.5rem;
 }
 
+/* O "Em destaque" tem sempre quatro cartões. Onde só cabiam três por
+   linha, o quarto ficava sozinho por baixo: aí ficam dois e dois. */
+@media (min-width: 570px) and (max-width: 1165px) {
+  .grid.destaques { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
 .card {
   display: flex;
   flex-direction: column;
