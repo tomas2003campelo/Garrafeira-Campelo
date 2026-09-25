@@ -1552,8 +1552,8 @@
         <div class="total-linha grande"><span>Total</span><strong>${euros(total)}</strong></div>
         ${aviso}
         <p class="nota-carrinho">
-          A encomenda segue como mensagem. Confirmamos a disponibilidade e
-          combinamos o pagamento antes de avançar.
+          A encomenda segue como mensagem. Confirmamos a disponibilidade antes de
+          avançar. Paga na loja ou na entrega, por MB Way, dinheiro ou transferência.
         </p>
         <button type="button" class="btn-remover" id="btn-esvaziar">Esvaziar carrinho</button>
 
@@ -1777,7 +1777,7 @@
             <div class="campo">
               <label for="d-observacoes">Observações <span class="opcional">opcional</span></label>
               <textarea id="d-observacoes" name="observacoes" rows="2"
-                placeholder="${modo === "recolha" ? "A que horas contas passar, ou outra coisa que devamos saber" : "Horário que dá jeito, indicações para chegar"}">${esc(d.observacoes)}</textarea>
+                placeholder="${modo === "recolha" ? "A que horas conta passar, ou outra coisa que devamos saber" : "Horário que dá jeito, indicações para chegar"}">${esc(d.observacoes)}</textarea>
             </div>
 
             <label class="opcao-caixa lembrar">
@@ -1788,6 +1788,11 @@
             <p class="aviso-dados">
               Os seus dados seguem na mensagem para a ${CONFIG.nome} e servem apenas para tratar desta encomenda.
               <a href="privacidade.html" target="_blank" rel="noopener">Como tratamos os dados</a>
+            </p>
+            <p class="aviso-dados">
+              Ao enviar a encomenda, aceita as
+              <a href="condicoes.html" target="_blank" rel="noopener">condições de venda</a>,
+              incluindo o direito de desistir em 14 dias.
             </p>
           </form>
 
@@ -2018,7 +2023,7 @@
 
   /* Páginas que ninguém deve ter de desbloquear: informação legal
      tem de estar acessível sem declarar idade nenhuma.            */
-  const PAGINAS_SEM_IDADE = ["privacidade.html", "termos.html"];
+  const PAGINAS_SEM_IDADE = ["privacidade.html", "condicoes.html"];
 
   function ligarVerificacaoIdade() {
     const modal = document.getElementById("modal-idade");

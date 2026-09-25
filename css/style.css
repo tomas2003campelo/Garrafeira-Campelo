@@ -2305,6 +2305,23 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 .texto-legal ul { margin: 0 0 1.1rem; padding-left: 1.1rem; }
 .texto-legal li { margin-bottom: .4rem; }
 .texto-legal li::marker { color: var(--dourado); }
+.texto-legal ol { margin: 0 0 1.1rem; padding-left: 1.3rem; }
+
+/* O modelo do formulário de livre resolução, para copiar */
+.formulario-modelo {
+  margin: 1rem 0 .5rem;
+  padding: 1.2rem 1.4rem .4rem;
+  border: 1px solid var(--linha-forte);
+  border-radius: var(--raio);
+  background: var(--superficie);
+}
+.formulario-modelo p { margin-bottom: .75rem; }
+.formulario-modelo .formulario-nota { font-size: .85rem; color: var(--texto-suave); }
+
+/* Formas de pagamento, por baixo dos cartões das entregas */
+.nota-pagamento { max-width: 46rem; margin: 2.2rem auto 0; text-align: center; font-size: .95rem; color: var(--texto-suave); }
+.nota-pagamento strong { color: var(--texto); }
+.nota-pagamento a { white-space: nowrap; }
 
 .aviso-revisao {
   padding: 1rem 1.2rem;

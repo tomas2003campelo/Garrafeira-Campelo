@@ -29,6 +29,7 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 ├── profissionais.html Restaurantes, cafés e outros negócios
 ├── sobre.html        Sobre a casa
 ├── contacto.html     Morada, horário, formulário e entregas
+├── condicoes.html    Condições de venda (encomendas, pagamento, 14 dias)
 ├── privacidade.html  Política de privacidade (RGPD)
 ├── catalogo/
 │   ├── produtos.xlsx      ←  O CATÁLOGO (fica só no teu Mac)
@@ -259,6 +260,11 @@ O site já tem as três peças que a lei portuguesa exige:
   em vez de ficar em branco.
 - **Política de privacidade** — em `privacidade.html`, escrita sobre o que o site
   realmente faz. **Por rever** antes de publicar.
+- **Condições de venda** — em `condicoes.html`: quem vende, preços, pagamento (MB Way,
+  dinheiro ou transferência, na loja ou na entrega), entregas, o direito de desistir em
+  14 dias (Decreto-Lei 24/2014, com o modelo de formulário), garantia e litígios. O
+  carrinho diz que, ao enviar a encomenda, o cliente aceita estas condições. A rever
+  com a contabilidade, como a privacidade.
 
 As páginas legais estão isentas da verificação de idade: ninguém deve ter de
 declarar idade para ler a política de privacidade.
@@ -274,7 +280,7 @@ declarar idade para ler a política de privacidade.
 - [ ] Trocar as fotos de banco de imagens por fotos da loja
 - [ ] Ligar o formulário de contacto a um serviço a sério (Formspree, Netlify
       Forms ou um backend próprio) — hoje só valida no browser
-- [ ] Escrever a política de privacidade e os termos, se passar a vender online
+- [x] Escrever as condições de venda (setembro de 2026); rever com a contabilidade
 - [x] Deixar o Google encontrar o site: feito a 23 de setembro de 2026
 - [ ] Decidir se há condições diferentes para restaurantes e cafés (preço, mínimo,
       pagamento a 30 dias) e escrevê-las na `profissionais.html`

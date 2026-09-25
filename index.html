@@ -28,7 +28,91 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=e9ae1ac3">
+  <link rel="stylesheet" href="css/style.css?v=d5ca71d5">
+  <!-- A loja, no formato que o Google lê (schema.org): morada, horário,
+       telefone e formas de pagamento. Ajuda a aparecer nas pesquisas
+       locais, como "garrafeira Barcelos". Se o horário, o telefone ou a
+       morada mudarem no js/config.js, mudar também aqui. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LiquorStore",
+    "@id": "https://garrafeiracampelo.pt/#loja",
+    "name": "Garrafeira Campelo",
+    "legalName": "J. Faria Campelo, Unipessoal Lda",
+    "taxID": "506401561",
+    "vatID": "PT506401561",
+    "description": "Comercialização de vinhos Verdes e maduros do Douro e do Alentejo, Vinho do Porto, espumantes e cervejas, direto das quintas. Para particulares, restaurantes, cafés e bares.",
+    "url": "https://garrafeiracampelo.pt/",
+    "logo": "https://garrafeiracampelo.pt/img/favicon.png",
+    "image": "https://garrafeiracampelo.pt/img/partilha.jpg",
+    "telephone": "+351252961558",
+    "email": "j.campelo.unipessoal@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Rua Principal, 1201, Silveiros",
+      "postalCode": "4775-237",
+      "addressLocality": "Barcelos",
+      "addressRegion": "Braga",
+      "addressCountry": "PT"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 41.4735,
+      "longitude": -8.5691
+    },
+    "hasMap": "https://maps.app.goo.gl/MydQPoUBo17FGfeD8",
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "opens": "09:00",
+        "closes": "19:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": "Saturday",
+        "opens": "09:00",
+        "closes": "13:00"
+      }
+    ],
+    "paymentAccepted": "MB Way, dinheiro, transferência bancária",
+    "currenciesAccepted": "EUR",
+    "priceRange": "€",
+    "areaServed": [
+      {
+        "@type": "City",
+        "name": "Barcelos"
+      },
+      {
+        "@type": "City",
+        "name": "Vila Nova de Famalicão"
+      },
+      {
+        "@type": "City",
+        "name": "Braga"
+      },
+      {
+        "@type": "City",
+        "name": "Póvoa de Varzim"
+      },
+      {
+        "@type": "City",
+        "name": "Vila do Conde"
+      }
+    ],
+    "sameAs": [
+      "https://www.instagram.com/garrafeira_campelo/",
+      "https://www.facebook.com/profile.php?id=61594402711283"
+    ]
+  }
+  </script>
 </head>
 <body>
 
@@ -451,6 +535,7 @@
           </svg>
           Livro de Reclamações
         </a>
+        <a href="condicoes.html">Condições de venda</a>
         <a href="privacidade.html">Política de privacidade</a>
         <a href="#" data-litigios hidden>Resolução de litígios</a>
       </nav>
@@ -484,6 +569,6 @@
 <script src="js/produtos.js?v=eb62b127"></script>
 <script src="js/ilustracoes.js?v=6c830521"></script>
 <script src="js/carrinho.js?v=89e50df7"></script>
-<script src="js/main.js?v=cde9939a"></script>
+<script src="js/main.js?v=95af5cd5"></script>
 </body>
 </html>
