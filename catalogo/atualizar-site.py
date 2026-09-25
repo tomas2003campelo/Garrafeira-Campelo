@@ -921,6 +921,31 @@ def escrever_catalogos(produtos):
     return mudadas
 
 
+def escrever_contagens(produtos):
+    """Escreve o número de produtores do catálogo onde a página o pedir,
+    entre as marcas <!-- produtores: início --> e <!-- produtores: fim -->.
+
+    O número vem da folha, por isso é sempre verdade: quando entra um
+    produtor novo, a página Sobre passa a dizê-lo sem ninguém lhe mexer.
+    Antes estava escrito à mão, e dizia 20 quando o catálogo tinha 11.
+
+    Devolve quantas páginas mudaram."""
+    produtores = len({p["produtor"].strip().lower()
+                      for p in produtos if (p.get("produtor") or "").strip()})
+    mudadas = 0
+    for pagina in sorted(RAIZ.glob("*.html")):
+        texto = pagina.read_text(encoding="utf-8")
+        if "<!-- produtores: início -->" not in texto or MARCA in texto:
+            continue
+        novo = re.sub(r"<!-- produtores: início -->.*?<!-- produtores: fim -->",
+                      f"<!-- produtores: início -->{produtores}<!-- produtores: fim -->",
+                      texto, flags=re.S)
+        if novo != texto:
+            pagina.write_text(novo, encoding="utf-8")
+            mudadas += 1
+    return mudadas
+
+
 def escrever_sitemap(produtos, site):
     """Põe as páginas dos produtos na lista que se entrega ao Google."""
     caminho = RAIZ / "sitemap.xml"
@@ -1027,6 +1052,7 @@ def main():
 
     paginas, apagadas = escrever_paginas(produtos)
     catalogos = escrever_catalogos(produtos)
+    escrever_contagens(produtos)
     escrever(produtos)
     carimbar_versoes()
     print(f"Site atualizado: {plural(len(produtos), 'produto', 'produtos')} ({resumo}).")

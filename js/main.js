@@ -375,7 +375,8 @@
 
   /* --- Números que contam para cima quando aparecem --- */
   function ligarContadores() {
-    const numeros = document.querySelectorAll(".stats dd");
+    // Um ano não se conta de 0 a 2018: esses ficam quietos.
+    const numeros = document.querySelectorAll(".stats dd:not([data-nao-contar])");
     if (!numeros.length) return;
 
     if (menosMovimento || !("IntersectionObserver" in window)) return;
