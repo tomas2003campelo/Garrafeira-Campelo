@@ -638,6 +638,7 @@
     { chave: "douro",    nome: "Douro",          aceita: p => p.categoria === "maduro" && zonaDoMaduro(p) === "douro" },
     { chave: "alentejo", nome: "Alentejo",       aceita: p => p.categoria === "maduro" && zonaDoMaduro(p) === "alentejo" },
     { chave: "outros",   nome: "Outros maduros", aceita: p => p.categoria === "maduro" && zonaDoMaduro(p) === "outros" },
+    { chave: "porto",    nome: "Porto",          aceita: p => p.categoria === "porto" },
     { chave: "maduro",   nome: "Maduros",        aceita: p => p.categoria === "maduro", semBotao: true }
   ];
 
@@ -674,9 +675,9 @@
   const PALAVRAS_VAZIAS = new Set(["a", "o", "as", "os", "e", "de", "da", "do", "das", "dos",
     "em", "no", "na", "nos", "nas", "com", "para", "um", "uma"]);
 
-  // "vinho" encontra os verdes e os maduros, "espumante" os espumantes
+  // "vinho" encontra os verdes, os maduros e os Portos, "espumante" os espumantes
   const PALAVRAS_DA_CATEGORIA = {
-    verde: "vinho verde", maduro: "vinho maduro", espumantes: "espumante", cervejas: "cerveja"
+    verde: "vinho verde", maduro: "vinho maduro", porto: "vinho do porto", espumantes: "espumante", cervejas: "cerveja"
   };
 
   // Só letras sem acento, números e vírgulas ("37,5 cl"), entre espaços
@@ -886,7 +887,7 @@
       caixa.innerHTML = `
         <p class="catalogo-vazio-titulo">Não há ${nomes.varios} com “${escapar(q)}”${noFiltro ? " neste filtro" : ""}.</p>
         <p>${ligacoes.length
-          ? `Mas há ${ligacoes.join(" e ")} com o que procuras.`
+          ? `Mas há ${ligacoes.join(" e ")} com o que procura.`
           : "Experimente outra palavra, ou procure pelo produtor ou pela região."}</p>
         <div class="catalogo-vazio-acoes">
           ${noFiltro ? `<button type="button" class="btn btn-ghost" data-ver-todos>Procurar em ${nomes.todos}</button>` : ""}
@@ -1208,8 +1209,8 @@
     }
 
     const pagina = paginaDaCategoria(p.categoria);
-    const familia = { verde: "Verdes", maduro: "Maduros", espumantes: "Espumantes", cervejas: "Cervejas" }[p.categoria];
-    const ancora = { verde: "#verde", maduro: "#maduro" }[p.categoria] || "";
+    const familia = { verde: "Verdes", maduro: "Maduros", porto: "Porto", espumantes: "Espumantes", cervejas: "Cervejas" }[p.categoria];
+    const ancora = { verde: "#verde", maduro: "#maduro", porto: "#porto" }[p.categoria] || "";
     document.querySelectorAll(".nav > a").forEach(a => {
       if (a.getAttribute("href") === pagina) a.setAttribute("aria-current", "page");
     });
@@ -1239,7 +1240,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
         Voltar
       </a>
-      <nav class="migalhas" aria-label="Estás em">
+      <nav class="migalhas" aria-label="Está em">
         <a href="index.html">Início</a><span aria-hidden="true">/</span>
         <a href="${pagina}${ancora}">${familia}</a><span aria-hidden="true">/</span>
         <span aria-current="page">${p.nome}</span>

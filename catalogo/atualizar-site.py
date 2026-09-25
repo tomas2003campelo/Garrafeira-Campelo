@@ -30,6 +30,7 @@ NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 CATEGORIAS = {
     "verde": "verde", "verdes": "verde", "vinho verde": "verde",
     "maduro": "maduro", "maduros": "maduro",
+    "porto": "porto", "portos": "porto", "vinho do porto": "porto",
     "espumantes": "espumantes", "espumante": "espumantes",
     "cervejas": "cervejas", "cerveja": "cervejas",
 }
@@ -42,12 +43,15 @@ REGIOES_COMO_CATEGORIA = {"douro": "Douro", "alentejo": "Alentejo"}
 TIPOS = {
     "tinto": "tinto", "branco": "branco", "rosé": "rosé", "rose": "rosé",
     "espumante": "espumante", "cerveja": "cerveja",
+    # Os Portos: o estilo faz de tipo
+    "tawny": "tawny", "ruby": "ruby",
 }
 
 # A garrafa desenhada toma a cor do tipo
 CORES = {
     "tinto": "#53000F", "branco": "#C9B35F", "rosé": "#D98A9A",
     "espumante": "#DCC98A", "cerveja": "#C08A2E",
+    "tawny": "#8A4B1C", "ruby": "#6E0F1E",
 }
 
 # Doçura dos espumantes, pelos nomes da lei portuguesa. Aceita também
@@ -323,7 +327,7 @@ def ler_produtos():
         categoria = CATEGORIAS.get(cat_bruta)
         if not categoria:
             erros.append(f"{sitio}: a categoria \"{dados.get('categoria', '')}\" não existe. "
-                         "Usa Verde, Maduro, Espumantes ou Cervejas.")
+                         "Usa Verde, Maduro, Porto, Espumantes ou Cervejas.")
             continue
 
         tipo_bruto = str(dados.get("tipo", "")).strip().lower()
@@ -336,7 +340,8 @@ def ler_produtos():
             # Sem tipo, deduz-se o que for óbvio pela categoria
             tipo = {"cervejas": "cerveja"}.get(categoria)
             if not tipo:
-                erros.append(f"{sitio}: falta o tipo (Tinto, Branco ou Rosé).")
+                erros.append(f"{sitio}: falta o tipo (Tinto, Branco ou Rosé; "
+                             "nos Portos, Tawny, Ruby ou Branco).")
                 continue
 
         docura = ""
@@ -554,10 +559,10 @@ MODELO = RAIZ / "produto.html"
 MARCA = "<!-- PÁGINA GERADA por catalogo/atualizar-site.py. Não a edites à mão. -->"
 
 PAGINA_DA_CATEGORIA = {"espumantes": "espumantes.html", "cervejas": "cervejas.html"}
-FAMILIA = {"verde": "Verdes", "maduro": "Maduros",
+FAMILIA = {"verde": "Verdes", "maduro": "Maduros", "porto": "Porto",
            "espumantes": "Espumantes", "cervejas": "Cervejas"}
-ANCORA = {"verde": "#verde", "maduro": "#maduro"}
-NOME_CATEGORIA = {"verde": "Verde", "maduro": "Maduro",
+ANCORA = {"verde": "#verde", "maduro": "#maduro", "porto": "#porto"}
+NOME_CATEGORIA = {"verde": "Verde", "maduro": "Maduro", "porto": "Porto",
                   "espumantes": "Espumantes", "cervejas": "Cervejas"}
 
 
@@ -694,7 +699,7 @@ def html_da_ficha(p, nome_site, url):
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
         Voltar
       </a>
-      <nav class="migalhas" aria-label="Estás em">
+      <nav class="migalhas" aria-label="Está em">
         <a href="index.html">Início</a><span aria-hidden="true">/</span>
         <a href="{pagina_cat}{ANCORA.get(cat, "")}">{FAMILIA[cat]}</a><span aria-hidden="true">/</span>
         <span aria-current="page">{esc(p["nome"])}</span>
@@ -921,6 +926,37 @@ def escrever_catalogos(produtos):
     return mudadas
 
 
+# Uma fotografia mais larga do que isto (largura a dividir pela altura)
+# traz a caixa ao lado da garrafa, como a do Magnum. Uma garrafa sozinha
+# anda pelos 0,3.
+SO_A_GARRAFA = 0.42
+
+
+def proporcao_da_foto(caminho):
+    """A largura a dividir pela altura de uma fotografia .webp, lida do
+    cabeçalho do ficheiro, sem bibliotecas. None se não a souber ler."""
+    try:
+        with open(RAIZ / caminho, "rb") as f:
+            d = f.read(30)
+    except OSError:
+        return None
+    if len(d) < 30 or d[:4] != b"RIFF" or d[8:12] != b"WEBP":
+        return None
+    bloco = d[12:16]
+    if bloco == b"VP8X":
+        w = int.from_bytes(d[24:27], "little") + 1
+        h = int.from_bytes(d[27:30], "little") + 1
+    elif bloco == b"VP8 ":
+        w = int.from_bytes(d[26:28], "little") & 0x3FFF
+        h = int.from_bytes(d[28:30], "little") & 0x3FFF
+    elif bloco == b"VP8L":
+        b = int.from_bytes(d[21:25], "little")
+        w, h = (b & 0x3FFF) + 1, ((b >> 14) & 0x3FFF) + 1
+    else:
+        return None
+    return w / h if h else None
+
+
 def garrafas_para_montra(candidatos, quantas, evitar=()):
     """Escolhe garrafas variadas para uma montra da página inicial.
 
@@ -928,14 +964,18 @@ def garrafas_para_montra(candidatos, quantas, evitar=()):
     ou um tipo (tinto, branco, rosé) que ainda não está na escolha, para
     não sair uma fila de garrafas iguais. Nunca repete uma fotografia,
     porque há produtos que partilham a mesma (o Quintela de 75 e de
-    37,5 cl, por exemplo). Em caso de empate, manda a ordem da folha."""
+    37,5 cl, por exemplo). As fotografias com a caixa ao lado só entram
+    se não houver garrafas sozinhas que cheguem: no leque, uma caixa
+    tapa as outras. Em caso de empate, manda a ordem da folha."""
     livres = [p for p in candidatos
               if p.get("imagem") and not p.get("esgotado")
               and p["imagem"] not in evitar]
     escolhidas, produtores, tipos = [], set(), set()
     while livres and len(escolhidas) < quantas:
         def pontos(p):
-            return ((p.get("produtor") not in produtores)
+            proporcao = proporcao_da_foto(p["imagem"])
+            return (10 * (proporcao is None or proporcao <= SO_A_GARRAFA)
+                    + (p.get("produtor") not in produtores)
                     + (p.get("tipo") not in tipos)
                     + (0.5 if p.get("inicio") else 0))
         melhor = max(livres, key=pontos)

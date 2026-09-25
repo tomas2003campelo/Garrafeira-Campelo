@@ -171,14 +171,17 @@ dos produtos, também são escritas pelo mesmo comando:
 
 - **"O que temos"**: três garrafas de cada família, em leque, em cada
   cartão (entre `<!-- garrafas:verde: início -->` e `<!-- garrafas:verde: fim -->`,
-  e o mesmo para `maduro`, `espumantes` e `cervejas`).
+  e o mesmo para `maduro`, `porto`, `espumantes` e `cervejas`). Uma família
+  com só duas garrafas mostra-as lado a lado.
 - **A faixa escura a meio da página**: sete garrafas em fila, numa
   prateleira (entre `<!-- prateleira: início -->` e `<!-- prateleira: fim -->`).
 
 As garrafas são escolhidas da folha: primeiro as marcadas para o início,
 depois as que trazem um produtor ou um tipo (tinto, branco, rosé) que ainda
 não esteja lá, para a fila não sair toda igual. A prateleira não repete as
-garrafas dos cartões. Se um produto sair do catálogo, sai também daqui, e
+garrafas dos cartões. As fotografias com a caixa ao lado da garrafa (a do
+Magnum, por exemplo) só entram se não houver outras, porque no leque a caixa
+tapa as garrafas de trás. Se um produto sair do catálogo, sai também daqui, e
 nunca fica uma imagem partida. Quem quiser uma garrafa em destaque nestes
 sítios, marca-a para o início na folha.
 

@@ -23,8 +23,8 @@ DESTINO = PASTA / "produtos.xlsx"
 # Linhas preparadas com listas pendentes (dá para 200 produtos)
 LINHAS = 200
 
-CATEGORIAS = ["Verde", "Maduro", "Espumantes", "Cervejas"]
-TIPOS = ["Tinto", "Branco", "Rosé", "Cerveja"]
+CATEGORIAS = ["Verde", "Maduro", "Porto", "Espumantes", "Cervejas"]
+TIPOS = ["Tinto", "Branco", "Rosé", "Tawny", "Ruby", "Cerveja"]
 DOCURAS = ["Bruto Natural", "Extra Bruto", "Bruto", "Extra Seco", "Seco", "Meio Seco", "Doce"]
 
 # Quanto mais caro é o preço no site do que o da loja. Fica na aba
@@ -79,13 +79,15 @@ INSTRUCOES = [
     ("negrito", "Nome"),
     ("texto", "Como aparece no site. Obrigatório."),
     ("negrito", "Categoria"),
-    ("texto", "Escolhe da lista: Verde, Maduro, Espumantes ou Cervejas. O Douro "
-              "e o Alentejo são maduros: escolhe Maduro e escreve a região na "
-              "coluna Região. Define em que página do site o produto aparece. "
-              "Obrigatório."),
+    ("texto", "Escolhe da lista: Verde, Maduro, Porto, Espumantes ou Cervejas. O "
+              "Douro e o Alentejo são maduros: escolhe Maduro e escreve a região na "
+              "coluna Região. O Vinho do Porto é Porto. Define em que página do site "
+              "o produto aparece. Obrigatório."),
     ("negrito", "Tipo"),
-    ("texto", "Escolhe da lista: Tinto, Branco, Rosé ou Cerveja. Nos espumantes, "
-              "é a cor do espumante. Define a cor da garrafa desenhada e os filtros."),
+    ("texto", "Escolhe da lista: Tinto, Branco, Rosé, Tawny, Ruby ou Cerveja. Nos "
+              "espumantes, é a cor do espumante. Nos Portos, é o estilo: Tawny, Ruby, "
+              "ou Branco para um Porto branco. Define a cor da garrafa desenhada e os "
+              "filtros."),
     ("negrito", "Doçura"),
     ("texto", "Só nos espumantes: Bruto Natural, Extra Bruto, Bruto, Extra Seco, "
               "Seco, Meio Seco ou Doce. Aparece no cartão e nos filtros da página "
