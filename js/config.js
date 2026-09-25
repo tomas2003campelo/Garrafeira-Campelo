@@ -71,7 +71,7 @@ const CONFIG = {
      Fica com este aspeto: https://g.page/r/XXXXXXXX/review
      Enquanto estiver vazia, o bloco das avaliações não aparece no
      site, para não haver um botão que não leva a lado nenhum.      */
-  avaliacao: "",
+  avaliacao: "https://g.page/r/CVnqSKXk29z-EAE/review",
 
   /* --- Encomendas ---
      Como preferes receber os pedidos do carrinho:
