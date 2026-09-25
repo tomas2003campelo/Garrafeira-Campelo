@@ -8,10 +8,10 @@ fim deste ficheiro).
 
 | Ficheiro | Fotógrafo | Origem | Licença |
 |---|---|---|---|
-| `img/mesa.webp` (e versão pequena) | Fantesca Estate & Winery (@fantesca) | [Unsplash](https://unsplash.com/photos/OMXWJp28_Fk) | Unsplash License |
+| `img/mesa.webp` (e versão pequena) | Fantesca Estate & Winery (@fantesca) | [Unsplash](https://unsplash.com/photos/OMXWJp28_Fk) | Unsplash License. Já não aparece no site |
 | `img/partilha.jpg` | — | Desenhada de raiz para o site | Própria |
 | `img/logotipo.svg`, `img/marca.svg`, favicons e a pasta `final/` | — | Logótipo desenhado de raiz para a casa | Própria |
-| `img/adega.webp` (e versão pequena) | Liv Kao (@spacecupcake) | [Unsplash](https://unsplash.com/photos/a-wine-cellar-filled-with-lots-of-bottles-of-wine-ymeKNdGU3R0) | Unsplash License |
+| `img/adega.webp` (e versão pequena) | Liv Kao (@spacecupcake) | [Unsplash](https://unsplash.com/photos/a-wine-cellar-filled-with-lots-of-bottles-of-wine-ymeKNdGU3R0) | Unsplash License. Já não aparece no site |
 | `img/cave.webp` (e versão pequena) | — | [Unsplash](https://unsplash.com/s/photos/wine-cellar) | Unsplash License |
 
 ## O que a licença do Unsplash permite

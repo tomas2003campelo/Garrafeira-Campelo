@@ -500,7 +500,24 @@ main { overflow-x: clip; }
 }
 
 /* O gradiente e as colinas do hero claro não se usam aqui */
-.hero-cor::before, .hero-cor .hero-colinas { display: none; }
+.hero-cor .hero-colinas { display: none; }
+
+/* A forma do cruzamento de Silveiros, de onde saiu o logótipo: duas
+   estradas que se encontram numa esquina redonda. Muito ténue, por
+   trás de tudo. A esquina está no centro da imagem (img/cruzamento.svg),
+   por isso "calc(50% + X)" põe-na X píxeis ao lado do centro da secção.
+   Aqui a nacional passa a meio do espaço entre o texto e a marca (o
+   texto acaba uns 100 a 120 px à direita do centro, a marca começa uns
+   225 a 245 px), e a esquina fica logo abaixo da marca: a marca fica no
+   quarteirão da casa, como no banner de partilha. */
+.hero-cor::before {
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: auto;
+  aspect-ratio: auto;
+  border-radius: 0;
+  background: url("../img/cruzamento.svg") no-repeat calc(50% + 208px) calc(50% + 135px) / 3400px auto;
+  z-index: 0;
+}
 
 /* Colinas em camadas, no espírito da capa da marca */
 .hero-colinas {
@@ -539,6 +556,19 @@ main { overflow-x: clip; }
 .hero + .section { padding-top: clamp(2rem, 4vw, 3rem); }
 .section-alt { background: var(--creme-fundo); border-block: 1px solid var(--linha); }
 .section-escura { background: var(--borgonha); color: var(--texto-suave); }
+
+/* O cruzamento do logótipo, ténue, no fundo de uma secção escura. A
+   nacional passa à esquerda do texto e a estrada da igreja por baixo
+   dos botões: o texto fica no quarteirão da casa. */
+.com-cruzamento { position: relative; overflow: hidden; isolation: isolate; }
+.com-cruzamento::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("../img/cruzamento.svg") no-repeat calc(50% - 400px) calc(50% + 125px) / 3400px auto;
+  pointer-events: none;
+}
 .section-escura h2, .section-escura h3 { color: var(--creme); }
 .section-escura a:not(.btn) { color: var(--dourado); }
 
@@ -597,49 +627,67 @@ main { overflow-x: clip; }
 .section-head-linha p { margin: .3rem 0 0; color: var(--texto-suave); }
 
 /* =========================================================
-   FAIXA FOTOGRÁFICA
+   FAIXA DAS GARRAFAS
+   A meio da página inicial, uma fila de garrafas verdadeiras do
+   catálogo em cima de uma prateleira de luz, com a mesma iluminação
+   das páginas de produto. Substitui uma fotografia de banco de
+   imagens. As garrafas são escolhidas pelo atualizar-site.py.
    ========================================================= */
 
 .faixa {
   position: relative;
   overflow: hidden;
-  padding: clamp(4.5rem, 11vw, 8rem) 0;
-  background: var(--borgonha-escuro);
+  padding: clamp(3.5rem, 8vw, 6rem) 0;
   isolation: isolate;
-}
-
-.faixa .faixa-fundo { position: absolute; display: block; inset: -12% 0; z-index: 0; }
-.faixa-fundo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  will-change: transform;
-}
-
-.faixa-veu {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: linear-gradient(95deg, rgba(58, 0, 10, .93) 0%, rgba(58, 0, 10, .8) 45%, rgba(58, 0, 10, .5) 100%);
-}
-
-.faixa-conteudo {
-  position: relative;
-  z-index: 2;
-  max-width: 620px;
-  margin-inline: 0;
-  padding-inline: clamp(1rem, 4vw, 3rem);
+  background:
+    radial-gradient(ellipse 42% 75% at 74% 64%, rgba(122, 18, 38, .5) 0%, transparent 72%),
+    linear-gradient(115deg, var(--borgonha-escuro) 0%, #2A0710 100%);
   color: var(--areia);
 }
+
+.faixa-grelha {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.faixa-conteudo { max-width: 34rem; }
 .faixa-conteudo h2 { color: var(--creme); margin-bottom: .7rem; }
 .faixa-conteudo .lead { color: rgba(252, 246, 238, .85); margin-bottom: 1.8rem; }
 .faixa-conteudo .eyebrow { color: var(--dourado); }
 .faixa-conteudo .eyebrow::before { background: var(--dourado); }
 
-/* Centrar a faixa dentro da largura máxima do site */
-@media (min-width: 1240px) {
-  .faixa-conteudo { margin-inline: auto; padding-left: calc((100vw - var(--largura)) / 2); max-width: none; }
-  .faixa-conteudo > * { max-width: 620px; }
+.prateleira {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 .5rem 20px;
+}
+/* A prateleira: um fio de luz dourada onde as garrafas assentam */
+.prateleira::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 14px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(194, 158, 97, .6) 15%, rgba(194, 158, 97, .6) 85%, transparent);
+}
+/* e a sombra das garrafas por baixo dele */
+.prateleira::before {
+  content: "";
+  position: absolute;
+  left: 10%; right: 10%; bottom: 0;
+  height: 24px;
+  background: radial-gradient(ellipse 50% 100% at 50% 0%, rgba(0, 0, 0, .5), transparent 70%);
+}
+.prateleira img {
+  position: relative;
+  z-index: 1;
+  height: calc(clamp(170px, 19vw, 270px) * var(--escala, 1));
+  width: auto;
+  margin-inline: -7px;
+  filter: drop-shadow(0 12px 14px rgba(0, 0, 0, .55));
 }
 
 /* --- Fotografia emoldurada (página Sobre) --- */
@@ -1543,16 +1591,17 @@ a.btn-voltar { text-decoration: none; }
    CONTEÚDO DIVERSO
    ========================================================= */
 
-.cartoes-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.4rem; }
+/* Sem caixa à volta: cada bloco tem só um fio dourado por cima. Eram
+   seis secções seguidas de caixas brancas iguais, e era isso que dava
+   ao site ar de modelo pronto. */
+/* Três por linha: as páginas têm três ou seis blocos, e assim ficam
+   sempre em linhas completas (3, ou 3 + 3), nunca 4 + 2. */
+.cartoes-info { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.2rem 2.6rem; }
 
 .info {
-  padding: 1.7rem;
-  background: var(--superficie);
-  border: 1px solid var(--ouro-contorno);
-  border-radius: var(--raio);
-  transition: transform .22s, box-shadow .22s;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--ouro-contorno);
 }
-.info:hover { transform: translateY(-3px); box-shadow: var(--sombra); }
 .info-icone {
   width: 44px; height: 44px;
   display: grid; place-items: center;
@@ -1572,19 +1621,19 @@ a.btn-voltar { text-decoration: none; }
    quem compra para o restaurante ou para o café.
    ========================================================= */
 
-.publicos { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.5rem; }
+/* Duas colunas separadas por um fio dourado, sem caixas: é a mesma casa
+   para os dois lados, e o desenho diz isso melhor do que dois cartões. */
+.publicos { display: grid; grid-template-columns: 1fr 1fr; }
 
 .publico {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 2rem;
-  background: var(--superficie);
-  border: 1px solid var(--ouro-contorno);
-  border-radius: var(--raio);
-  transition: transform .22s, box-shadow .22s, border-color .22s;
+  padding: .3rem clamp(1.5rem, 4.5vw, 3.8rem);
 }
-.publico:hover { transform: translateY(-3px); box-shadow: var(--sombra); border-color: var(--dourado); }
+.publico:first-child { padding-left: 0; }
+.publico:last-child { padding-right: 0; }
+.publico + .publico { border-left: 1px solid var(--ouro-contorno); }
 .publico h3 { font-size: 1.28rem; margin-bottom: .5rem; }
 .publico p { color: var(--texto-suave); margin-bottom: 1.4rem; }
 .publico .btn { margin-top: auto; }
@@ -1620,27 +1669,70 @@ a.btn-voltar { text-decoration: none; }
 .passos p { font-size: .9rem; color: var(--texto-suave); margin: 0; }
 .passos-nota { margin: 1.6rem 0 0; text-align: center; color: var(--texto-suave); font-size: .92rem; }
 
-.categorias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; }
+/* =========================================================
+   O QUE TEMOS
+   Um cartão por família, com três garrafas verdadeiras em leque,
+   na mesma luz dos cartões dos produtos. Os cartões são escuros
+   mesmo dentro da secção clara: são montras.
+   ========================================================= */
+
+.categorias-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.2rem; }
 
 .categoria-card {
+  /* As cores do tema escuro, mesmo dentro de uma secção clara
+     (são os valores do :root) */
+  --texto: #F4EADF;
+  --texto-suave: #BDAAA1;
+  --acento: #D6B27B;
   position: relative;
-  display: block;
-  padding: 1.8rem 1.5rem;
+  display: flex;
+  flex-direction: column;
   border-radius: var(--raio);
-  background: var(--superficie);
-  border: 1px solid var(--ouro-contorno);
-  border-left: 3px solid var(--dourado);
+  background: #2A1E20;
+  border: 1px solid rgba(194, 158, 97, .45);
   color: var(--texto);
   text-decoration: none;
   overflow: hidden;
-  transition: transform .22s, box-shadow .22s, border-left-color .22s;
+  transition: transform .22s, box-shadow .22s, border-color .22s;
 }
-.categoria-card:hover { transform: translateY(-4px); box-shadow: var(--sombra); text-decoration: none; border-left-color: var(--acento); }
-.categoria-card h3 { margin-bottom: .35rem; }
-.categoria-card p { font-size: .87rem; color: var(--texto-suave); margin: 0 0 1rem; }
-.categoria-card .seta { font-size: .85rem; font-weight: 600; color: var(--acento); transition: transform .22s; display: inline-block; }
+.categoria-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(46, 33, 36, .3);
+  border-color: var(--dourado);
+  text-decoration: none;
+}
+
+.categoria-montra {
+  position: relative;
+  height: 215px;
+  background: radial-gradient(ellipse 60% 72% at 50% 58%, #5E4346 0%, #3F2D30 48%, #2A1E20 100%);
+  border-bottom: 1px solid rgba(194, 158, 97, .3);
+}
+.categoria-montra img {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  height: calc(178px * var(--escala, 1));
+  width: auto;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .5));
+  transition: transform .45s cubic-bezier(.22, .68, .3, 1);
+}
+/* Em leque: a do meio à frente, as outras duas um pouco atrás e
+   inclinadas. Ao passar o rato, abrem-se um pouco mais. */
+.categoria-montra img:nth-child(1) { z-index: 1; transform: translateX(-50%) translateX(-42px) rotate(-8deg) scale(.86); }
+.categoria-montra img:nth-child(2) { z-index: 2; transform: translateX(-50%); }
+.categoria-montra img:nth-child(3) { z-index: 1; transform: translateX(-50%) translateX(42px) rotate(8deg) scale(.86); }
+.categoria-card:hover .categoria-montra img:nth-child(1) { transform: translateX(-50%) translateX(-54px) rotate(-11deg) scale(.86); }
+.categoria-card:hover .categoria-montra img:nth-child(2) { transform: translateX(-50%) translateY(-6px); }
+.categoria-card:hover .categoria-montra img:nth-child(3) { transform: translateX(-50%) translateX(54px) rotate(11deg) scale(.86); }
+
+.categoria-corpo { display: flex; flex-direction: column; flex: 1; padding: 1.15rem 1.3rem 1.3rem; }
+.categoria-card h3 { margin-bottom: .3rem; }
+.categoria-card p { font-size: .87rem; color: var(--texto-suave); margin: 0 0 .9rem; }
+.categoria-conta { display: block; margin-top: auto; font-size: .78rem; color: var(--texto-suave); }
+.categoria-card .seta { display: inline-block; margin-top: .25rem; font-size: .85rem; font-weight: 600; color: var(--acento); transition: transform .22s; }
 .categoria-card:hover .seta { transform: translateX(5px); }
-.categoria-conta { font-size: .78rem; color: var(--texto-suave); }
 
 .about { display: grid; grid-template-columns: 1.55fr 1fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
 .about-text p { color: var(--texto-suave); }
@@ -1695,22 +1787,29 @@ a.btn-voltar { text-decoration: none; }
 }
 .redes .btn-rede:hover svg, .nav-redes .btn-rede:hover svg { color: currentColor; }
 
-/* Página inicial: faixa por baixo dos três cartões */
-.redes-faixa {
+/* Página inicial: avaliações e redes numa faixa só, entre dois fios
+   dourados. Se uma das metades desaparecer (falta a ligação das
+   avaliações, ou não há redes), a outra ocupa a largura toda e o fio
+   do meio vai com ela. */
+.faixa-dupla {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1.2rem 2rem;
-  margin-top: 1.4rem;
-  padding: 1.5rem 1.7rem;
-  background: var(--superficie);
-  border: 1px solid var(--ouro-contorno);
-  border-left: 3px solid var(--dourado);
-  border-radius: var(--raio);
+  margin-top: 2.8rem;
+  border-top: 1px solid var(--ouro-contorno);
+  border-bottom: 1px solid var(--ouro-contorno);
 }
-.redes-faixa h3 { font-size: 1.2rem; margin-bottom: .25rem; }
-.redes-faixa p { margin: 0; font-size: .92rem; color: var(--texto-suave); }
+.faixa-metade {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.6rem clamp(1rem, 3vw, 2.4rem);
+}
+.faixa-metade:first-child { padding-left: 0; }
+.faixa-metade:last-child { padding-right: 0; }
+.faixa-metade + .faixa-metade { border-left: 1px solid var(--ouro-contorno); }
+.faixa-metade h3 { font-size: 1.15rem; margin-bottom: .2rem; }
+.faixa-metade p { margin: 0; font-size: .9rem; color: var(--texto-suave); }
 
 .contacto-bloco .redes { margin-top: .8rem; }
 
@@ -2574,6 +2673,12 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .hero-inner { gap: 1rem; padding-top: 0; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .contacto-grid, .about { grid-template-columns: 1fr; }
+
+  /* As montras das famílias em 2×2, e a faixa das garrafas com o texto
+     por cima e a prateleira por baixo */
+  .categorias-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .faixa-grelha { grid-template-columns: 1fr; }
+  .faixa-conteudo { max-width: 40rem; }
 }
 
 /* Num ecrã estreito as três não cabem lado a lado sem partir o texto
@@ -2585,6 +2690,36 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 @media (max-width: 760px) {
   body { font-size: 16px; }
   :root { --topo: 62px; }
+
+  /* Montras das famílias: mais baixas, sem a frase, para as quatro
+     caberem em 2×2 */
+  .cartoes-info { grid-template-columns: 1fr; gap: 1.8rem; }
+  .categorias-grid { gap: .75rem; }
+  .categoria-montra { height: 150px; }
+  .categoria-montra img { bottom: 12px; height: calc(122px * var(--escala, 1)); }
+  .categoria-montra img:nth-child(1) { transform: translateX(-50%) translateX(-28px) rotate(-8deg) scale(.86); }
+  .categoria-montra img:nth-child(3) { transform: translateX(-50%) translateX(28px) rotate(8deg) scale(.86); }
+  .categoria-corpo { padding: .85rem .9rem 1rem; }
+  .categoria-card h3 { font-size: 1.12rem; margin-bottom: .15rem; }
+  .categoria-card p { display: none; }
+  .categoria-card .seta { font-size: .8rem; }
+
+  /* Cinco garrafas na prateleira, em vez de sete */
+  .prateleira img { height: calc(165px * var(--escala, 1)); margin-inline: -5px; }
+  .prateleira img:first-child, .prateleira img:last-child { display: none; }
+
+  /* Particulares e empresas, e a faixa das avaliações: uma coisa por
+     baixo da outra, com o fio a separar por cima em vez de ao lado */
+  .publicos { grid-template-columns: 1fr; }
+  .publico { padding-inline: 0; }
+  .publico + .publico { border-left: 0; border-top: 1px solid var(--ouro-contorno); margin-top: 2rem; padding-top: 2rem; }
+  .faixa-dupla { flex-direction: column; }
+  .faixa-metade { padding-inline: 0; }
+  .faixa-metade + .faixa-metade { border-left: 0; border-top: 1px solid var(--ouro-contorno); }
+
+  /* O cruzamento mais pequeno: no telemóvel o texto ocupa a largura toda */
+  .hero-cor::before { background-size: 2000px auto; background-position: calc(50% + 100px) calc(50% + 260px); }
+  .com-cruzamento::before { background-size: 2000px auto; background-position: calc(50% - 150px) calc(50% + 150px); }
 
   .logo img { height: 36px; }
 
@@ -2641,7 +2776,6 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .faixa-fundo img { transform: none !important; }
   .cortina::after { display: none; }
   .cortina img { transform: none; }
   .card { transform: none !important; }

@@ -425,34 +425,6 @@
     }, { passive: true });
   }
 
-  /* --- Parallax da faixa fotográfica ---
-     A imagem desliza mais devagar do que a página, o que dá
-     sensação de profundidade sem pesar nada.                 */
-  function ligarParallaxFaixa() {
-    if (menosMovimento) return;
-
-    const faixas = [...document.querySelectorAll(".faixa")];
-    if (!faixas.length) return;
-
-    let aEsperar = false;
-    function mover() {
-      faixas.forEach(faixa => {
-        const r = faixa.getBoundingClientRect();
-        if (r.bottom < 0 || r.top > window.innerHeight) return;
-        const img = faixa.querySelector(".faixa-fundo img");
-        if (!img) return;
-        // -1 quando a faixa entra por baixo, +1 quando sai por cima
-        const progresso = (window.innerHeight / 2 - (r.top + r.height / 2)) / window.innerHeight;
-        img.style.transform = `translateY(${progresso * 42}px)`;
-      });
-      aEsperar = false;
-    }
-    window.addEventListener("scroll", () => {
-      if (!aEsperar) { aEsperar = true; requestAnimationFrame(mover); }
-    }, { passive: true });
-    mover();
-  }
-
   /* --- Inclinação dos cartões conforme a posição do rato --- */
   function ligarInclinacao() {
     if (menosMovimento || window.matchMedia("(hover: none)").matches) return;
@@ -2212,7 +2184,6 @@
     ligarCabecalhoEncolhido();
     ligarContadores();
     ligarBrilhoCartoes();
-    ligarParallaxFaixa();
     ligarInclinacao();
     ligarTransicaoPaginas();
   });

@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=3c5c91f8">
+  <link rel="stylesheet" href="css/style.css?v=527eb13f">
 </head>
 <body>
 
@@ -168,30 +168,44 @@
         <p>Quatro famílias, todas provadas por nós. Carregue numa para ver tudo.</p>
       </div>
 
+      <!-- Cada cartão mostra três garrafas verdadeiras da família,
+           escolhidas pelo atualizar-site.py a partir da folha. -->
       <div class="categorias-grid">
         <a class="categoria-card revelar revelar-zoom" href="vinhos.html#verde">
-          <h3>Verdes</h3>
-          <p>Noroeste atlântico. Leves, cítricos e de acidez marcada.</p>
-          <span class="categoria-conta" data-conta-categoria="verde"></span><br>
-          <span class="seta">Ver verdes →</span>
+          <div class="categoria-montra" aria-hidden="true"><!-- garrafas:verde: início --><img src="img/produtos/arca-nova-vinhao-primoris.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/conde-villar-branco.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/vinho-verde-da-casa.webp" alt="" loading="lazy" decoding="async"><!-- garrafas:verde: fim --></div>
+          <div class="categoria-corpo">
+            <h3>Verdes</h3>
+            <p>Noroeste atlântico. Leves, cítricos e de acidez marcada.</p>
+            <span class="categoria-conta" data-conta-categoria="verde"></span>
+            <span class="seta">Ver verdes →</span>
+          </div>
         </a>
         <a class="categoria-card revelar revelar-zoom" href="vinhos.html#maduro">
-          <h3>Maduros</h3>
-          <p>Do Douro e do Alentejo, tintos e brancos para todas as ocasiões.</p>
-          <span class="categoria-conta" data-conta-categoria="maduro"></span><br>
-          <span class="seta">Ver maduros →</span>
+          <div class="categoria-montra" aria-hidden="true"><!-- garrafas:maduro: início --><img src="img/produtos/piano-colheita-branco.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/bafarela-reserva-tinto.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/castello-de-numao-tinto.webp" alt="" loading="lazy" decoding="async"><!-- garrafas:maduro: fim --></div>
+          <div class="categoria-corpo">
+            <h3>Maduros</h3>
+            <p>Do Douro e do Alentejo, tintos e brancos para todas as ocasiões.</p>
+            <span class="categoria-conta" data-conta-categoria="maduro"></span>
+            <span class="seta">Ver maduros →</span>
+          </div>
         </a>
         <a class="categoria-card revelar revelar-zoom" href="espumantes.html">
-          <h3>Espumantes</h3>
-          <p>Método clássico e bolha fina, para celebrar ou acompanhar a refeição.</p>
-          <span class="categoria-conta" data-conta-categoria="espumantes"></span><br>
-          <span class="seta">Ver espumantes →</span>
+          <div class="categoria-montra" aria-hidden="true"><!-- garrafas:espumantes: início --><img src="img/produtos/terras-do-demo-rose-bruto.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/mata-fidalga-branco-bruto.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/mata-fidalga-tinto-bruto.webp" alt="" loading="lazy" decoding="async"><!-- garrafas:espumantes: fim --></div>
+          <div class="categoria-corpo">
+            <h3>Espumantes</h3>
+            <p>Método clássico e bolha fina, para celebrar ou acompanhar a refeição.</p>
+            <span class="categoria-conta" data-conta-categoria="espumantes"></span>
+            <span class="seta">Ver espumantes →</span>
+          </div>
         </a>
         <a class="categoria-card revelar revelar-zoom" href="cervejas.html">
-          <h3>Cervejas</h3>
-          <p>Cervejas especiais, para beber devagar e à mesa.</p>
-          <span class="categoria-conta" data-conta-categoria="cervejas"></span><br>
-          <span class="seta">Ver cervejas →</span>
+          <div class="categoria-montra" aria-hidden="true"><!-- garrafas:cervejas: início --><img src="img/produtos/la-divine.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/3-monts-75cl.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/3-monts-33cl.webp" alt="" loading="lazy" decoding="async" style="--escala:0.8"><!-- garrafas:cervejas: fim --></div>
+          <div class="categoria-corpo">
+            <h3>Cervejas</h3>
+            <p>Cervejas especiais, para beber devagar e à mesa.</p>
+            <span class="categoria-conta" data-conta-categoria="cervejas"></span>
+            <span class="seta">Ver cervejas →</span>
+          </div>
         </a>
       </div>
     </div>
@@ -229,20 +243,22 @@
     </div>
   </section>
 
-  <section class="faixa">
-    <picture class="faixa-fundo cortina">
-      <source media="(max-width: 760px)" srcset="img/adega-pequena.webp">
-      <img src="img/adega.webp" alt="" loading="lazy" decoding="async">
-    </picture>
-    <div class="faixa-veu" aria-hidden="true"></div>
-    <div class="container faixa-conteudo">
-      <p class="eyebrow">A nossa forma de trabalhar</p>
-      <h2>Provamos tudo o que vendemos.</h2>
-      <p class="lead">
-        Recusamos mais do que aceitamos. O que não bebemos em nossa casa não
-        vai para a prateleira.
-      </p>
-      <a class="btn btn-dourado" href="sobre.html">Conhecer a casa</a>
+  <!-- Em vez de uma fotografia de banco de imagens (mostrava colheitas
+       de 1989 a 1992, vinhos velhos que a loja não vende), uma fila de
+       garrafas verdadeiras do catálogo, com a luz das páginas de produto.
+       As garrafas são escolhidas pelo atualizar-site.py. -->
+  <section class="faixa faixa-garrafas">
+    <div class="container faixa-grelha">
+      <div class="faixa-conteudo revelar">
+        <p class="eyebrow">A nossa forma de trabalhar</p>
+        <h2>Provamos tudo o que vendemos.</h2>
+        <p class="lead">
+          Recusamos mais do que aceitamos. O que não bebemos em nossa casa não
+          vai para a prateleira.
+        </p>
+        <a class="btn btn-dourado" href="sobre.html">Conhecer a casa</a>
+      </div>
+      <div class="prateleira revelar" aria-hidden="true"><!-- prateleira: início --><img src="img/produtos/conde-villar-branco.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/mata-fidalga-rose-bruto.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/piano-reserva-branco.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/bafarela-grande-reserva-tinto.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/castello-de-numao-branco.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/fraga-da-pena-bruto.webp" alt="" loading="lazy" decoding="async"><img src="img/produtos/3-monts-heritage-cereales.webp" alt="" loading="lazy" decoding="async"><!-- prateleira: fim --></div>
     </div>
   </section>
 
@@ -272,27 +288,27 @@
         </div>
       </div>
 
-      <!-- Avaliações do Google. Só aparece quando a ligação estiver
-           escrita no js/config.js, em "avaliacao". -->
-      <div class="redes-faixa revelar" data-bloco-avaliar>
-        <div>
-          <h3>Já comprou aqui?</h3>
-          <p>Uma avaliação no Google ajuda outras pessoas a encontrar a garrafeira. Leva um minuto.</p>
-        </div>
-        <div class="redes">
+      <!-- Avaliações e redes sociais numa faixa só, com duas metades.
+           Cada metade desaparece sozinha se lhe faltar o que precisa: a
+           das avaliações sem a ligação no js/config.js ("avaliacao"), a
+           das redes sem nenhuma rede preenchida. A outra ocupa o espaço. -->
+      <div class="faixa-dupla revelar">
+        <div class="faixa-metade" data-bloco-avaliar>
+          <div>
+            <h3>Já comprou aqui?</h3>
+            <p>Uma avaliação no Google ajuda outras pessoas a encontrar a garrafeira.</p>
+          </div>
           <a class="btn btn-dourado" data-avaliar href="#" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m12 3 2.6 5.6 6 .8-4.4 4.2 1.1 6-5.3-2.9-5.3 2.9 1.1-6L3.4 9.4l6-.8z"/></svg>
             <span>Avaliar no Google</span>
           </a>
         </div>
-      </div>
-
-      <div class="redes-faixa revelar" data-redes>
-        <div>
-          <h3>Siga-nos nas redes sociais</h3>
-          <p>As novidades da garrafeira, no Instagram e no Facebook.</p>
-        </div>
-        <div class="redes">
+        <div class="faixa-metade" data-redes>
+          <div>
+            <h3>Siga-nos</h3>
+            <p>As novidades da garrafeira.</p>
+          </div>
+          <div class="redes">
           <a class="btn-rede" data-rede="instagram" href="#" target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
             <span>Instagram</span>
@@ -301,6 +317,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 3h-3a4 4 0 0 0-4 4v3H5v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
             <span>Facebook</span>
           </a>
+          </div>
         </div>
       </div>
     </div>
@@ -333,7 +350,7 @@
     </div>
   </section>
 
-  <section class="section section-escura">
+  <section class="section section-escura com-cruzamento">
     <div class="container">
       <div class="section-head revelar">
         <h2>Não sabe o que escolher?</h2>
@@ -457,6 +474,6 @@
 <script src="js/produtos.js?v=e0f38737"></script>
 <script src="js/ilustracoes.js?v=6c830521"></script>
 <script src="js/carrinho.js?v=89e50df7"></script>
-<script src="js/main.js?v=fba842f8"></script>
+<script src="js/main.js?v=bc86a8a8"></script>
 </body>
 </html>

@@ -164,6 +164,27 @@ que aparece. É de propósito.
 O endereço antigo, `produto.html?id=...`, continua a funcionar: reencaminha
 para a página nova, para as ligações que já andam por aí não se perderem.
 
+### As garrafas da página inicial
+
+As fotografias de garrafas que aparecem na página inicial, fora dos cartões
+dos produtos, também são escritas pelo mesmo comando:
+
+- **"O que temos"**: três garrafas de cada família, em leque, em cada
+  cartão (entre `<!-- garrafas:verde: início -->` e `<!-- garrafas:verde: fim -->`,
+  e o mesmo para `maduro`, `espumantes` e `cervejas`).
+- **A faixa escura a meio da página**: sete garrafas em fila, numa
+  prateleira (entre `<!-- prateleira: início -->` e `<!-- prateleira: fim -->`).
+
+As garrafas são escolhidas da folha: primeiro as marcadas para o início,
+depois as que trazem um produtor ou um tipo (tinto, branco, rosé) que ainda
+não esteja lá, para a fila não sair toda igual. A prateleira não repete as
+garrafas dos cartões. Se um produto sair do catálogo, sai também daqui, e
+nunca fica uma imagem partida. Quem quiser uma garrafa em destaque nestes
+sítios, marca-a para o início na folha.
+
+O número de produtores na página **Sobre** também é contado da folha (entre
+`<!-- produtores: início -->` e `<!-- produtores: fim -->`).
+
 ## Como funciona o carrinho
 
 Não há pagamentos nem servidor. O carrinho guarda as escolhas no browser do

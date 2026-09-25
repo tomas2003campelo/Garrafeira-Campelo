@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4000 4000">
+  <!-- O cruzamento de Silveiros, de onde saiu o logótipo: a nacional a
+       direito, a estrada da igreja a entrar de lado, e a esquina redonda
+       da casa entre as duas. Usa-se muito ténue, como fundo.
+
+       A esquina fica no centro exato desta imagem, e as estradas vão até
+       às bordas. Assim o CSS põe a esquina onde quer com
+       "background-position: calc(50% + Xpx) calc(50% + Ypx)", e as
+       estradas chegam sempre ao fim da secção. -->
+  <path fill="#FCF6EE" fill-opacity=".05"
+        d="M1910 0V4000H2000V2090H4000V2000H2190A190 190 0 0 1 2000 1810V0Z"/>
+</svg>

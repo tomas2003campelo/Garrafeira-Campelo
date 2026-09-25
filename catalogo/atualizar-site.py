@@ -921,6 +921,107 @@ def escrever_catalogos(produtos):
     return mudadas
 
 
+def garrafas_para_montra(candidatos, quantas, evitar=()):
+    """Escolhe garrafas variadas para uma montra da página inicial.
+
+    Primeiro as marcadas para o início, depois as que trazem um produtor
+    ou um tipo (tinto, branco, rosé) que ainda não está na escolha, para
+    não sair uma fila de garrafas iguais. Nunca repete uma fotografia,
+    porque há produtos que partilham a mesma (o Quintela de 75 e de
+    37,5 cl, por exemplo). Em caso de empate, manda a ordem da folha."""
+    livres = [p for p in candidatos
+              if p.get("imagem") and not p.get("esgotado")
+              and p["imagem"] not in evitar]
+    escolhidas, produtores, tipos = [], set(), set()
+    while livres and len(escolhidas) < quantas:
+        def pontos(p):
+            return ((p.get("produtor") not in produtores)
+                    + (p.get("tipo") not in tipos)
+                    + (0.5 if p.get("inicio") else 0))
+        melhor = max(livres, key=pontos)
+        escolhidas.append(melhor)
+        produtores.add(melhor.get("produtor"))
+        tipos.add(melhor.get("tipo"))
+        livres = [p for p in livres if p["imagem"] != melhor["imagem"]]
+    return escolhidas
+
+
+def do_centro_para_fora(garrafas):
+    """A primeira escolhida fica no meio, e as outras vão-se pondo de um
+    lado e do outro: [2.ª, 1.ª, 3.ª], ou [6.ª, 4.ª, 2.ª, 1.ª, 3.ª, 5.ª, 7.ª]."""
+    return garrafas[1::2][::-1] + garrafas[:1] + garrafas[2::2]
+
+
+def html_das_garrafas(garrafas):
+    partes = []
+    for p in do_centro_para_fora(garrafas):
+        escala = escala_da_garrafa(p)
+        estilo = f' style="--escala:{escala:g}"' if escala != 1 else ""
+        partes.append(f'<img src="{p["imagem"]}" alt="" loading="lazy" '
+                      f'decoding="async"{estilo}>')
+    return "".join(partes)
+
+
+def escrever_montras(produtos):
+    """Põe fotografias de garrafas verdadeiras nas montras da página
+    inicial, entre marcas, como as listas:
+
+      <!-- garrafas:verde: início --> ... <!-- garrafas:verde: fim -->
+          três garrafas de cada família, nos cartões de "O que temos";
+      <!-- prateleira: início --> ... <!-- prateleira: fim -->
+          sete garrafas em fila, na faixa escura a meio da página.
+
+    As garrafas vêm da folha: se um produto sair do catálogo, sai também
+    da montra, e nunca fica uma imagem partida. A prateleira evita as
+    garrafas que já estão nos cartões, para não se repetirem.
+
+    Devolve quantas páginas mudaram."""
+    por_familia = {}
+    for p in produtos:
+        por_familia.setdefault(p["categoria"], []).append(p)
+
+    mudadas = 0
+    for pagina in sorted(RAIZ.glob("*.html")):
+        texto = pagina.read_text(encoding="utf-8")
+        if MARCA in texto or ("<!-- garrafas:" not in texto
+                              and "<!-- prateleira: início -->" not in texto):
+            continue
+
+        usadas = set()
+
+        def cartao(m):
+            familia = m.group(1)
+            garrafas = garrafas_para_montra(por_familia.get(familia, []), 3)
+            usadas.update(g["imagem"] for g in garrafas)
+            return (f"<!-- garrafas:{familia}: início -->{html_das_garrafas(garrafas)}"
+                    f"<!-- garrafas:{familia}: fim -->")
+
+        novo = re.sub(r"<!-- garrafas:(\w+): início -->.*?<!-- garrafas:\1: fim -->",
+                      cartao, texto, flags=re.S)
+
+        # Prateleira: mais maduros e espumantes, que é o grosso da loja.
+        plano = [("maduro", 3), ("espumantes", 2), ("verde", 1), ("cervejas", 1)]
+        fila = []
+        for familia, quantas in plano:
+            ja = {g["imagem"] for g in fila}
+            escolha = garrafas_para_montra(por_familia.get(familia, []), quantas,
+                                           evitar=usadas | ja)
+            if len(escolha) < quantas:    # família pequena: repete-se dos cartões
+                ja |= {g["imagem"] for g in escolha}
+                escolha += garrafas_para_montra(por_familia.get(familia, []),
+                                                quantas - len(escolha), evitar=ja)
+            fila += escolha
+        novo = re.sub(r"<!-- prateleira: início -->.*?<!-- prateleira: fim -->",
+                      lambda _: (f"<!-- prateleira: início -->{html_das_garrafas(fila)}"
+                                 f"<!-- prateleira: fim -->"),
+                      novo, flags=re.S)
+
+        if novo != texto:
+            pagina.write_text(novo, encoding="utf-8")
+            mudadas += 1
+    return mudadas
+
+
 def escrever_contagens(produtos):
     """Escreve o número de produtores do catálogo onde a página o pedir,
     entre as marcas <!-- produtores: início --> e <!-- produtores: fim -->.
@@ -1052,6 +1153,7 @@ def main():
 
     paginas, apagadas = escrever_paginas(produtos)
     catalogos = escrever_catalogos(produtos)
+    escrever_montras(produtos)
     escrever_contagens(produtos)
     escrever(produtos)
     carimbar_versoes()
