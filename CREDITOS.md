@@ -48,7 +48,8 @@ as margens e passaram a WebP com 600 px de altura.
 | `piano-*.webp`, `porto-piano-*.webp`, `quintela-*.webp` | [Carlos Alonso Douro Wine](https://carlosalonso.wine/) |
 | `tapada-villar-*.webp`, `conde-villar-*.webp`, `arca-nova-vinhao-primoris.webp` | [Quinta das Arcas](https://lojadaquinta.pt/) |
 | `terras-do-demo-bruto.webp`, `fraga-da-pena-bruto.webp` | [Caves Terras do Demo](https://www.cavesterrasdodemo.pt/) |
-| `murganheira-*.webp` | [Murganheira](https://murganheira.com/) |
+| `murganheira-reserva-bruto.webp` | [Murganheira](https://murganheira.com/) |
+| `murganheira-super-reserva-bruto.webp` | Fotografia junta pela Garrafeira Campelo (setembro de 2026): a do site da Murganheira mostra a Super Reserva Meio Seco |
 | `raposeira-*.webp` | [Caves da Raposeira](https://cavesdaraposeira.com/) |
 | `mata-fidalga-rose-bruto.webp` | [Quinta da Mata Fidalga](https://qmf.pt/) |
 | `3-monts-*.webp` | [Brasserie 3 Monts](https://www.3monts.fr/) |
