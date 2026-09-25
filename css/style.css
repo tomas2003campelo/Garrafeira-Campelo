@@ -400,6 +400,22 @@ main { overflow-x: clip; }
 
 .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
 
+/* Na abertura, as três portas têm exatamente a mesma largura. O texto
+   de cada uma fica numa linha só, senão umas ficavam mais altas
+   do que as outras. */
+.hero-cor .hero-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .7rem;
+  max-width: 40rem;
+}
+.hero-cor .hero-actions .btn {
+  width: 100%;
+  padding-inline: 1rem;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .hero-tags {
   grid-column: 1 / -1;
   display: flex;
@@ -434,62 +450,72 @@ main { overflow-x: clip; }
 .hero-tags a:hover span { text-decoration: underline; text-underline-offset: 3px; }
 
 /* =========================================================
-   HERO COM FOTOGRAFIA
-   As fotos são de banco de imagens (Unsplash, licença livre
-   para uso comercial) e mostram adegas genéricas — não são
-   da loja. Substitui por fotos tuas quando as tiveres.
+   ABERTURA A DUAS CORES
+   Sem fotografia: duas passagens de bordô, do mais escuro à
+   esquerda para o mais aberto à direita, e o selo da casa em
+   destaque. Pesa menos a carregar e o texto lê-se sempre.
    ========================================================= */
 
-/* Sem "overflow: hidden": a lista da pesquisa pode descer para lá do
-   hero. A fotografia continua cortada pela própria moldura. */
-.hero-foto { background: var(--borgonha-escuro); overflow: visible; }
-.hero-foto .hero-inner { z-index: 4; }
+/* Sem "overflow: hidden": a lista da pesquisa pode descer para lá do hero. */
+.hero-cor {
+  overflow: visible;
+  background: linear-gradient(118deg,
+      var(--borgonha-escuro) 0%,
+      var(--borgonha-escuro) 38%,
+      var(--borgonha) 100%);
+}
+.hero-cor .hero-inner {
+  z-index: 4;
+  /* Mais largura para o texto do que a que a fotografia deixava: é
+     o que permite às três portas ficarem lado a lado. */
+  grid-template-columns: 1.32fr .68fr;
+}
 
-.hero-fundo {
+/* Um halo dourado muito ténue por trás do selo, para o lado
+   direito não ficar uma chapa de cor lisa. */
+.hero-cor::after {
+  content: "";
   position: absolute;
-  display: block;
-  inset: 0;
   z-index: 0;
-  overflow: hidden;
-}
-.hero-fundo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  /* Zoom muito lento, para a imagem não ficar parada */
-  animation: aproximar 26s ease-in-out infinite alternate;
+  top: 50%; right: 2%;
+  width: min(620px, 60vw);
+  aspect-ratio: 1;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(194, 158, 97, .17) 0%, rgba(194, 158, 97, 0) 66%);
+  pointer-events: none;
 }
 
-@keyframes aproximar {
-  from { transform: scale(1) translateY(0); }
-  to   { transform: scale(1.09) translateY(-1.2%); }
+/* O selo da casa, na coluna que era da fotografia. O disco de
+   creme por trás dá-lhe ar de medalha e separa-o do bordô. */
+.hero-marca {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-marca img {
+  display: block;
+  width: min(300px, 80%);
+  height: auto;
+  border-radius: 50%;
+  background: #F2E6D6;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, .42);
 }
 
-/* Véu que garante que o texto se lê sobre a fotografia */
-.hero-veu {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background:
-    linear-gradient(100deg, rgba(58, 0, 10, .94) 0%, rgba(58, 0, 10, .82) 38%, rgba(58, 0, 10, .42) 72%, rgba(58, 0, 10, .58) 100%),
-    linear-gradient(to top, rgba(58, 0, 10, .75) 0%, transparent 34%);
-}
-
-/* O conteúdo do hero passa a ser claro */
-.hero-foto .hero-inner { color: var(--areia); }
-.hero-foto h1 { color: var(--creme); }
-.hero-foto h1 em { color: var(--dourado); font-style: italic; }
-.hero-foto .lead { color: rgba(252, 246, 238, .87); }
-.hero-foto .eyebrow { color: var(--dourado); }
-.hero-foto .eyebrow::before { background: var(--dourado); }
-.hero-foto .hero-tags {
+/* O conteúdo do hero é claro sobre o bordô */
+.hero-cor .hero-inner { color: var(--areia); }
+.hero-cor h1 { color: var(--creme); }
+.hero-cor h1 em { color: var(--dourado); font-style: italic; }
+.hero-cor .lead { color: rgba(252, 246, 238, .87); }
+.hero-cor .eyebrow { color: var(--dourado); }
+.hero-cor .eyebrow::before { background: var(--dourado); }
+.hero-cor .hero-tags {
   color: rgba(252, 246, 238, .78);
   border-top-color: rgba(252, 246, 238, .22);
 }
 
-/* O gradiente e as colinas do hero claro não se usam sobre fotografia */
-.hero-foto::before, .hero-foto .hero-colinas { display: none; }
+/* O gradiente e as colinas do hero claro não se usam aqui */
+.hero-cor::before, .hero-cor .hero-colinas { display: none; }
 
 /* Colinas em camadas, no espírito da capa da marca */
 .hero-colinas {
@@ -2549,10 +2575,15 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 
 @media (max-width: 1000px) {
   .hero { padding-top: clamp(2rem, 6vw, 4rem); }
-  .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 1.5rem; }
+  .hero-inner, .hero-cor .hero-inner { grid-template-columns: 1fr; }
+  .hero-inner { text-align: center; gap: 1.5rem; }
   .hero-inner .eyebrow, .hero-inner .lead { margin-inline: auto; }
   .hero-actions, .hero-tags { justify-content: center; }
+  .hero-cor .hero-actions { margin-inline: auto; }
   .pesquisa-inicio { margin-inline: auto; }
+  /* Numa coluna só, o selo passa para cima do título, mais pequeno */
+  .hero-marca { order: -1; }
+  .hero-marca img { width: 132px; }
   /* Centrado, o ícone fica colado ao início da morada, e o
      "Como chegar" desce para a linha de baixo */
   .hero-local { display: block; text-align: center; line-height: 1.5; }
@@ -2562,6 +2593,12 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .hero-inner { gap: 1rem; padding-top: 0; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .contacto-grid, .about { grid-template-columns: 1fr; }
+}
+
+/* Num ecrã estreito as três não cabem lado a lado sem partir o texto
+   ao meio. Ficam uma por linha, todas do mesmo tamanho. */
+@media (max-width: 700px) {
+  .hero-cor .hero-actions { grid-template-columns: 1fr; max-width: none; }
 }
 
 @media (max-width: 760px) {
@@ -2587,6 +2624,9 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .hero-inner { text-align: left; }
   .hero-inner .eyebrow, .hero-inner .lead { margin-inline: 0; }
   .hero-actions, .hero-tags { justify-content: flex-start; }
+  .hero-cor .hero-actions { margin-inline: 0; }
+  .hero-marca { justify-content: flex-start; }
+  .hero-marca img { width: 96px; }
 
   /* A linha "Retalhista de vinhos · Direto das quintas" partia-se em
      duas; o título diz o mesmo e diz melhor. */
@@ -2603,11 +2643,7 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   /* Colado ao fim da morada lia-se "...Barcelos Como chegar" */
   .hero-local strong { display: block; margin-top: .2rem; }
 
-  /* Um botão a mandar, não dois do mesmo tamanho */
   .hero .hero-actions { gap: .6rem; }
-  .hero .hero-actions .btn-dourado { flex: 1 1 100%; }
-  /* Os dois mais pequenos têm de caber lado a lado num ecrã de 375 px */
-  .hero .hero-actions .btn-pequeno { flex: 0 0 auto; padding-inline: 1rem; font-size: .84rem; }
 
   .modal-acoes { flex-direction: column-reverse; }
   .carrinho { width: 100%; }
@@ -2625,7 +2661,6 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .hero-fundo img { animation: none; }
   .faixa-fundo img { transform: none !important; }
   .cortina::after { display: none; }
   .cortina img { transform: none; }
