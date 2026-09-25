@@ -42,7 +42,8 @@ Sempre que gravares uma alteração, recarrega a página (`⌘R`).
 │   ├── ilustracoes.js Garrafas e latas desenhadas em SVG
 │   ├── carrinho.js    Lógica do carrinho
 │   └── main.js        Navegação, filtros, pesquisa, animações, formulário
-└── img/              Logótipo, favicon, capa social e fotos de produtos
+├── img/              Logótipo, favicon, capa social e fotos de produtos
+└── final/            O kit completo do logótipo, em SVG e PNG (ver "O logótipo")
 ```
 
 Só precisas de mexer em dois sítios: **`js/config.js`** e **`catalogo/produtos.xlsx`**.
@@ -192,6 +193,36 @@ mais vale não existir do que existir um botão que não leva a lado nenhum.
 Para o ligar: no Perfil de Empresa do Google, em **Pedir avaliações** (ou
 "Obter mais avaliações"), copia a ligação, que tem este aspeto
 `https://g.page/r/XXXXXXXX/review`, e escreve-a no `js/config.js`.
+
+## O logótipo
+
+A marca é um **C** desenhado a partir da esquina redonda do cruzamento de
+Silveiros, onde fica a loja. O losango é a própria loja, de frente para o
+cruzamento.
+
+O kit completo está na pasta **`final/`**. Abre o `final/ver-todos.html`
+para ver todas as versões, cada uma no fundo para que foi feita:
+
+- **marca**: o C sozinho. Para ícones e espaços pequenos.
+- **horizontal**: o C com GARRAFEIRA CAMPELO ao lado. Cabeçalho, fatura,
+  papel timbrado.
+- **vertical**: o C com o nome por baixo. Redes sociais, cartazes.
+- Cada uma existe **para fundo escuro**, **para fundo claro** e **a uma
+  cor só** (preto, para carimbos, sacos e vinil).
+- **perfil-instagram**: já no formato que o Instagram corta em círculo.
+
+O site só usa cópias, em `img/`:
+
+| No site | Vem de |
+|---|---|
+| `img/logotipo.svg` (cabeçalho e rodapé) | `final/svg/horizontal-para-fundo-escuro.svg` |
+| `img/marca.svg` (abertura e aviso de idade) | `final/svg/marca-para-fundo-escuro.svg` |
+| `favicon.ico`, `img/favicon.png` | `final/png/` |
+| `img/apple-touch-icon.png` | Feito a partir do `final/svg/favicon.svg`, sem os cantos redondos: o iPhone arredonda-os sozinho, e com os cantos já transparentes ficavam pretos |
+| `img/partilha.jpg` (a imagem que aparece ao partilhar o site) | `final/banner-partilha/partilha.jpg` |
+
+Se um dia mudares o logótipo, troca os ficheiros de `img/` pelos novos
+com o **mesmo nome** e o site inteiro atualiza-se sozinho.
 
 ## Obrigações legais
 

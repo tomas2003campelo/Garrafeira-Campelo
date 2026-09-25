@@ -2072,8 +2072,8 @@
     modal.querySelector("[data-idade-nao]")?.addEventListener("click", () => {
       const caixa = modal.querySelector(".modal-caixa");
       caixa.innerHTML = `
-        <img src="img/logo.png" alt="">
-        <h2>Volta noutra altura</h2>
+        <img src="img/marca.svg" alt="" width="72" height="72">
+        <h2>Volte noutra altura</h2>
         <p>
           Este site vende bebidas alcoólicas e, por lei, só pode ser visitado
           por maiores de 18 anos.

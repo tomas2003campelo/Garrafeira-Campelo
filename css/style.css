@@ -181,28 +181,15 @@ main { overflow-x: clip; }
   margin-right: auto;
 }
 .logo:hover { text-decoration: none; }
-.logo img { width: 42px; height: 42px; flex-shrink: 0; }
+/* O logótipo horizontal (marca, GARRAFEIRA e CAMPELO) é comprido:
+   mede-se pela altura e a largura acompanha. */
+.logo { flex-shrink: 0; }
+.logo img { display: block; height: 42px; width: auto; max-width: none; }
 
-.logo-texto { display: flex; flex-direction: column; line-height: 1.05; }
-.logo-nome {
-  font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo);
-  font-size: 1.24rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.logo-tag {
-  font-size: .63rem;
-  text-transform: uppercase;
-  letter-spacing: .13em;
-  color: var(--acento);
-  font-weight: 600;
-  white-space: nowrap;
-}
-/* O lema já aparece na página inicial e no rodapé. No cabeçalho, o
-   espaço vai para os ícones das redes sociais. */
-.topbar .logo-tag { display: none; }
-
-.nav { display: flex; gap: 1.7rem; align-items: center; }
+/* Sete links, o logótipo e o carrinho têm de caber na largura do
+   conteúdo. Com mais espaço entre os links, o carrinho saía para lá
+   da margem direita em todos os ecrãs grandes. */
+.nav { display: flex; gap: 1.1rem; align-items: center; }
 
 .nav a {
   color: var(--texto-suave);
@@ -486,8 +473,8 @@ main { overflow-x: clip; }
   pointer-events: none;
 }
 
-/* O selo da casa, na coluna que era da fotografia. O disco de
-   creme por trás dá-lhe ar de medalha e separa-o do bordô. */
+/* A marca da casa, na coluna que era da fotografia. Dourada sobre o
+   bordô, já não precisa de nada por trás para se ver. */
 .hero-marca {
   display: flex;
   justify-content: center;
@@ -495,11 +482,9 @@ main { overflow-x: clip; }
 }
 .hero-marca img {
   display: block;
-  width: min(300px, 80%);
+  width: min(260px, 70%);
   height: auto;
-  border-radius: 50%;
-  background: #F2E6D6;
-  box-shadow: 0 20px 44px rgba(0, 0, 0, .42);
+  filter: drop-shadow(0 16px 30px rgba(0, 0, 0, .35));
 }
 
 /* O conteúdo do hero é claro sobre o bordô */
@@ -2242,9 +2227,8 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 .footer ul { list-style: none; margin: 0; padding: 0; }
 .footer li { margin-bottom: .4rem; }
 
-.footer-marca { display: flex; align-items: center; gap: .7rem; margin-bottom: .9rem; }
-.footer-marca img { width: 46px; height: 46px; }
-.footer-marca strong { font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 1.2rem; color: var(--creme); display: block; line-height: 1.2; }
+.footer-marca { display: flex; flex-direction: column; align-items: flex-start; gap: .55rem; margin-bottom: .9rem; }
+.footer-marca img { display: block; height: 48px; width: auto; }
 .footer-marca span { font-size: .68rem; text-transform: uppercase; letter-spacing: .12em; color: var(--dourado); }
 
 .footer .redes-titulo {
@@ -2329,10 +2313,8 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 .topbar.encolhido { box-shadow: 0 2px 20px rgba(0, 0, 0, 0.32); }
 .topbar.encolhido .topbar-inner { min-height: 58px; padding-block: .45rem; }
 .topbar-inner { transition: min-height .3s ease, padding .3s ease; }
-.topbar.encolhido .logo img { width: 34px; height: 34px; }
-.logo img { transition: width .3s ease, height .3s ease; }
-.topbar.encolhido .logo-tag { opacity: 0; max-height: 0; }
-.logo-tag { transition: opacity .25s ease, max-height .3s ease; max-height: 20px; }
+.topbar.encolhido .logo img { height: 34px; }
+.logo img { transition: height .3s ease; }
 
 /* --- Brilho que atravessa os botões principais --- */
 .btn-primary, .btn-dourado { position: relative; overflow: hidden; isolation: isolate; }
@@ -2528,9 +2510,8 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
    ========================================================= */
 
 /* Portáteis pequenos: o menu ainda cabe inteiro se o carrinho ficar
-   só com o ícone e os links mais juntos. */
-@media (min-width: 1021px) and (max-width: 1180px) {
-  .nav { gap: 1.2rem; }
+   só com o ícone. */
+@media (min-width: 1021px) and (max-width: 1210px) {
   .btn-carrinho { padding: .55rem .8rem; }
   .btn-carrinho .etiqueta-carrinho { display: none; }
 }
@@ -2583,7 +2564,7 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .pesquisa-inicio { margin-inline: auto; }
   /* Numa coluna só, o selo passa para cima do título, mais pequeno */
   .hero-marca { order: -1; }
-  .hero-marca img { width: 132px; }
+  .hero-marca img { width: 104px; }
   /* Centrado, o ícone fica colado ao início da morada, e o
      "Como chegar" desce para a linha de baixo */
   .hero-local { display: block; text-align: center; line-height: 1.5; }
@@ -2605,9 +2586,7 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   body { font-size: 16px; }
   :root { --topo: 62px; }
 
-  .logo img { width: 36px; height: 36px; }
-  .logo-nome { font-size: 1.08rem; }
-  .logo-tag { display: none; }
+  .logo img { height: 36px; }
 
   .btn-carrinho { padding: .5rem .8rem; }
   .btn-carrinho .etiqueta-carrinho { display: none; }
@@ -2625,8 +2604,9 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .hero-inner .eyebrow, .hero-inner .lead { margin-inline: 0; }
   .hero-actions, .hero-tags { justify-content: flex-start; }
   .hero-cor .hero-actions { margin-inline: 0; }
-  .hero-marca { justify-content: flex-start; }
-  .hero-marca img { width: 96px; }
+  /* No telemóvel, o logótipo do cabeçalho fica logo por cima: a marca
+     repetida dois dedos abaixo só empurrava o título para baixo. */
+  .hero-marca { display: none; }
 
   /* A linha "Retalhista de vinhos · Direto das quintas" partia-se em
      duas; o título diz o mesmo e diz melhor. */
