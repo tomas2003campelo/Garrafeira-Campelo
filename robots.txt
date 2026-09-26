@@ -1,0 +1,6 @@
+# Todo o site pode ser visto pelos motores de busca.
+# A lista das páginas, para o Google as encontrar mais depressa:
+User-agent: *
+Allow: /
+
+Sitemap: https://garrafeiracampelo.pt/sitemap.xml
