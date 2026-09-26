@@ -214,7 +214,7 @@ const PRODUTOS = [
     regiao: "Douro DOC",
     ano: null,
     volume: "5 l",
-    alcool: 14.00,
+    alcool: 14.50,
     preco: 89.25,
     descricao: "O Piano Grande Reserva em garrafa de 5 litros, numa caixa de madeira. Touriga Nacional, Touriga Franca e Tinta Barroca, com estágio em barrica nova. Fruta negra, tabaco e baunilha, taninos firmes e final longo. Para uma festa, com borrego, cabrito ou posta.",
     cor: "#53000F",
