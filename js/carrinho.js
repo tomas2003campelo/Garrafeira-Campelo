@@ -36,14 +36,17 @@ const Carrinho = (function () {
     fatura: false, nif: "", nomeFatura: "",
     mesmaMorada: true, moradaFatura: "", codigoPostalFatura: "", localidadeFatura: "",
     morada: "", codigoPostal: "", localidade: "", concelho: "", pais: "Portugal",
-    diaRecolha: "", observacoes: "", lembrar: false
+    diaRecolha: "", observacoes: "", lembrar: false,
+    // A caixa das condições de venda: marca-se em cada encomenda, e
+    // nunca fica guardada de uma vez para a outra
+    aceitaCondicoes: false
   };
   let dados = carregarDados();
 
   function carregarDados() {
     try {
       const guardado = JSON.parse(localStorage.getItem(CHAVE_DADOS) || "null");
-      if (guardado) return Object.assign({}, DADOS_VAZIOS, guardado, { lembrar: true, observacoes: "" });
+      if (guardado) return Object.assign({}, DADOS_VAZIOS, guardado, { lembrar: true, observacoes: "", aceitaCondicoes: false });
     } catch (e) {}
     return Object.assign({}, DADOS_VAZIOS);
   }
@@ -181,7 +184,7 @@ const Carrinho = (function () {
     dados = Object.assign({}, dados, parcial);
     try {
       if (dados.lembrar) {
-        const { observacoes, diaRecolha, lembrar, ...guardar } = dados;
+        const { observacoes, diaRecolha, lembrar, aceitaCondicoes, ...guardar } = dados;
         localStorage.setItem(CHAVE_DADOS, JSON.stringify(guardar));
       } else {
         localStorage.removeItem(CHAVE_DADOS);
@@ -317,6 +320,9 @@ const Carrinho = (function () {
     if (modo === "entrega" && !(CONFIG.entrega.concelhos || []).includes(d.concelho))
       e.concelho = "Escolha o concelho da entrega.";
 
+    if (!d.aceitaCondicoes)
+      e.aceitaCondicoes = "Para enviar a encomenda, marque que leu e aceita as condições de venda.";
+
     return e;
   }
 
@@ -397,6 +403,8 @@ const Carrinho = (function () {
       p.push("", titulo("Observações"), d.observacoes.trim());
     }
 
+    // Fica escrito na mensagem que o cliente aceitou as condições
+    if (d.aceitaCondicoes) p.push("", "Li e aceito as condições de venda (garrafeiracampelo.pt/condicoes.html).");
     if (CONFIG.notaEncomenda) p.push("", CONFIG.notaEncomenda);
     return p.join("\n");
   }

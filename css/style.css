@@ -1502,6 +1502,11 @@ a.btn-voltar { text-decoration: none; }
 }
 .opcao-caixa.lembrar { font-size: .84rem; color: var(--texto-suave); }
 
+/* A caixa das condições de venda, obrigatória antes de enviar */
+.campo-aceitar { display: flex; flex-direction: column; gap: .35rem; margin-top: .9rem; padding-top: .9rem; border-top: 1px solid var(--linha); }
+.opcao-caixa.aceitar a { color: var(--acento); text-decoration: underline; text-underline-offset: 2px; }
+.opcao-caixa.aceitar input[aria-invalid="true"] { outline: 2px solid var(--erro); outline-offset: 2px; }
+
 #bloco-nif { display: flex; flex-direction: column; gap: .75rem; margin-top: .2rem; }
 #bloco-morada-fatura { display: flex; flex-direction: column; gap: .75rem; }
 

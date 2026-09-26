@@ -1789,11 +1789,13 @@
               Os seus dados seguem na mensagem para a ${CONFIG.nome} e servem apenas para tratar desta encomenda.
               <a href="privacidade.html" target="_blank" rel="noopener">Como tratamos os dados</a>
             </p>
-            <p class="aviso-dados">
-              Ao enviar a encomenda, aceita as
-              <a href="condicoes.html" target="_blank" rel="noopener">condições de venda</a>,
-              incluindo o direito de desistir em 14 dias.
-            </p>
+            <div class="campo-aceitar">
+              <label class="opcao-caixa aceitar">
+                <input type="checkbox" id="d-aceitaCondicoes" name="aceitaCondicoes"${d.aceitaCondicoes ? " checked" : ""} aria-describedby="e-aceitaCondicoes">
+                <span>Li e aceito as <a href="condicoes.html" target="_blank" rel="noopener">condições de venda</a>, incluindo o direito de desistir em 14 dias.</span>
+              </label>
+              <p class="campo-erro" id="e-aceitaCondicoes" role="alert"></p>
+            </div>
           </form>
 
           <div class="carrinho-acao">

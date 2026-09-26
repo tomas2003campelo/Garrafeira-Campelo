@@ -263,7 +263,8 @@ O site já tem as três peças que a lei portuguesa exige:
 - **Condições de venda** — em `condicoes.html`: quem vende, preços, pagamento (MB Way,
   dinheiro ou transferência, na loja ou na entrega), entregas, o direito de desistir em
   14 dias (Decreto-Lei 24/2014, com o modelo de formulário), garantia e litígios. O
-  carrinho diz que, ao enviar a encomenda, o cliente aceita estas condições. A rever
+  carrinho tem uma caixa obrigatória, "Li e aceito as condições de venda", que não fica
+  guardada de uma encomenda para a outra, e a mensagem da encomenda diz que foram aceites. A rever
   com a contabilidade, como a privacidade.
 
 As páginas legais estão isentas da verificação de idade: ninguém deve ter de
