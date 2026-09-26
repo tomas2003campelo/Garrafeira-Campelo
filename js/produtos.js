@@ -163,6 +163,7 @@ const PRODUTOS = [
     regiao: "Douro DOC",
     ano: null,
     volume: "75 cl",
+    alcool: 14.50,
     caixa: 6,
     preco: 25.56,
     descricao: "Vinhas velhas do Douro, com 24 meses em barricas novas de carvalho francês. Denso e complexo, de fruta concentrada, mineral e com final longo. Para pratos de caça e assados no forno.",
@@ -178,7 +179,7 @@ const PRODUTOS = [
     tipo: "branco",
     produtor: "Carlos Alonso Douro Wine",
     regiao: "Douro DOC",
-    ano: null,
+    ano: 2022,
     volume: "75 cl",
     alcool: 13.00,
     caixa: 6,
@@ -395,6 +396,23 @@ const PRODUTOS = [
     inicio: true
   },
   {
+    id: "bafarela-reserva-tinto-magnum",
+    pagina: "bafarela-reserva-tinto-magnum.html",
+    nome: "Bafarela Reserva Tinto Magnum",
+    categoria: "maduro",
+    tipo: "tinto",
+    produtor: "Brites Aguiar",
+    regiao: "Douro DOC",
+    ano: null,
+    volume: "1,5 l",
+    alcool: 14.00,
+    preco: 36.75,
+    descricao: "O Bafarela Reserva em garrafa magnum, de 1,5 litros, numa caixa de madeira. Touriga Nacional, Touriga Franca, Tinta Amarela e Tinta Roriz, com 10 meses em barrica. Fruta vermelha, violeta e especiarias, final fresco e persistente. Para cozinha tradicional, carnes e queijos.",
+    cor: "#53000F",
+    imagem: "img/produtos/bafarela-reserva-tinto.webp",
+    destaque: "Magnum"
+  },
+  {
     id: "dom-xisto-tinto",
     pagina: "dom-xisto-tinto.html",
     nome: "Dom Xisto Tinto",
@@ -511,7 +529,8 @@ const PRODUTOS = [
     preco: 8.19,
     descricao: "Tinta Roriz, Tinta Barroca, Touriga Nacional e Touriga Franca, envelhecido em madeira de carvalho. Especiarias e frutos secos, elegante, de doçura equilibrada e final persistente. Para sobremesas de caramelo ou café, tarte de maçã e queijos fortes.",
     cor: "#8A4B1C",
-    imagem: "img/produtos/porto-piano-tawny.webp"
+    imagem: "img/produtos/porto-piano-tawny.webp",
+    destaque: "Tawny"
   },
   {
     id: "porto-piano-10-anos",

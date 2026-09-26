@@ -27,7 +27,7 @@ const CONFIG = {
   telefone: "+351 252 961 558",
   telefoneLimpo: "351252961558",       // só dígitos, com indicativo do país, para o WhatsApp
   telefone2: "+351 936 506 371",       // segundo número, mostrado a seguir ao primeiro
-  telefone3: "+351 936 506 373",       // terceiro, se houver
+  telefone3: "+351 936 506 370",       // terceiro, se houver
   email: "j.campelo.unipessoal@gmail.com",
 
   morada: {
