@@ -584,7 +584,6 @@
         <p class="card-meta">${linhaMeta}</p>
         <h3 class="card-nome"><a href="${url}">${p.nome}</a></h3>
         ${origem ? `<p class="card-produtor">${origem}</p>` : ""}
-        <p class="card-desc">${p.descricao}</p>
         <span class="card-mais" aria-hidden="true">Ver detalhes <span class="card-seta">→</span></span>
         <div class="card-foot">
           <span class="preco-bloco">
@@ -1950,6 +1949,13 @@
     if (!contadores.length) return;
 
     function atualizar(animar) {
+      // Com uma garrafa a voar para o carrinho, o número só muda quando
+      // ela lá chega
+      const falta = chegadaAoCarrinho - performance.now();
+      if (animar && falta > 0) {
+        setTimeout(() => atualizar(true), falta);
+        return;
+      }
       const n = Carrinho.totalItens();
       contadores.forEach(c => {
         c.textContent = n;
@@ -1965,6 +1971,84 @@
     atualizar(false);
   }
 
+  /* --- A garrafa voa até ao carrinho ---
+     Ao adicionar, uma cópia da fotografia sai do cartão (ou da página
+     do produto) e vai, numa curva, até ao botão do carrinho no topo.
+     O número do carrinho só muda quando ela chega (ver ligarContador).
+     Quem pediu menos movimento não vê o voo: o número muda logo.     */
+  const DURACAO_VOO = 760;
+  let chegadaAoCarrinho = 0;
+
+  function prepararVoo(btn) {
+    if (menosMovimento) return null;
+    const alvo = document.querySelector(".topbar .btn-carrinho");
+    const origem = btn.closest(".card, .ficha")
+      ?.querySelector(".card-top img, .card-top .ilustracao, .ficha-foto img, .ficha-foto .ilustracao");
+    if (!alvo || !origem || !origem.animate) return null;
+    const de = origem.getBoundingClientRect(), para = alvo.getBoundingClientRect();
+    // Só voa entre duas coisas que se estejam a ver
+    if (!de.width || !para.width || para.bottom <= 0 || de.bottom <= 0 || de.top >= innerHeight) return null;
+    return { origem, alvo, de, para };
+  }
+
+  function voar({ origem, alvo, de, para }) {
+    const copia = origem.cloneNode(true);
+    copia.removeAttribute("loading");
+    copia.removeAttribute("style");
+    copia.setAttribute("aria-hidden", "true");
+    if (copia.tagName === "IMG") copia.alt = "";
+    copia.classList.remove("aparece");
+    copia.classList.add("garrafa-a-voar", "carregada");
+    Object.assign(copia.style, {
+      left: `${de.left}px`, top: `${de.top}px`,
+      width: `${de.width}px`, height: `${de.height}px`
+    });
+    document.body.appendChild(copia);
+    // Se o browser suspender a animação (separador escondido, por
+    // exemplo), a cópia não fica parada no ecrã
+    setTimeout(() => copia.remove(), DURACAO_VOO + 400);
+
+    // De centro a centro, numa curva que sobe primeiro, e a encolher
+    // até ao tamanho do botão
+    const dx = para.left + para.width / 2 - (de.left + de.width / 2);
+    const dy = para.top + para.height / 2 - (de.top + de.height / 2);
+    const fim = Math.max(0.12, Math.min(0.6, (para.height * 1.3) / de.height));
+    const meio = (1 + fim) / 2;
+    copia.animate([
+      { transform: "translate(0, 0) scale(1) rotate(0deg)", opacity: 1 },
+      { transform: `translate(${dx * 0.35}px, ${dy * 0.35 - 70}px) scale(${meio}) rotate(-10deg)`, opacity: 1, offset: 0.45 },
+      { transform: `translate(${dx}px, ${dy}px) scale(${fim}) rotate(-18deg)`, opacity: 0.35 }
+    ], { duration: DURACAO_VOO, easing: "cubic-bezier(.5, 0, .3, 1)", fill: "forwards" })
+      .finished.then(() => {
+        copia.remove();
+        // O carrinho "recebe" a garrafa
+        alvo.animate([
+          { transform: "scale(1)" }, { transform: "scale(1.12)" }, { transform: "scale(1)" }
+        ], { duration: 320, easing: "ease-out" });
+      });
+  }
+
+  /* --- Fotografias que aparecem suavemente ---
+     As que já estavam carregadas mostram-se logo; as outras ficam
+     invisíveis até acabarem de carregar, e aí aparecem (ver o CSS
+     .js-fotos). Vale também para as dos cartões desenhados depois.  */
+  function ligarFotos() {
+    const FOTO = 'img[src*="produtos/"]';
+    document.documentElement.classList.add("js-fotos");
+    document.querySelectorAll(FOTO).forEach(img => {
+      if (img.complete) img.classList.add("carregada");
+    });
+    document.addEventListener("load", e => {
+      const img = e.target;
+      if (img.tagName !== "IMG" || !img.matches(FOTO) || img.classList.contains("carregada")) return;
+      img.classList.add("carregada", "aparece");
+    }, true);
+    // Uma fotografia que falhe não pode ficar invisível para sempre
+    document.addEventListener("error", e => {
+      if (e.target.tagName === "IMG") e.target.classList.add("carregada");
+    }, true);
+  }
+
   /* Botões "Adicionar" espalhados pela página */
   const esperasDosBotoes = new WeakMap();
   function ligarBotoesAdicionar() {
@@ -1973,7 +2057,10 @@
       if (!btn || btn.disabled) return;
 
       const id = btn.dataset.add;
-      if (!Carrinho.adicionar(id)) return;
+      const voo = prepararVoo(btn);
+      chegadaAoCarrinho = voo ? performance.now() + DURACAO_VOO : 0;
+      if (!Carrinho.adicionar(id)) { chegadaAoCarrinho = 0; return; }
+      if (voo) voar(voo);
 
       // O texto original guarda-se uma vez só: com dois cliques seguidos,
       // o botão ficava para sempre em "Adicionado ✓"
@@ -2167,6 +2254,7 @@
       return;
     }
 
+    ligarFotos();           // antes de tudo, para apanhar as fotografias dos cartões
     preencherConfig();
     preencherIdentificacao();
     preencherLitigios();
