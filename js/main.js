@@ -2028,6 +2028,19 @@
       });
   }
 
+  /* Ao carregar em "voltar atrás", o browser guarda a página inteira
+     como estava e volta a mostrá-la, sem a recarregar. Pode trazer um
+     voo a meio (a garrafa presa no ar, o número à espera dela) e traz
+     sempre o carrinho que a página tinha em memória, que já pode estar
+     desatualizado. Limpa-se o voo e relê-se o carrinho, por esta ordem,
+     para o número do topo ficar logo certo. */
+  window.addEventListener("pageshow", ev => {
+    if (!ev.persisted) return;
+    chegadaAoCarrinho = 0;
+    document.querySelectorAll(".garrafa-a-voar").forEach(c => c.remove());
+    Carrinho.recarregar();
+  });
+
   /* --- Fotografias que aparecem suavemente ---
      As que já estavam carregadas mostram-se logo; as outras ficam
      invisíveis até acabarem de carregar, e aí aparecem (ver o CSS

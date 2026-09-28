@@ -208,6 +208,20 @@ mensagem da encomenda leva uma linha `Empresa:` e a faturação já preenchida.
 As quantidades escrevem-se à mão no carrinho, em garrafas ou em caixas, para
 quem leva 24 garrafas não ter de carregar 24 vezes no "+".
 
+### O número do carrinho está sempre certo
+
+Quando se carrega em "voltar atrás", o browser não recarrega a página: guarda-a
+inteira como estava e volta a mostrá-la, com o carrinho que ela tinha em
+memória. Quem tirasse garrafas no carrinho e voltasse atrás via o número velho
+no topo. O mesmo acontecia com o site aberto em dois separadores.
+
+O `carrinho.js` tem por isso um `recarregar()`, que volta a ler o que está
+guardado no browser e só avisa a página se alguma coisa mudou. Chama-se em dois
+sítios: quando uma página reaparece vinda dessa cache (`pageshow` com
+`persisted`, no `main.js`, que limpa primeiro a garrafa a voar) e quando o
+carrinho é mexido noutro separador (evento `storage`). Os dados do cliente
+ficam de fora de propósito, para não se deitar fora o que ele está a escrever.
+
 ### Avaliações no Google
 
 O site tem um bloco "Já comprou aqui?" com um botão para avaliar a loja,

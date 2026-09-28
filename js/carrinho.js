@@ -339,6 +339,32 @@ const Carrinho = (function () {
   function aoMudar(fn) { ouvintes.push(fn); }
   function avisar() { ouvintes.forEach(fn => fn()); }
 
+  /* ---------- Voltar a ler o que está guardado ----------
+     Quando o cliente carrega em "voltar atrás", o browser não recarrega
+     a página: guarda-a inteira como estava e volta a mostrá-la, com o
+     carrinho que ela tinha em memória. Quem tirasse garrafas na página
+     do carrinho e voltasse atrás via o número velho no topo, como se
+     ainda lá estivesse tudo. O mesmo acontecia com o site aberto em
+     dois separadores.
+
+     Aqui volta-se a ler o que está guardado no browser, que é a única
+     verdade, e só se avisa a página se alguma coisa tiver mudado. Os
+     dados do cliente ficam de fora de propósito: o que ele está a
+     escrever no formulário não se deita fora.                        */
+  function recarregar() {
+    const antes = JSON.stringify(itens) + "|" + modo;
+    itens = carregar();
+    modo = carregarModo();
+    if (JSON.stringify(itens) + "|" + modo !== antes) avisar();
+  }
+
+  // Uma página que reapareça vinda dessa cache também chama isto, a
+  // partir do main.js, que tem de limpar o voo da garrafa primeiro.
+  // Aqui fica o caso de o carrinho ser mexido noutro separador:
+  window.addEventListener("storage", ev => {
+    if (ev.key === null || ev.key === CHAVE || ev.key === CHAVE_MODO) recarregar();
+  });
+
   /* ---------- Escrever a encomenda ---------- */
 
   function euros(valor) {
@@ -428,6 +454,6 @@ const Carrinho = (function () {
     modoAtual, definirModo, entregaDisponivel, faltaParaEntrega, podeEncomendar,
     dadosCliente, definirDados, validarDados, nifValido, eEmpresa,
     horasDoDia, dataLocal, textoDoDia, erroNoDiaDeRecolha,
-    aoMudar, textoEncomenda, linkEncomenda, euros, unidadesPorCaixa
+    aoMudar, recarregar, textoEncomenda, linkEncomenda, euros, unidadesPorCaixa
   };
 })();
