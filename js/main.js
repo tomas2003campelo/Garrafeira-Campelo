@@ -587,9 +587,9 @@
         <span class="card-mais" aria-hidden="true">Ver detalhes <span class="card-seta">→</span></span>
         <div class="card-foot">
           <span class="preco-bloco">
-            <span class="preco">${euros(p.preco)}</span>
-            <span class="volume">${caixa > 1 ? "por garrafa · " : ""}${p.volume}</span>
-            <span class="volume">${caixa > 1 ? `caixa de ${caixa} · ` : ""}IVA incluído</span>
+            <span class="preco">${euros(p.preco)}${caixa > 1 ? ` <span class="preco-cada">por garrafa</span>` : ""}</span>
+            <span class="volume">${p.volume}</span>
+            <span class="volume">${caixa > 1 ? `Caixa de ${caixa}: <strong>${euros(p.preco * caixa)}</strong> · ` : ""}IVA incluído</span>
           </span>
           <button class="btn-add" data-add="${p.id}" ${p.esgotado ? "disabled" : ""}>
             ${p.esgotado ? "Esgotado" : "Adicionar"}
@@ -1252,8 +1252,8 @@
           <p class="ficha-desc">${p.descricao}</p>
           <div class="ficha-compra">
             <div class="ficha-preco">
-              <span class="preco">${euros(p.preco)}</span>
-              <span class="volume">${caixa > 1 ? "por garrafa · " : ""}IVA incluído</span>
+              <span class="preco">${euros(p.preco)}${caixa > 1 ? ` <span class="preco-cada">por garrafa</span>` : ""}</span>
+              <span class="volume">IVA incluído</span>
               ${caixa > 1 ? `<span class="ficha-caixa">Caixa de ${caixa}: <strong>${euros(p.preco * caixa)}</strong></span>` : ""}
             </div>
             <button class="btn btn-primary btn-comprar" data-add="${p.id}" ${p.esgotado ? "disabled" : ""}>${botao}</button>

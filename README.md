@@ -96,6 +96,12 @@ essencial:
 - **Preço site**: não se escreve. Calcula-se sozinho, com o preço da loja mais
   5%, e é o que aparece no site. A percentagem está na aba **Definições**: se a
   mudares, todos os preços do site acompanham.
+- **Caixa**: quantas garrafas leva a caixa. Quase tudo se vende à caixa, por isso
+  o preço grande é sempre o de **uma garrafa**, e o cartão diz "por garrafa" ao
+  lado dele e "Caixa de 6: 13,68 €" por baixo, que é a quantia que o cliente paga
+  ao carregar em Adicionar. Nas garrafas vendidas à unidade nada disto aparece.
+  Foi por caber tudo isto que o botão Adicionar passou para baixo, a toda a
+  largura: ao lado do preço sobravam 93 px num cartão de cinco por fila.
 - **Etiqueta**: opcional, aparece no canto do cartão (Reserva, DOC, Novidade).
 - **Sempre no início**: Sim para o produto estar sempre no "Em destaque" da
   página inicial. Os lugares que sobram enchem-se à sorte, e mudam em cada visita.

@@ -1098,25 +1098,39 @@ main { overflow-x: clip; }
 
 .card-foot {
   margin-top: auto;
-  /* O preço e o botão na mesma linha; o volume e o "IVA incluído" por
-     baixo, a toda a largura, para não se partirem num cartão estreito
-     e os preços ficarem alinhados de cartão para cartão. */
+  /* Tudo a toda a largura, numa coluna só: o preço com o "por garrafa"
+     ao lado, depois o volume e a caixa, e o botão a fechar. O botão
+     esteve ao lado do preço, mas num cartão de cinco por fila sobravam
+     93 px para o preço, e o "por garrafa" não cabia lá. Em coluna, os
+     preços também ficam alinhados de cartão para cartão. */
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
   align-items: center;
-  column-gap: .7rem;
   padding-top: .9rem;
   border-top: 1px solid var(--ouro-fio);
 }
 .card-foot .preco-bloco { display: contents; }
-.card-foot .preco { grid-column: 1; grid-row: 1; }
-.card-foot .btn-add { grid-column: 2; grid-row: 1; }
+.card-foot .preco { grid-row: 1; }
+.card-foot .btn-add { grid-row: 4; margin-top: .7rem; justify-content: center; }
 .card-foot .volume { grid-column: 1 / -1; }
 .card-foot .preco + .volume { margin-top: .3rem; }
 
 .preco-bloco { display: flex; flex-direction: column; }
 .preco { font-family: var(--fonte-titulo); font-size-adjust: var(--ajuste-titulo); font-size: 1.35rem; font-weight: 700; line-height: 1.1; }
 .volume { font-size: .76rem; color: var(--texto-suave); }
+
+/* Quase tudo se vende à caixa, e o número grande é o de uma garrafa.
+   O "por garrafa" fica colado ao preço, e o preço da caixa inteira
+   fecha o rodapé, que é a quantia que o cliente vai mesmo pagar. */
+.preco-cada {
+  font-family: var(--fonte-texto);
+  font-size-adjust: var(--ajuste-texto);
+  font-size: .76rem;
+  font-weight: 400;
+  color: var(--texto-suave);
+  white-space: nowrap;
+}
+.card-foot .volume strong { font-weight: 600; color: var(--texto); }
 
 .btn-add {
   display: inline-flex;
@@ -1906,6 +1920,8 @@ a.btn-voltar { text-decoration: none; }
 }
 .ficha-preco { display: flex; flex-direction: column; gap: .1rem; }
 .ficha-preco .preco { font-size: 2rem; }
+/* O preço da ficha é maior, e o "por garrafa" ao lado acompanha */
+.ficha-preco .preco-cada { font-size: .9rem; }
 .ficha-caixa { margin-top: .3rem; font-size: .9rem; color: var(--texto-suave); }
 .ficha-caixa strong { color: var(--texto); }
 .btn-comprar.feito { background: #2E6B4F; border-color: #2E6B4F; color: var(--creme); }
@@ -2053,15 +2069,16 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 }
 .carrinho-sugestoes-topo h2 { margin: 0; font-size: 1.5rem; }
 .nota-sugestoes { margin: 0; font-size: .95rem; font-weight: 600; color: var(--acento); }
-.grid-sugestoes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.2rem; }
+/* auto-fit e não três fixas: entre os 900 e os 1150 px a coluna das
+   sugestões fica estreita, e três cartões davam 102 px cada um, com o
+   preço e a linha da caixa partidos ao meio. Assim passam a dois ou a
+   um, e o texto cabe sempre. */
+.grid-sugestoes { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; }
 .grid-sugestoes .card-produtor { display: none; }
 .grid-sugestoes .card-top { height: 200px; }
 .grid-sugestoes .card-top img { height: calc(168px * var(--escala, 1)); }
 .grid-sugestoes .card-top .ilustracao { height: 170px; }
 .grid-sugestoes .card-nome { margin-bottom: .9rem; }
-/* Cartão estreito: o preço por cima, o botão a toda a largura, no fim */
-.grid-sugestoes .card-foot { grid-template-columns: 1fr; }
-.grid-sugestoes .card-foot .btn-add { grid-column: 1; grid-row: 4; margin-top: .7rem; justify-content: center; }
 
 @media (max-width: 900px) {
   /* minmax(0, ...): sem isto, a fila das sugestões alargava a coluna

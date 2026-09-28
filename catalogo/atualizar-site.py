@@ -712,8 +712,8 @@ def html_da_ficha(p, nome_site, url):
           <p class="ficha-desc">{esc(p.get("descricao") or "")}</p>
           <div class="ficha-compra">
             <div class="ficha-preco">
-              <span class="preco">{euros(p["preco"])}</span>
-              <span class="volume">{"por garrafa · " if caixa > 1 else ""}IVA incluído</span>
+              <span class="preco">{euros(p["preco"])}{' <span class="preco-cada">por garrafa</span>' if caixa > 1 else ""}</span>
+              <span class="volume">IVA incluído</span>
               {preco_extra}
             </div>
             <button class="btn btn-primary btn-comprar" data-add="{esc(p["id"])}"{" disabled" if p.get("esgotado") else ""}>{esc(botao)}</button>
