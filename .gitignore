@@ -47,3 +47,7 @@ Publicações Garrafeira Campelo/
 # Logótipo: os ficheiros de trabalho, as versões que ficaram de fora e as
 # ferramentas que os desenham. Para o site só vão os finais, em img/.
 Logotipo Garrafeira Campelo/
+
+# Catálogo para os clientes profissionais e a lista de preços (PDF): ficam
+# só no computador. Refazem-se com fonte/gerar.sh a partir dos dados do site.
+Catálogo Garrafeira Campelo/
