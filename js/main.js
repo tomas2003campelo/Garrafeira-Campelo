@@ -2200,14 +2200,37 @@
       });
 
       if (!valido) {
+        // O email é opcional: só falha se estiver mal escrito
+        const soOEmail = campos.every(c => c.name === "email" || c.checkValidity());
         nota.className = "form-nota erro";
-        nota.textContent = "Preencha todos os campos com dados válidos.";
+        nota.textContent = soOEmail
+          ? "O email parece estar mal escrito. Corrija-o ou deixe-o em branco."
+          : "Falta o seu nome, o assunto ou a mensagem.";
+        form.querySelector('[aria-invalid="true"]')?.focus();
         return;
       }
 
-      nota.className = "form-nota ok";
-      nota.textContent = "Obrigado! Isto é uma demonstração: o formulário ainda não envia nada.";
-      form.reset();
+      // Não há servidor: como no carrinho e no pedido dos profissionais,
+      // escreve-se a mensagem no WhatsApp ou no email, e quem a envia é
+      // o cliente. O formulário não se limpa, para o texto não se perder
+      // se ele fechar a janela sem enviar.
+      const v = nome => form.elements[nome].value.trim();
+      const assunto = v("assunto");
+      const linhas = [`Olá! Sou ${v("nome")}.`, "", v("mensagem")];
+      if (v("email")) linhas.push("", `O meu email: ${v("email")}`);
+      const texto = linhas.join("\n");
+
+      if (e.submitter?.value === "email") {
+        location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(`${assunto} · ${CONFIG.nome}`)}`
+                      + `&body=${encodeURIComponent(texto)}`;
+        nota.className = "form-nota ok";
+        nota.textContent = `Abrimos o seu programa de email com a mensagem escrita. Se não abriu, escreva-nos para ${CONFIG.email}.`;
+      } else {
+        window.open(`https://wa.me/${CONFIG.telefoneLimpo}?text=${encodeURIComponent(`Assunto: ${assunto}\n\n${texto}`)}`,
+                    "_blank", "noopener");
+        nota.className = "form-nota ok";
+        nota.textContent = "Abrimos o WhatsApp com a mensagem escrita. Falta só carregar em enviar.";
+      }
       campos.forEach(c => c.removeAttribute("aria-invalid"));
     });
   }

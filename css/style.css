@@ -2278,6 +2278,8 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 }
 .form input[aria-invalid="true"], .form textarea[aria-invalid="true"] { border-color: var(--erro); }
 .form .opcional { font-weight: 400; font-size: .78rem; color: var(--texto-suave); }
+.form-envio { display: flex; flex-wrap: wrap; gap: .7rem; }
+@media (max-width: 480px) { .form-envio .btn { flex: 1 1 100%; } }
 
 /* Painel do pedido de condições: o formulário dentro de uma moldura,
    para se perceber que é ali que se escreve. */

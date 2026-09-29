@@ -292,15 +292,15 @@ declarar idade para ler a política de privacidade.
 
 ## Por fazer
 
-- [ ] Preencher os dados da empresa no `js/config.js` (denominação, NIF, sede)
+- [x] Preencher os dados da empresa no `js/config.js` (denominação, NIF, sede)
 - [ ] Rever a política de privacidade com quem trata da contabilidade
-- [ ] Indicar a entidade de resolução de litígios (o link só aparece depois de preenchida)
-- [ ] Preencher os contactos reais no `js/config.js`
+- [x] Indicar a entidade de resolução de litígios: CIAB, a de Barcelos
+- [x] Preencher os contactos reais no `js/config.js`
 - [x] Preencher `catalogo/produtos.xlsx` com os produtos reais e correr `atualizar-site.py`
 - [x] Trocar as garrafas desenhadas por fotografias dos produtos
 - [ ] Trocar as fotos de banco de imagens por fotos da loja
-- [ ] Ligar o formulário de contacto a um serviço a sério (Formspree, Netlify
-      Forms ou um backend próprio) — hoje só valida no browser
+- [x] Formulário de contacto: escreve a mensagem no WhatsApp ou no email do
+      cliente, como o carrinho, sem servidor nem serviço de fora (setembro de 2026)
 - [x] Escrever as condições de venda (setembro de 2026); rever com a contabilidade
 - [x] Deixar o Google encontrar o site: feito a 23 de setembro de 2026
 - [ ] Decidir se há condições diferentes para restaurantes e cafés (preço, mínimo,
