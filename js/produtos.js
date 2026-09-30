@@ -719,7 +719,7 @@ const PRODUTOS = [
     tipo: "branco",
     docura: "Bruto",
     produtor: "Quinta das Arcas",
-    regiao: "",
+    regiao: "Vinho Verde",
     ano: null,
     volume: "75 cl",
     alcool: 12.00,
