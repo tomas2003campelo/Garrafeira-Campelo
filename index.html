@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=1bb4b235">
+  <link rel="stylesheet" href="css/style.css?v=e26af345">
   <!-- A loja, no formato que o Google lê (schema.org): morada, horário,
        telefone e formas de pagamento. Ajuda a aparecer nas pesquisas
        locais, como "garrafeira Barcelos". Se o horário, o telefone ou a
@@ -216,11 +216,20 @@
           <p class="so-leitores" aria-live="polite"></p>
         </form>
         <!-- Uma porta para cada família, as três com o mesmo peso:
-             nenhuma é mais importante do que as outras. -->
+             nenhuma é mais importante do que as outras. No telemóvel
+             fica só o nome ("Vinhos"), para caberem as três numa linha. -->
         <div class="hero-actions">
-          <a class="btn btn-dourado" href="vinhos.html">Ver os vinhos</a>
-          <a class="btn btn-dourado" href="espumantes.html">Ver os espumantes</a>
-          <a class="btn btn-dourado" href="cervejas.html">Ver as cervejas</a>
+          <a class="btn btn-dourado" href="vinhos.html"><span><span class="rotulo-longo">Ver os </span><span class="rotulo">vinhos</span></span></a>
+          <a class="btn btn-dourado" href="espumantes.html"><span><span class="rotulo-longo">Ver os </span><span class="rotulo">espumantes</span></span></a>
+          <a class="btn btn-dourado" href="cervejas.html"><span><span class="rotulo-longo">Ver as </span><span class="rotulo">cervejas</span></span></a>
+        </div>
+        <!-- Só no telemóvel: cinco garrafas, uma de cada família -->
+        <div class="hero-garrafas" aria-hidden="true">
+          <img src="img/produtos/conde-villar-branco.webp" alt="" width="136" height="600" loading="lazy" decoding="async">
+          <img src="img/produtos/piano-reserva-tinto.webp" alt="" width="152" height="600" loading="lazy" decoding="async">
+          <img src="img/produtos/bafarela-reserva-tinto.webp" alt="" width="131" height="600" loading="lazy" decoding="async">
+          <img src="img/produtos/murganheira-reserva-bruto.webp" alt="" width="136" height="516" loading="lazy" decoding="async">
+          <img src="img/produtos/porto-piano-tawny.webp" alt="" width="155" height="600" loading="lazy" decoding="async">
         </div>
         <p class="hero-falar"><a href="contacto.html">Falar connosco</a></p>
         <a class="hero-local" href="#" data-direcoes target="_blank" rel="noopener">

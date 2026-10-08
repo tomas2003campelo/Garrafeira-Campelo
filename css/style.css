@@ -385,6 +385,9 @@ main { overflow-x: clip; }
 .lead { font-size: 1.12rem; color: var(--texto-suave); max-width: 52ch; margin-bottom: 2rem; }
 .hero .lead { margin-bottom: 1.1rem; }
 
+/* A fila de garrafas da abertura só existe no telemóvel (ver RESPONSIVO) */
+.hero-garrafas { display: none; }
+
 .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
 
 /* Na abertura, as três portas têm exatamente a mesma largura. O texto
@@ -2845,7 +2848,31 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   /* Colado ao fim da morada lia-se "...Barcelos Como chegar" */
   .hero-local strong { display: block; margin-top: .2rem; }
 
-  .hero .hero-actions { gap: .6rem; }
+  /* As três portas numa linha só, com o nome curto ("Vinhos" em vez de
+     "Ver os vinhos"): empilhadas, eram três barras douradas iguais a
+     encher meio ecrã. Continuam as três com o mesmo peso. */
+  .hero-cor .hero-actions { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; max-width: none; }
+  .hero-cor .hero-actions .btn { padding: .78rem .3rem; font-size: .92rem; }
+  .hero-actions .rotulo-longo { display: none; }
+  .hero-actions .rotulo { text-transform: capitalize; }
+
+  /* E garrafas logo na abertura: uma garrafeira sem uma garrafa à
+     vista no primeiro ecrã não se percebia o que era. */
+  .hero-garrafas {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1.05rem;
+    margin: 1.5rem 0 .2rem;
+    padding-bottom: .55rem;
+    border-bottom: 1px solid rgba(194, 158, 97, .4);
+  }
+  .hero-garrafas img {
+    height: 138px;
+    width: auto;
+    filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .45));
+  }
+  .hero-garrafas img:nth-child(3) { height: 150px; }
 
   .modal-acoes { flex-direction: column-reverse; }
   .carrinho { width: 100%; }
@@ -2855,10 +2882,52 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 
 @media (max-width: 420px) {
   .stats { grid-auto-flow: row; }
-  .grid { grid-template-columns: 1fr; }
-  .card-top { height: 292px; }
-  .card-top .ilustracao { height: 252px; }
-  .card-top img { height: calc(248px * var(--escala, 1)); }
+}
+
+/* --- Os cartões no telemóvel ---
+   Com um cartão por linha, cada vinho ocupava um ecrã inteiro e a
+   página dos vinhos tinha uns 25 ecrãs de altura. Passam a dois por
+   linha, mais baixos, para se verem quatro de cada vez. Sai o "Ver
+   detalhes" (o cartão inteiro já abre a página do produto). */
+@media (max-width: 569px) {
+  .grid:not(.grid-sugestoes):not(.destaques) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .7rem;
+  }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-top { height: 172px; }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-top img { height: calc(146px * var(--escala, 1)); }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-top .ilustracao { height: 146px; }
+  .grid:not(.grid-sugestoes):not(.destaques) .badge { top: .5rem; left: .5rem; padding: .16rem .5rem; font-size: .58rem; }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-body { padding: .7rem .7rem .8rem; }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-meta { font-size: .6rem; letter-spacing: .06em; }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-nome { font-size: .96rem; line-height: 1.2; }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-produtor { font-size: .72rem; line-height: 1.35; margin-bottom: .5rem; }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-mais { display: none; }
+  .grid:not(.grid-sugestoes):not(.destaques) .card-foot { padding-top: .6rem; }
+  .grid:not(.grid-sugestoes):not(.destaques) .preco { font-size: 1.16rem; }
+  .grid:not(.grid-sugestoes):not(.destaques) .preco-cada,
+  .grid:not(.grid-sugestoes):not(.destaques) .volume { font-size: .68rem; }
+  .grid:not(.grid-sugestoes):not(.destaques) .btn-add { margin-top: .55rem; padding: .55rem .4rem; font-size: .84rem; }
+
+  /* O "Em destaque" eram quatro cartões grandes empilhados, três ecrãs
+     antes de se chegar às famílias. Passa a uma fila que se arrasta
+     para o lado, como as sugestões do carrinho; o cartão seguinte
+     espreita à direita, para se perceber que há mais. */
+  .grid.destaques {
+    display: flex;
+    gap: .8rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: clamp(1rem, 4vw, 3rem);
+    margin-inline: calc(-1 * clamp(1rem, 4vw, 3rem));
+    padding: .3rem clamp(1rem, 4vw, 3rem) .9rem;
+    scrollbar-width: none;
+  }
+  .grid.destaques::-webkit-scrollbar { display: none; }
+  .grid.destaques .card { flex: 0 0 min(250px, 70%); scroll-snap-align: start; }
+  .grid.destaques .card-top { height: 220px; }
+  .grid.destaques .card-top img { height: calc(188px * var(--escala, 1)); }
+  .grid.destaques .card-top .ilustracao { height: 188px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
