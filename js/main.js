@@ -475,7 +475,7 @@
 
       e.preventDefault();
       document.body.classList.add("a-sair");
-      setTimeout(() => { location.href = destino; }, 240);
+      setTimeout(() => { location.href = destino; }, 150);
     });
 
     // Se o utilizador voltar atrás, a página vem da cache já esbatida
@@ -589,7 +589,7 @@
           <span class="preco-bloco">
             <span class="preco">${euros(p.preco)}${caixa > 1 ? ` <span class="preco-cada">por garrafa</span>` : ""}</span>
             <span class="volume">${p.volume}</span>
-            <span class="volume">${caixa > 1 ? `Caixa de ${caixa}: <strong>${euros(p.preco * caixa)}</strong> · ` : ""}IVA incluído</span>
+            <span class="volume">${caixa > 1 ? `Caixa de ${caixa}: <strong>${euros(p.preco * caixa)}</strong><span class="iva-ponto"> · </span>` : ""}<span class="iva">IVA incluído</span></span>
           </span>
           <button class="btn-add" data-add="${p.id}" ${p.esgotado ? "disabled" : ""}>
             ${p.esgotado ? "Esgotado" : "Adicionar"}
@@ -2284,6 +2284,44 @@
      ARRANQUE
      ======================================================= */
 
+  /* Na página do produto, tocar na fotografia abre-a em grande, para se
+     ver o rótulo. Fecha ao tocar outra vez, no X ou com a tecla Esc. */
+  function ligarAmpliarFoto() {
+    document.addEventListener("click", e => {
+      const foto = e.target.closest?.(".ficha-foto img");
+      if (!foto || document.querySelector(".foto-ampliada")) return;
+      const anterior = document.activeElement;
+      const fundo = document.createElement("div");
+      fundo.className = "foto-ampliada";
+      fundo.setAttribute("role", "dialog");
+      fundo.setAttribute("aria-modal", "true");
+      fundo.setAttribute("aria-label", foto.alt || "Fotografia do produto");
+      fundo.innerHTML = `<button type="button" class="foto-ampliada-fechar" aria-label="Fechar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>`;
+      const grande = document.createElement("img");
+      grande.src = foto.currentSrc || foto.src;
+      grande.alt = foto.alt;
+      fundo.appendChild(grande);
+      const fechar = () => {
+        document.removeEventListener("keydown", tecla);
+        fundo.classList.remove("aberta");
+        setTimeout(() => fundo.remove(), 180);
+        anterior?.focus?.();
+      };
+      const tecla = ev => { if (ev.key === "Escape") fechar(); };
+      fundo.addEventListener("click", fechar);
+      document.addEventListener("keydown", tecla);
+      document.body.appendChild(fundo);
+      // Força o browser a desenhar o estado inicial antes de abrir, para a
+      // transição acontecer (sem depender do requestAnimationFrame, que
+      // não corre com o separador em segundo plano)
+      void fundo.offsetWidth;
+      fundo.classList.add("aberta");
+      fundo.querySelector("button").focus();
+    });
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof CONFIG === "undefined" || typeof PRODUTOS === "undefined") {
       console.error("Faltam js/config.js ou js/produtos.js.");
@@ -2318,5 +2356,6 @@
     ligarBrilhoCartoes();
     ligarInclinacao();
     ligarTransicaoPaginas();
+    ligarAmpliarFoto();
   });
 })();

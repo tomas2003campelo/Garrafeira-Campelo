@@ -1936,6 +1936,47 @@ a.btn-voltar { text-decoration: none; }
   filter: drop-shadow(0 14px 22px rgba(0, 0, 0, .5));
 }
 .ficha-foto .ilustracao { height: 400px; width: auto; }
+.ficha-foto img { cursor: zoom-in; }
+
+/* A fotografia do produto aberta em grande (ver ligarAmpliarFoto) */
+.foto-ampliada {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  padding: 1.2rem;
+  background: rgba(16, 9, 11, .94);
+  opacity: 0;
+  transition: opacity .18s ease;
+  cursor: zoom-out;
+}
+.foto-ampliada.aberta { opacity: 1; }
+.foto-ampliada img {
+  max-height: min(88vh, 780px);
+  max-width: 92vw;
+  width: auto;
+  height: min(88vh, 780px);
+  object-fit: contain;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .6));
+  transform: scale(.96);
+  transition: transform .18s ease;
+}
+.foto-ampliada.aberta img { transform: none; }
+.foto-ampliada-fechar {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  width: 46px; height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(194, 158, 97, .5);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--creme);
+  cursor: pointer;
+}
+.foto-ampliada-fechar svg { width: 22px; height: 22px; }
+.foto-ampliada-fechar:hover { background: rgba(194, 158, 97, .18); }
 .ficha-foto .badge { top: 1rem; left: 1rem; }
 
 .ficha-nome { font-size: clamp(1.9rem, 4vw, 2.6rem); margin: .3rem 0 1rem; }
@@ -2688,10 +2729,10 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
 }
 
 /* --- Transição entre páginas --- */
-body { animation: pagina-entra .42s ease both; }
+body { animation: pagina-entra .22s ease both; }
 @keyframes pagina-entra { from { opacity: 0; } to { opacity: 1; } }
 
-body.a-sair { opacity: 0; transition: opacity .26s ease; }
+body.a-sair { opacity: 0; transition: opacity .15s ease; }
 
 /* =========================================================
    ANIMAÇÕES DE ENTRADA
@@ -2699,17 +2740,19 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
 
 @keyframes entrar { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
+/* Mais curta e mais rápida do que era (30 px em 0,7 s): quem desliza
+   depressa no telemóvel chegava a ver as secções ainda vazias. */
 .revelar {
   opacity: 0;
-  transform: translateY(30px);
-  transition: opacity .7s ease, transform .7s cubic-bezier(.22, .68, .3, 1);
+  transform: translateY(14px);
+  transition: opacity .4s ease, transform .4s cubic-bezier(.22, .68, .3, 1);
   transition-delay: var(--atraso, 0s);
 }
 .revelar.visivel { opacity: 1; transform: none; }
 
 /* Variantes de direção */
-.revelar-esq { transform: translateX(-34px); }
-.revelar-dir { transform: translateX(34px); }
+.revelar-esq { transform: translateX(-16px); }
+.revelar-dir { transform: translateX(16px); }
 .revelar-zoom { transform: scale(.94); }
 .revelar-esq.visivel, .revelar-dir.visivel, .revelar-zoom.visivel { transform: none; }
 
@@ -2959,6 +3002,10 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .grid:not(.grid-sugestoes):not(.destaques) .preco { font-size: 1.16rem; }
   .grid:not(.grid-sugestoes):not(.destaques) .preco-cada,
   .grid:not(.grid-sugestoes):not(.destaques) .volume { font-size: .68rem; }
+  /* "Caixa de 6: 13,68 € · IVA incluído" não cabe numa linha e partia-se
+     a meio do "IVA incluído": o IVA passa para a linha de baixo, inteiro */
+  .grid:not(.grid-sugestoes):not(.destaques) .iva-ponto { display: none; }
+  .grid:not(.grid-sugestoes):not(.destaques) .iva { display: block; }
   .grid:not(.grid-sugestoes):not(.destaques) .btn-add { margin-top: .55rem; padding: .55rem .4rem; font-size: .84rem; }
 
   /* O "Em destaque" eram quatro cartões grandes empilhados, três ecrãs
