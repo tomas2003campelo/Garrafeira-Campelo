@@ -2772,6 +2772,207 @@ body.a-sair { opacity: 0; transition: opacity .15s ease; }
 }
 
 /* =========================================================
+   CAIXA DE OFERTA (natal.html)
+   ---------------------------------------------------------
+   À esquerda a lista de garrafas; à direita, colada ao ecrã, a caixa
+   que o cliente está a montar. No telemóvel a caixa fica em cima,
+   mais baixa, e continua à vista enquanto se percorre a lista.
+   ========================================================= */
+
+.oferta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 2.4rem;
+  align-items: start;
+}
+.oferta-escolha { grid-column: 1; grid-row: 1; min-width: 0; }
+.oferta-titulo { font-size: 1.5rem; margin-bottom: 1rem; }
+.oferta .filtros { justify-content: flex-start; margin-bottom: 1.4rem; }
+
+.oferta-resumo {
+  grid-column: 2; grid-row: 1;
+  position: sticky;
+  top: calc(var(--topo, 76px) + 1rem);
+  padding: 1.4rem;
+  border: 1px solid var(--dourado);
+  border-radius: var(--raio);
+  background: var(--superficie);
+}
+.oferta-resumo h2 { font-size: 1.4rem; margin-bottom: .9rem; }
+
+.oferta-tamanhos { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: 1rem; }
+.oferta-tamanhos button {
+  padding: .6rem .5rem;
+  border: 1.5px solid var(--linha);
+  border-radius: 100px;
+  background: transparent;
+  color: var(--texto-suave);
+  font: inherit;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .18s;
+}
+.oferta-tamanhos button[aria-pressed="true"] { background: var(--dourado); border-color: var(--dourado); color: #2A0A10; }
+
+.oferta-vagas { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: .5rem; }
+.oferta-vaga {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .7rem;
+  min-height: 64px;
+  padding: .35rem .5rem;
+  border: 1.5px dashed var(--ouro-contorno);
+  border-radius: var(--raio-sm);
+  color: var(--texto-suave);
+  font-size: .86rem;
+}
+.oferta-vaga.cheia { border-style: solid; border-color: var(--ouro-fio); background: rgba(194, 158, 97, .07); color: var(--texto); }
+.oferta-vaga-arte { height: 54px; display: grid; place-items: center; }
+.oferta-vaga-arte img, .oferta-vaga-arte .ilustracao { height: 54px; width: auto; max-width: 100%; object-fit: contain; filter: none; }
+.oferta-vaga-texto { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.oferta-vaga-texto strong { font-weight: 600; font-size: .88rem; }
+.oferta-vaga-texto span { color: var(--texto-suave); }
+.oferta-tirar {
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  border: 0; border-radius: 50%;
+  background: transparent;
+  color: var(--texto-suave);
+  cursor: pointer;
+}
+.oferta-tirar:hover { background: rgba(194, 158, 97, .16); color: var(--creme); }
+.oferta-tirar svg { width: 16px; height: 16px; }
+
+.oferta-contas { display: grid; gap: .3rem; margin-bottom: 1rem; padding-top: .9rem; border-top: 1px solid var(--ouro-fio); font-size: .9rem; color: var(--texto-suave); }
+.oferta-contas div { display: flex; justify-content: space-between; gap: 1rem; }
+.oferta-total { margin-top: .3rem; color: var(--texto); font-size: 1rem; }
+.oferta-total strong { font-family: var(--fonte-titulo); font-size: 1.45rem; line-height: 1; }
+.oferta-aviso { min-height: 1.3em; margin: .7rem 0 0; font-size: .84rem; color: var(--acento); text-align: center; }
+.oferta-aviso a { color: var(--acento); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+/* A lista de garrafas: cartões pequenos, cada um é um botão */
+.oferta-garrafas { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: .9rem; }
+.oferta-garrafa {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 .8rem;
+  border: 1px solid var(--ouro-contorno);
+  border-radius: var(--raio);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color .18s, transform .18s;
+}
+.oferta-garrafa:hover { border-color: var(--dourado); transform: translateY(-2px); }
+.oferta-garrafa.escolhida { border-color: var(--dourado); box-shadow: 0 0 0 1px var(--dourado); }
+.oferta-garrafa-arte {
+  height: 168px;
+  display: grid;
+  place-items: center;
+  margin-bottom: .7rem;
+  background: radial-gradient(ellipse 58% 70% at 50% 46%, #5E4346 0%, #3F2D30 46%, var(--superficie) 100%);
+  border-bottom: 1px solid var(--ouro-fio);
+}
+.oferta-garrafa-arte img, .oferta-garrafa-arte .ilustracao { height: 142px; width: auto; max-width: 76%; object-fit: contain; filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .5)); }
+.oferta-garrafa-meta, .oferta-garrafa-nome, .oferta-garrafa-fim { padding-inline: .75rem; }
+.oferta-garrafa-meta { font-size: .6rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--acento); }
+.oferta-garrafa-nome { margin: .2rem 0 .6rem; font-family: var(--fonte-titulo); font-size: 1rem; font-weight: 600; line-height: 1.2; }
+.oferta-garrafa-fim { margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.oferta-garrafa-fim strong { font-family: var(--fonte-titulo); font-size: 1.12rem; }
+.oferta-mais { padding: .28rem .7rem; border: 1.5px solid var(--dourado); border-radius: 100px; font-size: .76rem; font-weight: 600; color: var(--acento); }
+.oferta-garrafa:hover .oferta-mais { background: var(--dourado); color: #2A0A10; }
+.oferta-quantas {
+  position: absolute; top: .5rem; left: .5rem; z-index: 1;
+  padding: .16rem .55rem;
+  border-radius: 100px;
+  background: var(--dourado);
+  color: #2A0A10;
+  font-size: .62rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+}
+.oferta-fechada { max-width: 46ch; margin: 0 auto; text-align: center; color: var(--texto-suave); }
+.oferta-fechada a { color: var(--acento); text-decoration: underline; text-underline-offset: 3px; }
+
+/* Os três passos, por baixo */
+.oferta-passos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 2.6rem; }
+.oferta-passos h3 { font-size: 1.15rem; margin: .7rem 0 .35rem; }
+.oferta-passos p { margin: 0; color: var(--texto-suave); }
+.oferta-passo-n {
+  display: grid; place-items: center;
+  width: 38px; height: 38px;
+  border: 1.5px solid var(--acento);
+  border-radius: 50%;
+  font-family: var(--fonte-titulo); font-size: 1.15rem; font-weight: 700; color: var(--acento);
+}
+.oferta-empresas { margin: 2.4rem 0 0; padding-top: 1.4rem; border-top: 1px solid var(--ouro-contorno); color: var(--texto); }
+
+/* No carrinho: as garrafas da caixa lado a lado, e a nota das 6 caixas */
+.linha-arte-oferta { width: auto; min-width: 46px; padding-inline: 4px; display: flex; align-items: center; gap: 2px; }
+.linha-arte-oferta img, .linha-arte-oferta .ilustracao { height: 50px; width: auto; }
+.linha-oferta .linha-meta { margin-bottom: .2rem; }
+.linha-oferta .qtd { margin-top: .35rem; }
+.nota-oferta { margin: 0; padding: .7rem 0; border-bottom: 1px solid var(--linha); font-size: .84rem; color: var(--texto-suave); }
+.nota-oferta-ok { color: var(--verde-ok); }
+
+/* A entrada "Natal" no menu, a dourado */
+.nav a.nav-natal { color: var(--dourado); }
+
+/* Faixa do Natal na página inicial, logo por baixo da abertura */
+.faixa-natal { background: linear-gradient(100deg, #B8935A 0%, #D1B37C 50%, #B8935A 100%); color: #2A0A10; }
+.faixa-natal .container { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .5rem 1.4rem; padding-block: .95rem; text-align: center; }
+.faixa-natal p { margin: 0; font-size: 1rem; }
+.faixa-natal strong { font-family: var(--fonte-titulo); font-size: 1.15rem; }
+.faixa-natal a { color: #3A000A; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
+.faixa-natal a:hover { color: #000; }
+
+@media (max-width: 900px) {
+  .oferta { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
+  .oferta-resumo, .oferta-escolha { grid-column: 1; grid-row: auto; }
+  /* A caixa fica colada ao topo e baixa, para não tapar a lista: as
+     garrafas numa fila, sem os nomes, e o total ao lado do botão */
+  .oferta-resumo {
+    top: var(--topo, 62px); z-index: 5;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas: "tam tam" "vagas vagas" "total botao" "aviso aviso";
+    gap: .5rem .9rem;
+    align-items: center;
+    padding: .7rem .8rem .8rem;
+    border-radius: 0 0 var(--raio) var(--raio);
+    border-top: 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .35);
+  }
+  .oferta-resumo h2 { display: none; }
+  .oferta-tamanhos { grid-area: tam; margin: 0; }
+  .oferta-tamanhos button { padding: .32rem .5rem; font-size: .82rem; }
+  .oferta-vagas { grid-area: vagas; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); margin: 0; }
+  .oferta-vaga { grid-template-columns: 1fr; justify-items: center; min-height: 54px; padding: .2rem; position: relative; text-align: center; font-size: .72rem; }
+  .oferta-vaga.cheia .oferta-vaga-texto { display: none; }
+  .oferta-vaga-arte, .oferta-vaga-arte img, .oferta-vaga-arte .ilustracao { height: 46px; }
+  .oferta-vaga:not(.cheia) .oferta-vaga-arte { display: none; }
+  .oferta-tirar { position: absolute; top: 0; right: 0; width: 28px; height: 28px; }
+  .oferta-contas { grid-area: total; margin: 0; padding: 0; border: 0; }
+  .oferta-contas div:not(.oferta-total) { display: none; }
+  .oferta-total { margin: 0; flex-direction: column; gap: 0; font-size: .72rem; color: var(--texto-suave); }
+  .oferta-total strong { font-size: 1.3rem; color: var(--texto); }
+  .oferta-resumo .btn { grid-area: botao; padding-block: .7rem; }
+  .oferta-aviso { grid-area: aviso; margin: 0; min-height: 0; }
+  .oferta-aviso:empty { display: none; }
+  .oferta-passos { grid-template-columns: 1fr; }
+}
+@media (max-width: 569px) {
+  .oferta-garrafas { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
+  .oferta-garrafa-arte { height: 150px; }
+  .oferta-garrafa-arte img, .oferta-garrafa-arte .ilustracao { height: 126px; }
+  .oferta-mais { padding: .24rem .55rem; }
+}
+
+/* =========================================================
    RESPONSIVO
    ========================================================= */
 

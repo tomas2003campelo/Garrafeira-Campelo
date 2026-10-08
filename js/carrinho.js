@@ -15,9 +15,15 @@ const Carrinho = (function () {
 
   const CHAVE = "garrafeira-campelo-carrinho";
   const CHAVE_MODO = "garrafeira-campelo-modo";
+  const CHAVE_OFERTAS = "garrafeira-campelo-ofertas";
 
   /* itens = { idDoProduto: quantidade } */
   let itens = carregar();
+
+  /* Caixas de oferta: cada uma é uma lista de 2 ou 3 garrafas escolhidas
+     pelo cliente, e quantas caixas iguais quer.
+     ofertas = [{ garrafas: ["id", "id", "id"], qtd: 1 }] */
+  let ofertas = carregarOfertas();
 
   /* Como o cliente quer receber: "recolha", "entrega" ou "pais".
      Começa em recolha, que é o único modo sem mínimo de compra. */
@@ -87,7 +93,88 @@ const Carrinho = (function () {
   function guardar() {
     try {
       localStorage.setItem(CHAVE, JSON.stringify(itens));
+      localStorage.setItem(CHAVE_OFERTAS, JSON.stringify(ofertas));
     } catch (e) { /* sem persistência — segue na mesma */ }
+  }
+
+  /* ---------- Caixas de oferta ---------- */
+
+  const OFERTA = (typeof CONFIG !== "undefined" && CONFIG.oferta) || { ativa: false, tamanhos: [], precoCaixa: 0 };
+
+  /* Só entram garrafas de 75 cl à venda: é o que cabe na caixa */
+  function podeIrNaOferta(p) {
+    return !!p && !p.esgotado && /^\s*75\s*cl\s*$/i.test(p.volume || "");
+  }
+
+  function carregarOfertas() {
+    try {
+      const guardado = JSON.parse(localStorage.getItem(CHAVE_OFERTAS) || "[]");
+      if (!Array.isArray(guardado)) return [];
+      const oferta = (typeof CONFIG !== "undefined" && CONFIG.oferta) || {};
+      if (!oferta.ativa) return [];
+      // Fica só o que ainda se pode vender: uma caixa com uma garrafa
+      // que entretanto esgotou sai inteira
+      return guardado
+        .map(o => ({ garrafas: Array.isArray(o.garrafas) ? o.garrafas.slice() : [], qtd: Math.floor(Number(o.qtd)) }))
+        .filter(o => o.qtd > 0
+          && (oferta.tamanhos || []).includes(o.garrafas.length)
+          && o.garrafas.every(id => podeIrNaOferta(PRODUTOS.find(p => p.id === id))));
+    } catch (e) { return []; }
+  }
+
+  const chaveDaOferta = garrafas => garrafas.slice().sort().join("+");
+  const totalCaixasOferta = () => ofertas.reduce((s, o) => s + o.qtd, 0);
+  const centimos = v => Math.round(v * 100) / 100;
+
+  /* Com muitas caixas de oferta na mesma encomenda, as garrafas ficam
+     ao preço da loja (o do site sem os 5%) */
+  function ofertaAoPrecoDaLoja() {
+    return !!OFERTA.precoLojaAPartirDe && totalCaixasOferta() >= OFERTA.precoLojaAPartirDe;
+  }
+  function precoNaOferta(p, loja) {
+    return loja ? centimos(p.preco / (1 + (OFERTA.aumentoSite || 0))) : p.preco;
+  }
+  /* Quanto custa uma caixa com estas garrafas, já com a caixa e a fita */
+  function precoDaOferta(garrafas, loja) {
+    return centimos(garrafas.reduce((s, p) => s + precoNaOferta(p, loja), 0) + (OFERTA.precoCaixa || 0));
+  }
+
+  /* As caixas de oferta do carrinho, prontas a mostrar */
+  function linhasOferta() {
+    const loja = ofertaAoPrecoDaLoja();
+    return ofertas.map(o => {
+      const garrafas = o.garrafas.map(produtoPorId).filter(Boolean);
+      const cada = precoDaOferta(garrafas, loja);
+      return { chave: chaveDaOferta(o.garrafas), garrafas, qtd: o.qtd, cada, total: centimos(cada * o.qtd), loja };
+    });
+  }
+
+  function adicionarOferta(ids) {
+    if (!OFERTA.ativa || !(OFERTA.tamanhos || []).includes(ids.length)) return false;
+    if (!ids.every(id => podeIrNaOferta(produtoPorId(id)))) return false;
+    const chave = chaveDaOferta(ids);
+    const igual = ofertas.find(o => chaveDaOferta(o.garrafas) === chave);
+    if (igual) igual.qtd = Math.min(99, igual.qtd + 1);
+    else ofertas.push({ garrafas: ids.slice().sort(), qtd: 1 });
+    guardar();
+    avisar();
+    return true;
+  }
+
+  function definirQuantidadeOferta(chave, quantidade) {
+    const n = Math.min(99, Math.floor(quantidade));
+    if (!(n > 0)) return removerOferta(chave);
+    const o = ofertas.find(x => chaveDaOferta(x.garrafas) === chave);
+    if (!o) return;
+    o.qtd = n;
+    guardar();
+    avisar();
+  }
+
+  function removerOferta(chave) {
+    ofertas = ofertas.filter(o => chaveDaOferta(o.garrafas) !== chave);
+    guardar();
+    avisar();
   }
 
   /* ---------- Consultar ---------- */
@@ -103,12 +190,17 @@ const Carrinho = (function () {
   }
 
   function totalItens() {
-    return linhas().reduce((soma, l) => soma + l.qtd, 0);
+    return linhas().reduce((soma, l) => soma + l.qtd, 0)
+         + ofertas.reduce((soma, o) => soma + o.garrafas.length * o.qtd, 0);
   }
 
   function totalEuros() {
-    return linhas().reduce((soma, l) => soma + l.produto.preco * l.qtd, 0);
+    return linhas().reduce((soma, l) => soma + l.produto.preco * l.qtd, 0)
+         + linhasOferta().reduce((soma, o) => soma + o.total, 0);
   }
+
+  /* O carrinho não tem nada: nem garrafas, nem caixas de oferta */
+  function vazio() { return !linhas().length && !ofertas.length; }
 
   /* ---------- Alterar ---------- */
 
@@ -150,6 +242,7 @@ const Carrinho = (function () {
 
   function esvaziar() {
     itens = {};
+    ofertas = [];
     guardar();
     avisar();
   }
@@ -328,7 +421,7 @@ const Carrinho = (function () {
 
   /* A encomenda pode seguir no modo escolhido? */
   function podeEncomendar() {
-    if (!linhas().length) return false;
+    if (vazio()) return false;
     if (modo === "entrega") return faltaParaEntrega() === 0;
     return true;
   }
@@ -352,17 +445,18 @@ const Carrinho = (function () {
      dados do cliente ficam de fora de propósito: o que ele está a
      escrever no formulário não se deita fora.                        */
   function recarregar() {
-    const antes = JSON.stringify(itens) + "|" + modo;
+    const antes = JSON.stringify(itens) + "|" + modo + "|" + JSON.stringify(ofertas);
     itens = carregar();
+    ofertas = carregarOfertas();
     modo = carregarModo();
-    if (JSON.stringify(itens) + "|" + modo !== antes) avisar();
+    if (JSON.stringify(itens) + "|" + modo + "|" + JSON.stringify(ofertas) !== antes) avisar();
   }
 
   // Uma página que reapareça vinda dessa cache também chama isto, a
   // partir do main.js, que tem de limpar o voo da garrafa primeiro.
   // Aqui fica o caso de o carrinho ser mexido noutro separador:
   window.addEventListener("storage", ev => {
-    if (ev.key === null || ev.key === CHAVE || ev.key === CHAVE_MODO) recarregar();
+    if (ev.key === null || ev.key === CHAVE || ev.key === CHAVE_MODO || ev.key === CHAVE_OFERTAS) recarregar();
   });
 
   /* ---------- Escrever a encomenda ---------- */
@@ -386,6 +480,12 @@ const Carrinho = (function () {
         : `${l.qtd}x`;
       p.push(`• ${quanto} ${l.produto.nome} (${l.produto.volume}) · ${euros(l.produto.preco * l.qtd)}`);
     });
+    const caixasOferta = linhasOferta();
+    caixasOferta.forEach(o => {
+      const n = o.garrafas.length;
+      p.push(`• ${o.qtd}x Caixa de oferta de ${n} garrafas, com caixa e fita: ${o.garrafas.map(g => g.nome).join(" + ")} · ${euros(o.total)}`);
+    });
+    if (caixasOferta.some(o => o.loja)) p.push(`(Caixas de oferta com as garrafas ao preço da loja, por serem ${totalCaixasOferta()} caixas.)`);
     p.push("", titulo(`Total: ${euros(totalEuros())}`), "");
 
     p.push(titulo(eEmpresa() ? "Cliente (empresa)" : "Cliente"));
@@ -449,8 +549,10 @@ const Carrinho = (function () {
   /* ---------- O que fica acessível de fora ---------- */
 
   return {
-    linhas, totalItens, totalEuros,
+    linhas, totalItens, totalEuros, vazio,
     adicionar, definirQuantidade, remover, esvaziar,
+    linhasOferta, adicionarOferta, definirQuantidadeOferta, removerOferta,
+    podeIrNaOferta, precoDaOferta, totalCaixasOferta, ofertaAoPrecoDaLoja,
     modoAtual, definirModo, entregaDisponivel, faltaParaEntrega, podeEncomendar,
     dadosCliente, definirDados, validarDados, nifValido, eEmpresa,
     horasDoDia, dataLocal, textoDoDia, erroNoDiaDeRecolha,

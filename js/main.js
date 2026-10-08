@@ -1323,7 +1323,8 @@
       const c = Carrinho.unidadesPorCaixa(l.produto);
       const n = c > 1 ? l.qtd / c : l.qtd;
       return c > 1 ? `${n} ${n === 1 ? "caixa" : "caixas"} de ${l.produto.nome}` : `${n}x ${l.produto.nome}`;
-    });
+    }).concat(Carrinho.linhasOferta().map(o =>
+      `${o.qtd}x caixa de oferta (${o.garrafas.map(g => g.nome).join(" + ")})`));
     return {
       titulo: `Recolher encomenda na ${CONFIG.nome}`,
       local: `${CONFIG.nome}, ${m.rua}, ${m.codigoPostal} ${m.localidade}`,
@@ -1452,6 +1453,33 @@
         </div>`;
     }
 
+    /* Uma caixa de oferta: as garrafas escolhidas, lado a lado, e
+       quantas caixas iguais */
+    function linhaOfertaHTML(o) {
+      const n = o.garrafas.length;
+      const arte = o.garrafas.map(g => g.imagem ? `<img src="${g.imagem}" alt="">` : Ilustracoes.paraProduto(g)).join("");
+      return `
+        <div class="linha-item linha-oferta">
+          <span class="linha-arte linha-arte-oferta">${arte}</span>
+          <div class="linha-info">
+            <p class="linha-nome">Caixa de oferta de ${n} garrafas</p>
+            <p class="linha-meta">${o.garrafas.map(g => escapar(g.nome)).join(" · ")}</p>
+            <p class="linha-meta">${euros(o.cada)} cada, com caixa e fita${o.loja ? " · garrafas ao preço da loja" : ""}</p>
+            <span class="qtd">
+              <button type="button" data-oferta-menos="${o.chave}" aria-label="Menos uma caixa de oferta">−</button>
+              <input class="qtd-num" type="number" inputmode="numeric" step="1" min="1" max="99" value="${o.qtd}"
+                     data-oferta-qtd="${o.chave}" aria-label="Quantas caixas de oferta iguais">
+              <span class="qtd-cx">cx.</span>
+              <button type="button" data-oferta-mais="${o.chave}" aria-label="Mais uma caixa de oferta">+</button>
+            </span>
+          </div>
+          <div class="linha-direita">
+            <span class="linha-preco">${euros(o.total)}</span>
+            <button type="button" class="btn-remover" data-oferta-remover="${o.chave}">Remover</button>
+          </div>
+        </div>`;
+    }
+
     function desenhar() {
       desenharCarrinho();
       desenharSugestoes();
@@ -1461,13 +1489,16 @@
       const linhas = Carrinho.linhas();
       const total = Carrinho.totalEuros();
 
-      if (passo === 2 && linhas.length) return desenharDados();
+      const caixasOferta = Carrinho.linhasOferta();
+      const vazio = Carrinho.vazio();
+
+      if (passo === 2 && !vazio) return desenharDados();
       passo = 1;
       lista.hidden = false;
       if (tituloPainel) tituloPainel.textContent = "O seu carrinho";
-      painel.dataset.passo = linhas.length ? "1" : "vazio";
+      painel.dataset.passo = vazio ? "vazio" : "1";
 
-      if (!linhas.length) {
+      if (vazio) {
         lista.innerHTML = `
           <div class="carrinho-vazio">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -1486,7 +1517,16 @@
         return;
       }
 
-      lista.innerHTML = linhas.map(linhaHTML).join("");
+      /* Quantas caixas de oferta faltam para o preço da loja */
+      const of = CONFIG.oferta || {};
+      const nCaixas = Carrinho.totalCaixasOferta();
+      const faltamCaixas = of.precoLojaAPartirDe ? of.precoLojaAPartirDe - nCaixas : 0;
+      const notaOferta = !caixasOferta.length || !of.precoLojaAPartirDe ? ""
+        : faltamCaixas > 0
+          ? `<p class="nota-oferta">Com ${of.precoLojaAPartirDe} caixas de oferta ou mais, as garrafas ficam ao preço da loja. ${faltamCaixas === 1 ? "Falta 1 caixa" : `Faltam ${faltamCaixas} caixas`}.</p>`
+          : `<p class="nota-oferta nota-oferta-ok">Tem ${nCaixas} caixas de oferta: as garrafas estão ao preço da loja.</p>`;
+
+      lista.innerHTML = caixasOferta.map(linhaOfertaHTML).join("") + notaOferta + linhas.map(linhaHTML).join("");
       fundo.hidden = false;
 
       const modo = Carrinho.modoAtual();
@@ -1619,9 +1659,9 @@
       const escolhidos = anteriores.map(p => p || novos.shift()).filter(Boolean).concat(novos);
 
       secaoSugestoes.hidden = !escolhidos.length;
-      tituloSugestoes.textContent = linhas.length ? "Para juntar à encomenda" : "Sugestões da casa";
+      tituloSugestoes.textContent = !Carrinho.vazio() ? "Para juntar à encomenda" : "Sugestões da casa";
       const faltaEntrega = Carrinho.faltaParaEntrega();
-      notaSugestoes.textContent = linhas.length && Carrinho.entregaDisponivel() && faltaEntrega > 0
+      notaSugestoes.textContent = !Carrinho.vazio() && Carrinho.entregaDisponivel() && faltaEntrega > 0
         ? `Faltam ${euros(faltaEntrega)} para a entrega em mão.`
         : "";
       notaSugestoes.hidden = !notaSugestoes.textContent;
@@ -1913,8 +1953,14 @@
     lista.addEventListener("click", e => {
       const btn = e.target.closest("button");
       if (!btn) return;
-      const { mais, menos, remover } = btn.dataset;
+      const { mais, menos, remover, ofertaMais, ofertaMenos, ofertaRemover } = btn.dataset;
       const linha = id => Carrinho.linhas().find(l => l.produto.id === id);
+
+      // Caixas de oferta: o + e o − andam uma caixa
+      const oferta = chave => Carrinho.linhasOferta().find(o => o.chave === chave);
+      if (ofertaMais)    return Carrinho.definirQuantidadeOferta(ofertaMais, oferta(ofertaMais).qtd + 1);
+      if (ofertaMenos)   return Carrinho.definirQuantidadeOferta(ofertaMenos, oferta(ofertaMenos).qtd - 1);
+      if (ofertaRemover) return Carrinho.removerOferta(ofertaRemover);
 
       // Nos produtos à caixa, o + e o − andam uma caixa inteira
       const passo = id => Carrinho.unidadesPorCaixa(linha(id).produto);
@@ -1926,6 +1972,11 @@
     /* Quem escreve o número no carrinho: em caixas, o número são
        caixas. Fora dos limites, arruma-se para o valor mais próximo. */
     lista.addEventListener("change", e => {
+      const daOferta = e.target.closest("[data-oferta-qtd]");
+      if (daOferta) {
+        const n = Math.min(99, Math.max(1, Math.floor(Number(daOferta.value)) || 1));
+        return Carrinho.definirQuantidadeOferta(daOferta.dataset.ofertaQtd, n);
+      }
       const campo = e.target.closest("[data-qtd]");
       if (!campo) return;
       const id = campo.dataset.qtd;
@@ -2284,6 +2335,143 @@
      ARRANQUE
      ======================================================= */
 
+  /* --- Caixa de oferta (página natal.html) ---
+     O cliente escolhe quantas garrafas leva a caixa (2 ou 3), enche as
+     vagas a partir da lista e junta a caixa ao carrinho como um artigo
+     só. As regras e os preços vêm do js/config.js ("oferta"); as contas
+     são do js/carrinho.js. Com a campanha desligada (ativa: false), a
+     página diz que acabou e o menu e a faixa do início escondem-se. */
+  function ligarCaixaOferta() {
+    const of = CONFIG.oferta || {};
+    const ativa = !!of.ativa;
+
+    // Fora da campanha, somem a entrada no menu e a faixa do início
+    document.querySelectorAll(".nav-natal, [data-faixa-natal]").forEach(el => { el.hidden = !ativa; });
+    document.querySelectorAll("[data-oferta-preco-caixa]").forEach(el => { el.textContent = euros(of.precoCaixa || 0); });
+    document.querySelectorAll("[data-oferta-nota-loja]").forEach(el => {
+      el.textContent = of.precoLojaAPartirDe
+        ? `Para empresas e para quem oferece a muita gente: com ${of.precoLojaAPartirDe} caixas de oferta ou mais na mesma encomenda, as garrafas ficam ao preço da loja.`
+        : "";
+      el.hidden = !el.textContent;
+    });
+
+    const raiz = document.getElementById("caixa-oferta");
+    if (!raiz) return;
+    if (!ativa) {
+      raiz.innerHTML = `<p class="oferta-fechada">A caixa de oferta de Natal já não está disponível este ano. Pode ver <a href="vinhos.html">os vinhos</a>, <a href="espumantes.html">os espumantes</a> e <a href="cervejas.html">as cervejas</a> como habitualmente.</p>`;
+      return;
+    }
+
+    const resumo = raiz.querySelector(".oferta-resumo");
+    const filtros = raiz.querySelector(".filtros");
+    const lista = raiz.querySelector(".oferta-garrafas");
+    const garrafas = PRODUTOS.filter(Carrinho.podeIrNaOferta);
+    const tamanhos = (of.tamanhos || []).slice().sort((a, b) => a - b);
+
+    let tamanho = tamanhos[tamanhos.length - 1] || 3;
+    let escolhidas = [];        // ids, pela ordem em que entraram
+    let filtro = "todos";
+    let aviso = "";             // mensagem por baixo do botão
+    let feita = false;          // acabou de juntar uma caixa ao carrinho
+
+    const FAMILIAS_OFERTA = [
+      ["todos", "Todas"], ["verde", "Verdes"], ["maduro", "Maduros"], ["porto", "Porto"],
+      ["espumantes", "Espumantes"], ["cervejas", "Cervejas"]
+    ].filter(([chave]) => chave === "todos" || garrafas.some(p => p.categoria === chave));
+
+    const porId = id => garrafas.find(p => p.id === id);
+    const arte = p => p.imagem ? `<img src="${p.imagem}" alt="" loading="lazy" decoding="async">` : Ilustracoes.paraProduto(p);
+
+    function desenharResumo() {
+      const dentro = escolhidas.map(porId).filter(Boolean);
+      const cheia = dentro.length === tamanho;
+      const somaGarrafas = dentro.reduce((s, p) => s + p.preco, 0);
+      const vagas = Array.from({ length: tamanho }, (_, i) => {
+        const p = dentro[i];
+        return p
+          ? `<li class="oferta-vaga cheia">
+               <span class="oferta-vaga-arte">${arte(p)}</span>
+               <span class="oferta-vaga-texto"><strong>${escapar(p.nome)}</strong><span>${euros(p.preco)}</span></span>
+               <button type="button" class="oferta-tirar" data-tirar="${i}" aria-label="Tirar ${escapar(p.nome)} da caixa">
+                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+               </button>
+             </li>`
+          : `<li class="oferta-vaga"><span class="oferta-vaga-arte"></span><span class="oferta-vaga-texto"><span>Garrafa ${i + 1}</span></span></li>`;
+      }).join("");
+
+      resumo.innerHTML = `
+        <h2>A sua caixa</h2>
+        <div class="oferta-tamanhos" role="group" aria-label="Quantas garrafas leva a caixa">
+          ${tamanhos.map(n => `<button type="button" data-tamanho="${n}" aria-pressed="${n === tamanho}">${n} garrafas</button>`).join("")}
+        </div>
+        <ol class="oferta-vagas">${vagas}</ol>
+        <div class="oferta-contas">
+          <div><span>Garrafas</span><span>${euros(somaGarrafas)}</span></div>
+          <div><span>Caixa e fita</span><span>${euros(of.precoCaixa || 0)}</span></div>
+          <div class="oferta-total"><span>Total</span><strong>${euros(somaGarrafas + (of.precoCaixa || 0))}</strong></div>
+        </div>
+        <button type="button" class="btn btn-primary btn-bloco" data-juntar${cheia ? "" : " disabled"}>
+          ${cheia ? "Juntar ao carrinho" : (tamanho - dentro.length === 1 ? "Falta 1 garrafa" : `Faltam ${tamanho - dentro.length} garrafas`)}
+        </button>
+        <p class="oferta-aviso" aria-live="polite">${feita
+          ? `A caixa está no carrinho. <a href="carrinho.html">Ver o carrinho</a> ou monte outra.`
+          : escapar(aviso)}</p>`;
+    }
+
+    function desenharLista() {
+      filtros.innerHTML = FAMILIAS_OFERTA.map(([chave, nome]) =>
+        `<button type="button" class="chip" data-filtro="${chave}" aria-pressed="${chave === filtro}">${nome}</button>`).join("");
+      const mostradas = garrafas.filter(p => filtro === "todos" || p.categoria === filtro);
+      lista.innerHTML = mostradas.map(p => {
+        const quantas = escolhidas.filter(id => id === p.id).length;
+        return `
+          <button type="button" class="oferta-garrafa${quantas ? " escolhida" : ""}" data-escolher="${p.id}"
+                  aria-label="Pôr ${escapar(p.nome)} na caixa, ${euros(p.preco)}">
+            ${quantas ? `<span class="oferta-quantas">${quantas} na caixa</span>` : ""}
+            <span class="oferta-garrafa-arte">${arte(p)}</span>
+            <span class="oferta-garrafa-meta">${metaDoProduto(p)}</span>
+            <span class="oferta-garrafa-nome">${escapar(p.nome)}</span>
+            <span class="oferta-garrafa-fim"><strong>${euros(p.preco)}</strong><span class="oferta-mais">Escolher</span></span>
+          </button>`;
+      }).join("");
+    }
+
+    function desenhar() { desenharResumo(); desenharLista(); }
+
+    raiz.addEventListener("click", e => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      const d = btn.dataset;
+      if (d.filtro) { filtro = d.filtro; return desenharLista(); }
+      aviso = "";
+      if (d.tamanho) {
+        tamanho = Number(d.tamanho);
+        escolhidas = escolhidas.slice(0, tamanho);
+        feita = false;
+      } else if (d.tirar !== undefined) {
+        escolhidas.splice(Number(d.tirar), 1);
+        feita = false;
+      } else if (d.escolher) {
+        feita = false;
+        if (escolhidas.length >= tamanho) aviso = "A caixa já está cheia. Tire uma garrafa para a trocar por outra.";
+        else escolhidas.push(d.escolher);
+      } else if (d.juntar !== undefined) {
+        if (escolhidas.length === tamanho && Carrinho.adicionarOferta(escolhidas)) {
+          escolhidas = [];
+          feita = true;
+        }
+      } else return;
+      desenhar();
+      // No telemóvel, quando a caixa fica cheia, mostra-a: o botão de
+      // juntar ao carrinho está lá em cima
+      if (d.escolher && escolhidas.length === tamanho && matchMedia("(max-width: 900px)").matches) {
+        resumo.scrollIntoView({ block: "start", behavior: "smooth" });
+      }
+    });
+
+    desenhar();
+  }
+
   /* Na página do produto, tocar na fotografia abre-a em grande, para se
      ver o rótulo. Fecha ao tocar outra vez, no X ou com a tecla Esc. */
   function ligarAmpliarFoto() {
@@ -2357,5 +2545,6 @@
     ligarInclinacao();
     ligarTransicaoPaginas();
     ligarAmpliarFoto();
+    ligarCaixaOferta();
   });
 })();

@@ -122,6 +122,26 @@ const CONFIG = {
     prazo: "Fica pronta a levantar no próprio dia ou no seguinte. Avisamos quando estiver."
   },
 
+  /* --- Caixa de oferta (Natal) ---
+     O cliente escolhe 2 ou 3 garrafas de 75 cl, à unidade, e a casa
+     põe-nas numa caixa com fita.
+       ativa         true mostra a página "Natal" a funcionar; false fecha-a
+                     (a página fica a dizer que a campanha acabou)
+       tamanhos      quantas garrafas pode levar a caixa
+       precoCaixa    o que se soma pela caixa e pela fita, com IVA
+       precoLojaAPartirDe
+                     com este número de caixas de oferta (ou mais) na mesma
+                     encomenda, as garrafas ficam ao preço da loja
+       aumentoSite   quanto o preço do site está acima do da loja (5%);
+                     é com isto que se volta ao preço da loja            */
+  oferta: {
+    ativa: true,
+    tamanhos: [2, 3],
+    precoCaixa: 2.5,
+    precoLojaAPartirDe: 6,
+    aumentoSite: 0.05
+  },
+
   entrega: {
     /* Valor mínimo, em euros, para entrega em mão. Abaixo disto, o
        cliente só pode escolher a recolha na loja. */
