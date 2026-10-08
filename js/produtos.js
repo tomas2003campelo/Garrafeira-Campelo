@@ -100,9 +100,9 @@ const PRODUTOS = [
     imagem: "img/produtos/vinhao-tinto.webp"
   },
   {
-    id: "piano-colheita-tinto-doc",
-    pagina: "piano-colheita-tinto-doc.html",
-    nome: "Piano Colheita Tinto DOC",
+    id: "piano-tinto-doc",
+    pagina: "piano-tinto-doc.html",
+    nome: "Piano Tinto DOC",
     categoria: "maduro",
     tipo: "tinto",
     produtor: "Carlos Alonso Douro Wine",
