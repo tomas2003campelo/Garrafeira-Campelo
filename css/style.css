@@ -2951,13 +2951,22 @@ body.a-sair { opacity: 0; transition: opacity .15s ease; }
 /* A entrada "Natal" no menu, a dourado */
 .nav a.nav-natal { color: var(--dourado); }
 
-/* Faixa do Natal na página inicial, logo por baixo da abertura */
+/* Faixa do Natal na página inicial, por cima da abertura */
 .faixa-natal { background: linear-gradient(100deg, #B8935A 0%, #D1B37C 50%, #B8935A 100%); color: #2A0A10; }
 .faixa-natal .container { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .5rem 1.4rem; padding-block: .95rem; text-align: center; }
 .faixa-natal p { margin: 0; font-size: 1rem; }
 .faixa-natal strong { font-family: var(--fonte-titulo); font-size: 1.15rem; }
 .faixa-natal a { color: #3A000A; font-weight: 700; text-decoration: underline; text-underline-offset: 4px; white-space: nowrap; }
 .faixa-natal a:hover { color: #000; }
+.faixa-natal svg { width: 40px; height: auto; margin-right: .5rem; vertical-align: -7px; color: #5C0816; }
+@media (max-width: 760px) {
+  /* No telemóvel fica só a frase curta e a ligação, numa linha baixa */
+  .faixa-natal .container { padding-block: .6rem; gap: .1rem .9rem; }
+  .faixa-natal-mais { display: none; }
+  .faixa-natal strong { font-size: 1.02rem; }
+  .faixa-natal svg { width: 30px; vertical-align: -5px; margin-right: .35rem; }
+  .faixa-natal a { font-size: .92rem; }
+}
 
 @media (max-width: 900px) {
   .oferta { grid-template-columns: minmax(0, 1fr); gap: 1.4rem; }
