@@ -385,7 +385,8 @@ main { overflow-x: clip; }
 .lead { font-size: 1.12rem; color: var(--texto-suave); max-width: 52ch; margin-bottom: 2rem; }
 .hero .lead { margin-bottom: 1.1rem; }
 
-/* A fila de garrafas da abertura só existe no telemóvel (ver RESPONSIVO) */
+/* A fila pequena de garrafas da abertura só existe quando a página
+   passa a uma coluna (ver RESPONSIVO); antes disso há a montra grande */
 .hero-garrafas { display: none; }
 
 .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
@@ -483,12 +484,22 @@ main { overflow-x: clip; }
   justify-content: center;
   align-items: center;
 }
-.hero-marca img {
-  display: block;
-  width: min(260px, 70%);
-  height: auto;
-  filter: drop-shadow(0 16px 30px rgba(0, 0, 0, .35));
+/* Cinco garrafas em pé numa linha dourada, a do meio um pouco mais alta */
+.hero-montra {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(.9rem, 1.6vw, 1.6rem);
+  padding-bottom: .9rem;
+  border-bottom: 1px solid rgba(194, 158, 97, .45);
 }
+.hero-montra img {
+  display: block;
+  height: clamp(210px, 21vw, 290px);
+  width: auto;
+  filter: drop-shadow(0 14px 18px rgba(0, 0, 0, .45));
+}
+.hero-montra img:nth-child(3) { height: clamp(228px, 23vw, 316px); }
 
 /* O conteúdo do hero é claro sobre o bordô */
 .hero-cor .hero-inner { color: var(--areia); }
@@ -588,7 +599,7 @@ main { overflow-x: clip; }
    texto suave) muda sozinho, porque já usa esses nomes. */
 .section-clara {
   --texto:         #2E2124;
-  --texto-suave:   #665450;
+  --texto-suave:   #55433F;
   --acento:        #7A5A1E;   /* o dourado, escurecido para se ler sobre areia */
   --superficie:    #FFFFFF;
   --superficie-2:  #E6D8C2;
@@ -606,6 +617,11 @@ main { overflow-x: clip; }
   color: var(--texto);
   border-block: 1px solid #E0D0B9;
 }
+/* Uma secção clara logo a seguir a outra, da mesma cor: continuam o
+   mesmo bloco, sem fio a meio e com menos espaço em cima. A página
+   inicial mudava de fundo nove vezes; assim muda cinco. */
+.section-clara + .section-seguida { border-top: 0; margin-top: -1px; padding-top: clamp(1rem, 3vw, 2rem); }
+
 /* A segunda de duas claras seguidas, para não parecerem uma só */
 .section-clara-alt {
   background: #EADCC9;
@@ -1823,6 +1839,22 @@ a.btn-voltar { text-decoration: none; }
 }
 .redes .btn-rede:hover svg, .nav-redes .btn-rede:hover svg { color: currentColor; }
 
+/* Página inicial: a ajuda a escolher, num quadro por baixo dos contactos */
+.ajuda-escolha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.4rem 2.4rem;
+  margin-top: 3rem;
+  padding: 1.7rem clamp(1.2rem, 3vw, 2.2rem);
+  border: 1px solid var(--ouro-contorno);
+  border-radius: var(--raio);
+  background: #EADCC9;
+}
+.ajuda-escolha h3 { font-size: 1.35rem; margin-bottom: .3rem; }
+.ajuda-escolha p { margin: 0; max-width: 52ch; color: var(--texto-suave); }
+.ajuda-escolha-acoes { display: flex; flex-wrap: wrap; gap: .7rem; flex: none; }
+
 /* Página inicial: avaliações e redes numa faixa só, entre dois fios
    dourados. Se uma das metades desaparecer (falta a ligação das
    avaliações, ou não há redes), a outra ocupa a largura toda e o fio
@@ -2249,6 +2281,17 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
   text-align: center;
   cursor: pointer;
 }
+.section-clara .local-mapa { background: #E6D8C2; }
+.section-clara .mapa-carregar {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 253, 249, .75), transparent 58%),
+    linear-gradient(32deg, transparent 46%, rgba(122, 90, 30, .2) 46.4%, rgba(122, 90, 30, .2) 48.2%, transparent 48.6%),
+    linear-gradient(-58deg, transparent 61%, rgba(122, 90, 30, .14) 61.4%, rgba(122, 90, 30, .14) 62.6%, transparent 63%),
+    repeating-linear-gradient(0deg, rgba(122, 90, 30, .07) 0 1px, transparent 1px 36px),
+    repeating-linear-gradient(90deg, rgba(122, 90, 30, .07) 0 1px, transparent 1px 36px),
+    #E6D8C2;
+}
+.section-clara .mapa-carregar svg { color: var(--marca); filter: none; }
 .mapa-carregar svg { width: 46px; height: 46px; color: var(--dourado); filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .45)); }
 .mapa-carregar-titulo { font-family: var(--fonte-titulo); font-size: 1.35rem; font-weight: 700; }
 .mapa-carregar-nota { max-width: 30ch; font-size: .8rem; color: var(--texto-suave); }
@@ -2742,9 +2785,21 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .hero-actions, .hero-tags { justify-content: center; }
   .hero-cor .hero-actions { margin-inline: auto; }
   .pesquisa-inicio { margin-inline: auto; }
-  /* Numa coluna só, o selo passa para cima do título, mais pequeno */
-  .hero-marca { order: -1; }
-  .hero-marca img { width: 104px; }
+  /* Numa coluna só, a montra grande sai e as garrafas passam para
+     baixo dos botões, mais pequenas */
+  .hero-marca { display: none; }
+  .hero-garrafas {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 1.3rem;
+    margin: 1.7rem 0 .2rem;
+    padding-bottom: .6rem;
+    border-bottom: 1px solid rgba(194, 158, 97, .4);
+  }
+  .hero-garrafas img { height: 176px; width: auto; filter: drop-shadow(0 8px 12px rgba(0, 0, 0, .45)); }
+  .hero-garrafas img:nth-child(3) { height: 190px; }
+  .ajuda-escolha { flex-direction: column; align-items: flex-start; }
   /* Centrado, o ícone fica colado ao início da morada, e o
      "Como chegar" desce para a linha de baixo */
   .hero-local { display: block; text-align: center; line-height: 1.5; }
@@ -2829,9 +2884,6 @@ body.a-sair { opacity: 0; transition: opacity .26s ease; }
   .hero-inner .eyebrow, .hero-inner .lead { margin-inline: 0; }
   .hero-actions, .hero-tags { justify-content: flex-start; }
   .hero-cor .hero-actions { margin-inline: 0; }
-  /* No telemóvel, o logótipo do cabeçalho fica logo por cima: a marca
-     repetida dois dedos abaixo só empurrava o título para baixo. */
-  .hero-marca { display: none; }
 
   /* A linha "Retalhista de vinhos · Direto das quintas" partia-se em
      duas; o título diz o mesmo e diz melhor. */

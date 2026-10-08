@@ -29,7 +29,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Karla:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=e26af345">
+  <link rel="stylesheet" href="css/style.css?v=f5ca7c55">
   <!-- A loja, no formato que o Google lê (schema.org): morada, horário,
        telefone e formas de pagamento. Ajuda a aparecer nas pesquisas
        locais, como "garrafeira Barcelos". Se o horário, o telefone ou a
@@ -239,11 +239,19 @@
         </a>
       </div>
 
-      <!-- A marca da casa: o C é a esquina redonda do cruzamento de
-           Silveiros, e o losango é a loja, de frente para ele. Só a
-           marca, sem o nome, porque o título ao lado já o diz. -->
-      <div class="hero-marca">
-        <img src="img/marca.svg" alt="" width="512" height="512" fetchpriority="high" decoding="async">
+      <!-- No computador, cinco garrafas, uma de cada família, na coluna
+           da direita. Esteve aqui a marca (o C dourado), mas repetia o
+           logótipo do cabeçalho e não mostrava o que a casa vende. No
+           telemóvel esta coluna desaparece e ficam as garrafas pequenas
+           por baixo dos botões. -->
+      <div class="hero-marca" aria-hidden="true">
+        <div class="hero-montra">
+          <img src="img/produtos/conde-villar-branco.webp" alt="" width="136" height="600" decoding="async">
+          <img src="img/produtos/piano-reserva-tinto.webp" alt="" width="152" height="600" decoding="async">
+          <img src="img/produtos/bafarela-reserva-tinto.webp" alt="" width="131" height="600" fetchpriority="high" decoding="async">
+          <img src="img/produtos/murganheira-reserva-bruto.webp" alt="" width="136" height="516" decoding="async">
+          <img src="img/produtos/porto-piano-tawny.webp" alt="" width="155" height="600" decoding="async">
+        </div>
       </div>
 
       <!-- Fora da coluna do texto, a ocupar a largura toda: assim fica
@@ -333,7 +341,7 @@
     </div>
   </section>
 
-  <section class="section section-clara section-clara-alt" id="para-quem">
+  <section class="section section-clara section-seguida" id="para-quem">
     <div class="container">
       <div class="section-head revelar">
         <h2>Para particulares e empresas</h2>
@@ -347,7 +355,7 @@
           <p>
             Para o jantar, para oferecer ou para ter em casa. Pode levantar na loja,
             sem mínimo de compra, ou receber em casa a partir de
-            <strong data-minimo-entrega>80 €</strong>.
+            <strong data-minimo-entrega>80 €</strong>, em <span data-concelhos></span>.
           </p>
           <a class="btn btn-ghost" href="vinhos.html">Ver os vinhos</a>
         </div>
@@ -384,29 +392,42 @@
     </div>
   </section>
 
-  <section class="section section-clara">
+  <section class="section section-clara" id="onde-estamos">
     <div class="container">
-      <div class="cartoes-info">
-        <div class="info revelar">
-          <span class="info-icone">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 6v6c0 5 3.4 9.4 8 10 4.6-.6 8-5 8-10V6z"/><path d="m9 12 2 2 4-4"/></svg>
-          </span>
-          <h3>Direto das quintas</h3>
-          <p>Compramos ao produtor, sem intermediários. Assim o preço fica melhor e sabemos exatamente o que vendemos.</p>
+      <div class="local">
+        <div class="local-texto revelar">
+          <p class="eyebrow">Onde estamos</p>
+          <h2>Visite a garrafeira</h2>
+          <p class="local-morada" data-morada></p>
+          <p class="local-estado" data-estado-loja></p>
+          <table class="horario">
+            <tbody data-horario></tbody>
+          </table>
+          <div class="local-acoes">
+            <a class="btn btn-dourado" href="#" data-direcoes target="_blank" rel="noopener">Como chegar</a>
+            <a class="btn btn-ghost" href="#" data-tel>Ligar</a>
+          </div>
         </div>
-        <div class="info revelar">
-          <span class="info-icone">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-          </span>
-          <h3>Recolha ou entrega</h3>
-          <p>Pode levantar na loja, sem mínimo de compra, ou receber em casa a partir de <strong data-minimo-entrega>80 €</strong> em <span data-concelhos></span>.</p>
+        <div class="local-mapa revelar" data-mapa-embutido>
+          <button type="button" class="mapa-carregar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+            <span class="mapa-carregar-titulo">Ver o mapa</span>
+            <span class="mapa-carregar-nota">O mapa é do Google Maps e só abre depois de carregar aqui.</span>
+          </button>
         </div>
-        <div class="info revelar">
-          <span class="info-icone">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </span>
-          <h3>Aconselhamento</h3>
-          <p>Diga-nos o prato ou a ocasião e sugerimos a garrafa. Sem compromisso.</p>
+      </div>
+
+      <!-- "Não sabe o que escolher?" era uma secção só dela, em bordô, no
+           fim da página. Fica aqui, ao lado dos contactos, que é onde a
+           pessoa já está a pensar em falar connosco. -->
+      <div class="ajuda-escolha revelar">
+        <div>
+          <h3>Não sabe o que escolher?</h3>
+          <p>Diga-nos o que vai cozinhar, quantas pessoas são e quanto pretende gastar. Respondemos com duas ou três sugestões.</p>
+        </div>
+        <div class="ajuda-escolha-acoes">
+          <a class="btn btn-dourado" href="#" data-whatsapp target="_blank" rel="noopener">Perguntar por WhatsApp</a>
+          <a class="btn btn-ghost" href="contacto.html">Ver contactos</a>
         </div>
       </div>
 
@@ -440,46 +461,6 @@
             <span>Facebook</span>
           </a>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-clara section-clara-alt" id="onde-estamos">
-    <div class="container">
-      <div class="local">
-        <div class="local-texto revelar">
-          <p class="eyebrow">Onde estamos</p>
-          <h2>Visite a garrafeira</h2>
-          <p class="local-morada" data-morada></p>
-          <p class="local-estado" data-estado-loja></p>
-          <table class="horario">
-            <tbody data-horario></tbody>
-          </table>
-          <div class="local-acoes">
-            <a class="btn btn-dourado" href="#" data-direcoes target="_blank" rel="noopener">Como chegar</a>
-            <a class="btn btn-ghost" href="#" data-tel>Ligar</a>
-          </div>
-        </div>
-        <div class="local-mapa revelar" data-mapa-embutido>
-          <button type="button" class="mapa-carregar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-            <span class="mapa-carregar-titulo">Ver o mapa</span>
-            <span class="mapa-carregar-nota">O mapa é do Google Maps e só abre depois de carregar aqui.</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-escura com-cruzamento">
-    <div class="container">
-      <div class="section-head revelar">
-        <h2>Não sabe o que escolher?</h2>
-        <p>Diga-nos o que vai cozinhar, quantas pessoas são e quanto pretende gastar. Respondemos com duas ou três sugestões.</p>
-        <div class="hero-actions" style="justify-content:center;margin-top:1.8rem">
-          <a class="btn btn-dourado" href="#" data-whatsapp target="_blank" rel="noopener">Perguntar por WhatsApp</a>
-          <a class="btn btn-ghost-claro" href="contacto.html">Ver contactos</a>
         </div>
       </div>
     </div>
