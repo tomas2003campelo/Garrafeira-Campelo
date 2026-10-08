@@ -138,7 +138,7 @@ const CONFIG = {
     ativa: true,
     tamanhos: [2, 3],
     precoCaixa: 2.5,
-    precoLojaAPartirDe: 6,
+    precoLojaAPartirDe: 5,
     aumentoSite: 0.05
   },
 
