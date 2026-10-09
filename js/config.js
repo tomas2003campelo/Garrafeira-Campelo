@@ -129,17 +129,17 @@ const CONFIG = {
                      (a página fica a dizer que a campanha acabou)
        tamanhos      quantas garrafas pode levar a caixa
        precoCaixa    o que se soma pela caixa e pela fita, com IVA
-       precoLojaAPartirDe
+       descontoAPartirDe
                      com este número de caixas de oferta (ou mais) na mesma
-                     encomenda, as garrafas ficam ao preço da loja
-       aumentoSite   quanto o preço do site está acima do da loja (5%);
-                     é com isto que se volta ao preço da loja            */
+                     encomenda, há desconto em todas as garrafas dessas caixas
+       desconto      o desconto, em fração: 0.05 são 5% sobre o preço do
+                     site de cada garrafa (a caixa e a fita não têm desconto) */
   oferta: {
     ativa: true,
     tamanhos: [2, 3],
     precoCaixa: 2.5,
-    precoLojaAPartirDe: 5,
-    aumentoSite: 0.05
+    descontoAPartirDe: 5,
+    desconto: 0.05
   },
 
   entrega: {

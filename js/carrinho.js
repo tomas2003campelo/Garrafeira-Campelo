@@ -126,13 +126,14 @@ const Carrinho = (function () {
   const totalCaixasOferta = () => ofertas.reduce((s, o) => s + o.qtd, 0);
   const centimos = v => Math.round(v * 100) / 100;
 
-  /* Com muitas caixas de oferta na mesma encomenda, as garrafas ficam
-     ao preço da loja (o do site sem os 5%) */
-  function ofertaAoPrecoDaLoja() {
-    return !!OFERTA.precoLojaAPartirDe && totalCaixasOferta() >= OFERTA.precoLojaAPartirDe;
+  /* Com 5 caixas de oferta ou mais na mesma encomenda, todas as garrafas
+     dessas caixas têm desconto (5% sobre o preço do site). É um desconto
+     a sério, ao cêntimo, porque é assim que está anunciado na página. */
+  function ofertaComDesconto() {
+    return !!OFERTA.descontoAPartirDe && totalCaixasOferta() >= OFERTA.descontoAPartirDe;
   }
-  function precoNaOferta(p, loja) {
-    return loja ? centimos(p.preco / (1 + (OFERTA.aumentoSite || 0))) : p.preco;
+  function precoNaOferta(p, comDesconto) {
+    return comDesconto ? centimos(p.preco * (1 - (OFERTA.desconto || 0))) : p.preco;
   }
   /* Quanto custa uma caixa com estas garrafas, já com a caixa e a fita */
   function precoDaOferta(garrafas, loja) {
@@ -141,7 +142,7 @@ const Carrinho = (function () {
 
   /* As caixas de oferta do carrinho, prontas a mostrar */
   function linhasOferta() {
-    const loja = ofertaAoPrecoDaLoja();
+    const loja = ofertaComDesconto();
     return ofertas.map(o => {
       const garrafas = o.garrafas.map(produtoPorId).filter(Boolean);
       const cada = precoDaOferta(garrafas, loja);
@@ -485,7 +486,7 @@ const Carrinho = (function () {
       const n = o.garrafas.length;
       p.push(`• ${o.qtd}x Caixa de oferta de ${n} garrafas, com caixa e fita: ${o.garrafas.map(g => g.nome).join(" + ")} · ${euros(o.total)}`);
     });
-    if (caixasOferta.some(o => o.loja)) p.push(`(Caixas de oferta com as garrafas ao preço da loja, por serem ${totalCaixasOferta()} caixas.)`);
+    if (caixasOferta.some(o => o.loja)) p.push(`(Caixas de oferta com ${Math.round((OFERTA.desconto || 0) * 100)}% de desconto nas garrafas, por serem ${totalCaixasOferta()} caixas.)`);
     p.push("", titulo(`Total: ${euros(totalEuros())}`), "");
 
     p.push(titulo(eEmpresa() ? "Cliente (empresa)" : "Cliente"));
@@ -552,7 +553,7 @@ const Carrinho = (function () {
     linhas, totalItens, totalEuros, vazio,
     adicionar, definirQuantidade, remover, esvaziar,
     linhasOferta, adicionarOferta, definirQuantidadeOferta, removerOferta,
-    podeIrNaOferta, precoDaOferta, totalCaixasOferta, ofertaAoPrecoDaLoja,
+    podeIrNaOferta, precoDaOferta, totalCaixasOferta, ofertaComDesconto,
     modoAtual, definirModo, entregaDisponivel, faltaParaEntrega, podeEncomendar,
     dadosCliente, definirDados, validarDados, nifValido, eEmpresa,
     horasDoDia, dataLocal, textoDoDia, erroNoDiaDeRecolha,

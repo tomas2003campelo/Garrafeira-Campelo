@@ -1457,6 +1457,7 @@
        quantas caixas iguais */
     function linhaOfertaHTML(o) {
       const n = o.garrafas.length;
+      const pctOferta = Math.round(((CONFIG.oferta || {}).desconto || 0) * 100);
       const arte = o.garrafas.map(g => g.imagem ? `<img src="${g.imagem}" alt="">` : Ilustracoes.paraProduto(g)).join("");
       return `
         <div class="linha-item linha-oferta">
@@ -1464,7 +1465,7 @@
           <div class="linha-info">
             <p class="linha-nome">Caixa de oferta de ${n} garrafas</p>
             <p class="linha-meta">${o.garrafas.map(g => escapar(g.nome)).join(" · ")}</p>
-            <p class="linha-meta">${euros(o.cada)} cada, com caixa e fita${o.loja ? " · garrafas ao preço da loja" : ""}</p>
+            <p class="linha-meta">${euros(o.cada)} cada, com caixa e fita${o.loja ? ` · com ${pctOferta}% de desconto nas garrafas` : ""}</p>
             <span class="qtd">
               <button type="button" data-oferta-menos="${o.chave}" aria-label="Menos uma caixa de oferta">−</button>
               <input class="qtd-num" type="number" inputmode="numeric" step="1" min="1" max="99" value="${o.qtd}"
@@ -1517,14 +1518,15 @@
         return;
       }
 
-      /* Quantas caixas de oferta faltam para o preço da loja */
+      /* Quantas caixas de oferta faltam para o desconto */
+      const pct = Math.round(((CONFIG.oferta || {}).desconto || 0) * 100);
       const of = CONFIG.oferta || {};
       const nCaixas = Carrinho.totalCaixasOferta();
-      const faltamCaixas = of.precoLojaAPartirDe ? of.precoLojaAPartirDe - nCaixas : 0;
-      const notaOferta = !caixasOferta.length || !of.precoLojaAPartirDe ? ""
+      const faltamCaixas = of.descontoAPartirDe ? of.descontoAPartirDe - nCaixas : 0;
+      const notaOferta = !caixasOferta.length || !of.descontoAPartirDe ? ""
         : faltamCaixas > 0
-          ? `<p class="nota-oferta">Com ${of.precoLojaAPartirDe} caixas de oferta ou mais, as garrafas ficam ao preço da loja. ${faltamCaixas === 1 ? "Falta 1 caixa" : `Faltam ${faltamCaixas} caixas`}.</p>`
-          : `<p class="nota-oferta nota-oferta-ok">Tem ${nCaixas} caixas de oferta: as garrafas estão ao preço da loja.</p>`;
+          ? `<p class="nota-oferta">Com ${of.descontoAPartirDe} caixas de oferta ou mais, tem ${pct}% de desconto em todas as garrafas. ${faltamCaixas === 1 ? "Falta 1 caixa" : `Faltam ${faltamCaixas} caixas`}.</p>`
+          : `<p class="nota-oferta nota-oferta-ok">Tem ${nCaixas} caixas de oferta: ${pct}% de desconto em todas as garrafas.</p>`;
 
       lista.innerHTML = caixasOferta.map(linhaOfertaHTML).join("") + notaOferta + linhas.map(linhaHTML).join("");
       fundo.hidden = false;
@@ -2344,18 +2346,19 @@
   function ligarCaixaOferta() {
     const of = CONFIG.oferta || {};
     const ativa = !!of.ativa;
+    const pct = Math.round((of.desconto || 0) * 100);
 
     // Fora da campanha, somem a entrada no menu e a faixa do início
     document.querySelectorAll(".nav-natal, [data-faixa-natal]").forEach(el => { el.hidden = !ativa; });
     document.querySelectorAll("[data-oferta-preco-caixa]").forEach(el => { el.textContent = euros(of.precoCaixa || 0); });
     document.querySelectorAll("[data-oferta-destaque]").forEach(el => {
-      if (!ativa || !of.precoLojaAPartirDe) return;
-      el.innerHTML = `<strong>${of.precoLojaAPartirDe} caixas ou mais?</strong> As garrafas ficam ao preço da loja, mais barato do que no site.`;
+      if (!ativa || !of.descontoAPartirDe) return;
+      el.innerHTML = `<strong>${of.descontoAPartirDe} caixas ou mais?</strong> Tem ${pct}% de desconto em todas as garrafas.`;
       el.hidden = false;
     });
     document.querySelectorAll("[data-oferta-nota-loja]").forEach(el => {
-      el.textContent = of.precoLojaAPartirDe
-        ? `Para empresas e para quem oferece a muita gente: com ${of.precoLojaAPartirDe} caixas de oferta ou mais na mesma encomenda, as garrafas ficam ao preço da loja.`
+      el.textContent = of.descontoAPartirDe
+        ? `Para empresas e para quem oferece a muita gente: com ${of.descontoAPartirDe} caixas de oferta ou mais na mesma encomenda, há ${pct}% de desconto em todas as garrafas.`
         : "";
       el.hidden = !el.textContent;
     });
@@ -2418,7 +2421,7 @@
         <button type="button" class="btn btn-primary btn-bloco" data-juntar${cheia ? "" : " disabled"}>
           ${cheia ? "Juntar ao carrinho" : (tamanho - dentro.length === 1 ? "Falta 1 garrafa" : `Faltam ${tamanho - dentro.length} garrafas`)}
         </button>
-        ${of.precoLojaAPartirDe ? `<p class="oferta-nota-loja">Com ${of.precoLojaAPartirDe} caixas ou mais na mesma encomenda, as garrafas ficam ao preço da loja.</p>` : ""}
+        ${of.descontoAPartirDe ? `<p class="oferta-nota-loja">Com ${of.descontoAPartirDe} caixas ou mais na mesma encomenda, tem ${pct}% de desconto em todas as garrafas.</p>` : ""}
         <p class="oferta-aviso" aria-live="polite">${feita
           ? `A caixa está no carrinho. <a href="carrinho.html">Ver o carrinho</a> ou monte outra.`
           : escapar(aviso)}</p>`;
