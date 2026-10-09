@@ -400,8 +400,9 @@ Como é um site estático, dá para publicar de graça:
 
 A página `natal.html` deixa o cliente montar uma caixa com 2 ou 3 garrafas de
 75 cl à escolha. Ao preço das garrafas somam-se 2,50 € pela caixa e pela fita.
-Com 5 caixas de oferta ou mais na mesma encomenda, há 5% de desconto em todas
-as garrafas dessas caixas (a caixa e a fita não têm desconto).
+Com 5 caixas de oferta ou mais na mesma encomenda, há até 5% de desconto em todas
+as garrafas dessas caixas, sem nunca descer abaixo do preço da loja (a caixa e
+a fita não têm desconto).
 
 Tudo isto se muda no `js/config.js`, no bloco `oferta`:
 

@@ -133,13 +133,17 @@ const CONFIG = {
                      com este número de caixas de oferta (ou mais) na mesma
                      encomenda, há desconto em todas as garrafas dessas caixas
        desconto      o desconto, em fração: 0.05 são 5% sobre o preço do
-                     site de cada garrafa (a caixa e a fita não têm desconto) */
+                     site de cada garrafa (a caixa e a fita não têm desconto)
+       aumentoSite   quanto o preço do site está acima do da loja (5%). Serve
+                     para o desconto nunca pôr uma garrafa abaixo do preço da
+                     loja: por isso o site diz "até 5%" e não "5%"          */
   oferta: {
     ativa: true,
     tamanhos: [2, 3],
     precoCaixa: 2.5,
     descontoAPartirDe: 5,
-    desconto: 0.05
+    desconto: 0.05,
+    aumentoSite: 0.05
   },
 
   entrega: {
