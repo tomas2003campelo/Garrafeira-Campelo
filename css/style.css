@@ -2878,6 +2878,20 @@ body.a-sair { opacity: 0; transition: opacity .15s ease; }
 .oferta-contas div { display: flex; justify-content: space-between; gap: 1rem; }
 .oferta-total { margin-top: .3rem; color: var(--texto); font-size: 1rem; }
 .oferta-total strong { font-family: var(--fonte-titulo); font-size: 1.45rem; line-height: 1; }
+/* O desconto das 5 caixas: uma etiqueta dourada por baixo do título e
+   uma linha junto ao total da caixa */
+.oferta-destaque {
+  display: inline-block;
+  margin-top: 1.1rem !important;
+  padding: .5rem 1.1rem;
+  border: 1px solid var(--dourado);
+  border-radius: 100px;
+  background: rgba(194, 158, 97, .12);
+  color: var(--creme) !important;
+  font-size: .95rem;
+}
+.oferta-destaque strong { color: var(--dourado); font-weight: 700; }
+.oferta-nota-loja { margin: .8rem 0 0; padding-top: .8rem; border-top: 1px solid var(--ouro-fio); font-size: .82rem; line-height: 1.45; color: var(--texto-suave); text-align: center; }
 .oferta-aviso { min-height: 1.3em; margin: .7rem 0 0; font-size: .84rem; color: var(--acento); text-align: center; }
 .oferta-aviso a { color: var(--acento); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
@@ -2999,6 +3013,10 @@ body.a-sair { opacity: 0; transition: opacity .15s ease; }
   .oferta-total { margin: 0; flex-direction: column; gap: 0; font-size: .72rem; color: var(--texto-suave); }
   .oferta-total strong { font-size: 1.3rem; color: var(--texto); }
   .oferta-resumo .btn { grid-area: botao; padding-block: .7rem; }
+  /* No telemóvel a linha das 5 caixas fica só no topo da página: a
+     caixa colada ao ecrã tem de ser baixa */
+  .oferta-nota-loja { display: none; }
+  .oferta-destaque { border-radius: var(--raio-sm); font-size: .9rem; }
   .oferta-aviso { grid-area: aviso; margin: 0; min-height: 0; }
   .oferta-aviso:empty { display: none; }
   .oferta-passos { grid-template-columns: 1fr; }
