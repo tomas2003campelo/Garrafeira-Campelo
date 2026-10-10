@@ -88,7 +88,7 @@ python3 catalogo/atualizar-site.py --verificar
 
 **O catálogo em PDF para os profissionais** (e a lista de preços) lê os mesmos
 dados, `js/produtos.js` e `js/config.js`. Fica só no computador, na pasta
-`Catálogo Garrafeira Campelo/`, fora do GitHub. Depois de atualizar o site,
+`Materiais/Catálogo Garrafeira Campelo/`, fora do GitHub. Depois de atualizar o site,
 refaz-se com `./gerar.sh` dentro da pasta `fonte` dessa pasta. Se mudares os
 nomes dos campos do `produtos.js`, o catálogo também tem de mudar.
 
