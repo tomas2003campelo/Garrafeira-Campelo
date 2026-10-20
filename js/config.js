@@ -73,6 +73,15 @@ const CONFIG = {
      site, para não haver um botão que não leva a lado nenhum.      */
   avaliacao: "https://g.page/r/CVnqSKXk29z-EAE/review",
 
+  /* --- Contador de visitas (GoatCounter) ---
+     Conta quantas pessoas abrem o site, que páginas vêem e de onde
+     vêm, sem cookies e sem guardar dados pessoais. Os números vêem-se
+     em https://NOME.goatcounter.com, depois de criar a conta.
+     Escreve aqui só o NOME que escolheste ao criar a conta (o que
+     fica antes de ".goatcounter.com"). Vazio = desligado, e a página
+     de privacidade volta a dizer que não há contador.              */
+  contador: "",
+
   /* --- Encomendas ---
      Como preferes receber os pedidos do carrinho:
        "whatsapp" → abre o WhatsApp com a encomenda escrita

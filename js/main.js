@@ -2519,6 +2519,21 @@
     });
   }
 
+  /* Contador de visitas: só se CONFIG.contador tiver o nome da conta do
+     GoatCounter. Sem cookies e sem nada guardado no aparelho de quem visita.
+     A página de privacidade mostra o texto certo para cada caso. */
+  function ligarEstatisticas() {
+    const ativo = !!CONFIG.contador;
+    document.querySelectorAll("[data-sem-contador]").forEach(el => { el.hidden = ativo; });
+    document.querySelectorAll("[data-com-contador]").forEach(el => { el.hidden = !ativo; });
+    if (!ativo) return;
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = "https://gc.zgo.at/count.js";
+    s.dataset.goatcounter = `https://${CONFIG.contador}.goatcounter.com/count`;
+    document.head.appendChild(s);
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     if (typeof CONFIG === "undefined" || typeof PRODUTOS === "undefined") {
       console.error("Faltam js/config.js ou js/produtos.js.");
@@ -2555,5 +2570,6 @@
     ligarTransicaoPaginas();
     ligarAmpliarFoto();
     ligarCaixaOferta();
+    ligarEstatisticas();
   });
 })();
