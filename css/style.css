@@ -2617,7 +2617,7 @@ a.btn-carrinho, a.btn-carrinho:hover { text-decoration: none; }
    js-fotos só existe com o JavaScript a funcionar: sem ele, as
    fotografias aparecem como sempre. --- */
 .js-fotos img[src*="produtos/"]:not(.carregada) { opacity: 0; }
-.js-fotos img.aparece { animation: foto-aparece .55s ease both; }
+.js-fotos img.aparece { animation: foto-aparece .25s ease both; }
 @keyframes foto-aparece {
   from { opacity: 0; }
   to   { opacity: 1; }

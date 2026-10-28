@@ -86,6 +86,11 @@ Para só conferir sem mudar nada:
 python3 catalogo/atualizar-site.py --verificar
 ```
 
+**Fotografias pequenas.** Os cartões e as montras usam versões pequenas das
+fotografias (`img/produtos/pequenas/`, 480 px de altura), que carregam muito mais
+depressa. O `atualizar-site.py` cria-as sozinho através do `catalogo/miniaturas.py`
+quando entra uma fotografia nova. A página de cada vinho continua a usar a grande.
+
 **O catálogo em PDF para os profissionais** (e a lista de preços) lê os mesmos
 dados, `js/produtos.js` e `js/config.js`. Fica só no computador, na pasta
 `Materiais/Catálogo Garrafeira Campelo/`, fora do GitHub. Depois de atualizar o site,

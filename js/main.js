@@ -500,10 +500,18 @@
     return cl < 50 ? 0.8 : 1;
   }
 
-  function arteDoProduto(p) {
+  /* Nos cartões vai a fotografia pequena (img/produtos/pequenas/, feita por
+     catalogo/miniaturas.py): carrega muito mais depressa. Se faltar, o
+     browser vai buscar a grande. A ficha de cada vinho usa a grande. */
+  function fotoPequena(caminho) {
+    return caminho.replace("img/produtos/", "img/produtos/pequenas/");
+  }
+  function arteDoProduto(p, pequena) {
     if (p.imagem) {
       const escala = escalaDaGarrafa(p);
-      return `<img src="${p.imagem}" alt="${p.nome}" loading="lazy"${escala !== 1 ? ` style="--escala: ${escala}"` : ""}>`;
+      const src = pequena ? fotoPequena(p.imagem) : p.imagem;
+      const recurso = pequena ? ` onerror="this.onerror=null;this.src='${p.imagem}'"` : "";
+      return `<img src="${src}" alt="${p.nome}" loading="lazy" decoding="async"${recurso}${escala !== 1 ? ` style="--escala: ${escala}"` : ""}>`;
     }
     return Ilustracoes.paraProduto(p);
   }
@@ -578,7 +586,7 @@
     card.innerHTML = `
       <div class="card-top">
         ${etiqueta}
-        ${arteDoProduto(p)}
+        ${arteDoProduto(p, true)}
       </div>
       <div class="card-body">
         <p class="card-meta">${linhaMeta}</p>
@@ -2388,7 +2396,7 @@
     ].filter(([chave]) => chave === "todos" || garrafas.some(p => p.categoria === chave));
 
     const porId = id => garrafas.find(p => p.id === id);
-    const arte = p => p.imagem ? `<img src="${p.imagem}" alt="" loading="lazy" decoding="async">` : Ilustracoes.paraProduto(p);
+    const arte = p => p.imagem ? `<img src="${fotoPequena(p.imagem)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${p.imagem}'">` : Ilustracoes.paraProduto(p);
 
     function desenharResumo() {
       const dentro = escolhidas.map(porId).filter(Boolean);

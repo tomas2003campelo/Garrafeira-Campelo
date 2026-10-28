@@ -11,6 +11,7 @@ linha, não altera nada no site e diz-te o que corrigir.
 Não precisa de instalar nada: lê o .xlsx com o que o Python já traz.
 """
 
+import subprocess
 import json
 import re
 import sys
@@ -997,7 +998,12 @@ def html_das_garrafas(garrafas):
     for p in do_centro_para_fora(garrafas):
         escala = escala_da_garrafa(p)
         estilo = f' style="--escala:{escala:g}"' if escala != 1 else ""
-        partes.append(f'<img src="{p["imagem"]}" alt="" loading="lazy" '
+        # A versão pequena (img/produtos/pequenas/, de catalogo/miniaturas.py):
+        # nas montras as garrafas são pequenas e assim carregam muito mais depressa.
+        pequena = p["imagem"].replace("img/produtos/", "img/produtos/pequenas/")
+        if not (RAIZ / pequena).exists():
+            pequena = p["imagem"]
+        partes.append(f'<img src="{pequena}" alt="" loading="lazy" '
                       f'decoding="async"{estilo}>')
     return "".join(partes)
 
@@ -1192,6 +1198,8 @@ def main():
         return
 
     paginas, apagadas = escrever_paginas(produtos)
+    # Versões pequenas das fotografias, para os cartões e as montras
+    subprocess.run([sys.executable, str(Path(__file__).with_name("miniaturas.py"))], check=False)
     catalogos = escrever_catalogos(produtos)
     escrever_montras(produtos)
     escrever_contagens(produtos)
